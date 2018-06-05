@@ -1,7 +1,6 @@
 #!/bin/sh
 
-cd $(mktemp -d) &&
-    ./install-docker.sh &&
+./install-docker.sh &&
     ./install-docker-lvm-plugin.sh &&
     ./lvm-setup.sh &&
     ./start-docker.sh &&
