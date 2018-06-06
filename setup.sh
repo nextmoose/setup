@@ -5,4 +5,5 @@
     ./lvm-setup.sh &&
     ./start-docker.sh &&
     ./install-dnf-update-cron.sh &&
+    ./start-xhost.sh &&
     true
