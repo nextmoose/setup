@@ -1,7 +1,7 @@
 #!/bin/sh
 
 sudo dnf install --assumeyes golang git golang-github-cpuguy83-go-md2man &&
-    export GOPATH=$(mktemp) &&
+    export GOPATH=$(mktemp -d) &&
     mkdir ${GOPATH}/src &&
     mkdir ${GOPATH}/src/github.com &&
     cd $(mktemp -d) &&
