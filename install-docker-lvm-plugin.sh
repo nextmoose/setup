@@ -6,6 +6,7 @@ sudo dnf install --assumeyes golang git golang-github-cpuguy83-go-md2man &&
     cd docker-lvm-plugin &&
     echo A &&
     export GOPATH=$(pwd) &&
+    mkdir ${GOPATH}/src &&
     mkdir ${GOPATH}/src/github.com &&
     go get ./... &&
     echo B &&
