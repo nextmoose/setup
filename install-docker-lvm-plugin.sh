@@ -1,16 +1,11 @@
 #!/bin/sh
 
 sudo dnf install --assumeyes golang git golang-github-cpuguy83-go-md2man &&
-    cd $(mktemp -d) &&
-    git clone https://github.com/projectatomic/docker-lvm-plugin.git &&
-    cd docker-lvm-plugin &&
-    echo A &&
     export GOPATH=$(mktemp -d) &&
     mkdir ${GOPATH}/src &&
     mkdir ${GOPATH}/src/github.com &&
+    git -C ${GOPATH}/src clone https://github.com/projectatomic/docker-lvm-plugin.git &&
     echo B &&
-    go get ./... &&
-    echo C &&
     go build &&
     echo D &&
     make &&
