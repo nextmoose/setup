@@ -9,6 +9,7 @@ sudo dnf install --assumeyes golang git golang-github-cpuguy83-go-md2man &&
     cd docker-lvm-plugin &&
     echo A &&
     go get ./... &&
+    go build &&
     echo B &&
     make &&
     echo C &&
