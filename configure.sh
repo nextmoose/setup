@@ -9,7 +9,7 @@ sudo docker network create browser &&
         --restart always \
         --privileged \
         --mount type=tmpfs,destination=/data,readonly=false \
-        --mount type=bind,source=/srv/host/tmp/.X11-unix,destination=/tmp/.X11-unix,readonly=true \
+        --mount type=bind,source=/tmp/.X11-unix,destination=/tmp/.X11-unix,readonly=true \
         --mount type=bind,source=/run/user/${UID}/pulse,destination=/run/user/${UID}/pulse,readonly=false \
         --mount type=bind,source=/etc/machine-id,destination=/etc/machine-id,readonly=false \
         --mount type=bind,source=/var/run/dbus/system_bus_socket,destination=/var/run/dbus/system_bus_socket,readonly=false \
