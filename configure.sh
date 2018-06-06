@@ -3,7 +3,6 @@
 sudo docker network create browser &&
     sudo \
         docker \
-        docker \
         container \
         create \
         --name browser \
