@@ -11,7 +11,9 @@ sudo dnf install --assumeyes golang git golang-github-cpuguy83-go-md2man &&
     echo B &&
     go get ./... &&
     echo C &&
-    make &&
+    go build &&
     echo D &&
+    make &&
+    echo E &&
     sudo make install &&
     sudo sed -i "s#^VOLUME_GROUP=\$#VOLUME_GROUP=docker#" /etc/docker/docker-lvm-plugin
