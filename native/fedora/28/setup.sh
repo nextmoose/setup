@@ -8,5 +8,5 @@
     ./start-xhost.sh &&
     ./configure.sh &&
     ./install-virtual-box.sh &&
-    dnf update --assumeyes &&
+    sudo dnf update --assumeyes &&
     true
