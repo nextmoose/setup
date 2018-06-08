@@ -4,5 +4,4 @@
     ./install-docker-lvm-plugin.sh &&
     ./lvm-setup.sh &&
     ./start-docker.sh &&
-    ./install-dnf-update-cron.sh &&
-    true
+    ./install-dnf-update-cron.sh
