@@ -10,6 +10,8 @@ sudo umount /var/reserve/albums &&
     sudo lvremove --force structure/var_reserve_structure &&
     sudo lvcreate --size 8G --name containers structure &&
     sudo lvcreate --size 8G --name overlay2 structure &&
+    # mkfs.ext4 /dev/structure/containers &&
+    # mkfs.ext4 /dev/structure/overlay2 &&
     # echo /dev/mapper/structure/containers /var/lib/docker/containers                   ext4    defaults        1 2 | tee --append /etc/fstab &&
     # echo /dev/mapper/structure/overlay2 /var/lib/docker/overlay2                   ext4    defaults        1 2 | tee --append /etc/fstab &&
     true
