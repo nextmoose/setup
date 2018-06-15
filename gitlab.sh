@@ -7,9 +7,9 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	create \
 	--hostname gitlab \
 	--name gitlab \
-	--publish 127.0.1.101:20022:22 \
-	--publish 127.0.1.101:80:80 \
-	--publish 127.0.1.101:443:443 \
+	--publish 20022:22 \
+	--publish 80:80 \
+	--publish 443:443 \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/config,destination=/etc/gitlab \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/logs,destination=/var/log/gitlab \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/data,destination=/var/opt/gitlab \
