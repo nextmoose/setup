@@ -1,13 +1,14 @@
 #!/bin/sh
 
 mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs ${HOME}/srv/transient/gitlab/data ${HOME}/srv/permanent/gitlab/backup/application ${HOME}/srv/permanent/gitlab/backup/secrets &&
-    docker \
+    sudo \
+	docker \
 	container \
 	create \
 	--name gitlab \
 	--publish 127.0.1.100:20022:22 \
-	--publish 127.0.1.100:20080:80 \
-	--publish 127.0.1.100:20443:443 \
+	--publish 127.0.1.100:80:80 \
+	--publish 127.0.1.100:443:443 \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/config,destination=/etc/gitlab \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/logs,destination=/var/log/gitlab \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/data,destination=/var/opt/gitlab \
@@ -18,7 +19,7 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	docker events --filter "container=gitlab" --filter event="health_status: healthy" | while read EVENT
 	do
 	    echo WE ARE IN THE LOOP &&
-		return 0
+		exit 0
 	done
     } &&
     wait_for_healthy &&
@@ -29,9 +30,9 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	BACKUP1=${BACKUP2%_*} &&
 	    BACKUP=${BACKUP1%_*} &&
 	    echo Restoring ${BACKUP} &&
-	    docker container exec --interactive --tty gitlab bash -c "BACKUP=${BACKUP} bash"
+	    docker container exec --interactive --tty gitlab bash -c "BACKUP=${BACKUP} bash" &&
+	    echo yes | docker container exec --interactive gitlab gitlab-rake gitlab:backup:restore BACKUP=${BACKUP}
     fi &&
-    echo yes | docker container exec --interactive gitlab gitlab-rake gitlab:backup:restore BACKUP=${BACKUP} &&
     docker container exec --interactive --tty gitlab apt-get update --assume-yes &&
     docker container exec --interactive --tty gitlab apt-get install --assume-yes cron &&
     FILE=$(docker container exec --interactive --tty gitlab mktemp) &&
