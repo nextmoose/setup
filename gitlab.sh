@@ -18,14 +18,7 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	docker events --filter "container=gitlab" --filter event="health_status: healthy" | while read EVENT
 	do
 	    echo WE ARE IN THE LOOP &&
-	    if [ "healthy" == $(docker container inspect --format "{{.State.Health.Status}}" gitlab) ]
-	    then
-		echo The gitlab container is healthy. &&
-		    return 0
-	    else
-		echo The gitlab container is not healthy. &&
-		    exit 64
-	    fi
+		return 0
 	done
     } &&
     wait_for_healthy &&
