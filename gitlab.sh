@@ -17,8 +17,8 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	gitlab/gitlab-ce:latest &&
     docker container start gitlab &&
     EVENT_FILE=$(mktemp) &&
-    docker events --filter "container=gitlab" --filter event="health_status: healthy" > ${EVENT_FILE} &&
-    cat ${FILE_FILE} | $(dirname ${0})/first_line.sh &&
+    sleep 5m &&
+    [ "healthy" == $(docker container inspect --format "{{.State.Health.Status}}" gitlab) ] &&
     echo WE ESCAPED THE LOOP &&
     BACKUP2=$(sudo ls -1t ${HOME}/srv/permanent/gitlab/backup/application | head -n 1) &&
     if [ ! -z "${BACKUP2}" ]
@@ -37,4 +37,5 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
     sleep 1m &&
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backup/application &&
     sleep 1m &&
-    sudo ls -1 ${HOME}/srv/permanent/gitlab/backup/application
+    sudo ls -1 ${HOME}/srv/permanent/gitlab/backup/application &&
+    echo DONE
