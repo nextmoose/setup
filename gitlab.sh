@@ -15,7 +15,7 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/data,destination=/var/opt/gitlab \
 	--mount type=bind,source=${HOME}/srv/permanent/gitlab/backups/application,destination=/var/opt/gitlab/backups \
 	gitlab/gitlab-ce:latest &&
-    docker container start gi tlab &&
+    docker container start gitlab &&
     seq 0 9 | while read I
     do
 	sudo docker container inspect --format "${I} -- {{.State.Health.Status}}" gitlab &&
