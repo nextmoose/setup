@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export RUNNER_REGISTRATION_TOKEN=$(uuidgen) &&
+export REGISTRATION_TOKEN=$(uuidgen) &&
     mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs ${HOME}/srv/transient/gitlab/data ${HOME}/srv/permanent/gitlab/backups/application ${HOME}/srv/permanent/gitlab/backups/secrets ${HOME}/srv/transient/gitlab-runner/config &&
     sudo \
 	docker \
@@ -8,7 +8,7 @@ export RUNNER_REGISTRATION_TOKEN=$(uuidgen) &&
 	create \
 	--hostname gitlab \
 	--name gitlab \
-	--env GITLAB_OMNIBUS_CONFIG="initial_shared_runners_registration_token=${RUNNER_REGISTRATION_TOKEN}" \
+	--env GITLAB_OMNIBUS_CONFIG="initial_shared_runners_registration_token=${REGISTRATION_TOKEN}" \
 	--publish 127.0.1.101:20022:22 \
 	--publish 127.0.1.101:80:80 \
 	--publish 127.0.1.101:443:443 \
@@ -23,10 +23,13 @@ export RUNNER_REGISTRATION_TOKEN=$(uuidgen) &&
 	--name gitlab-runner \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab-runner/config,destination=/etc/gitlab-runner \
 	--mount type=bind,source=/var/run/docker.sock,destination=/var/run/docker.sock,readonly=true \
-	--env REGISTRATION_TOKEN=${RUNNER_REGISTRATION_TOKEN} \
+	--env REGISTRATION_TOKEN \
 	gitlab/gitlab-runner:latest &&
     docker container start gitlab gitlab-runner &&
-    seq 0 9 | while read I
+    docker network create gitlab &&
+    docker network connect --alias gitlab gitlab gitlab &&
+    docker network connect gitlab gitlab-runner &&
+    seq 0 11 | while read I
     do
 	sudo docker container inspect --format "${I} -- {{.State.Health.Status}}" gitlab &&
 	    sleep 1m
@@ -49,7 +52,7 @@ export RUNNER_REGISTRATION_TOKEN=$(uuidgen) &&
     echo "* * * * * nice --adjustment 19 gitlab-rake gitlab:backup:create >> /backup.application.log 2>&1" | docker container exec --interactive gitlab crontab - &&
     echo BETA 004 &&
     docker container exec --interactive --tty gitlab sed -i "s@^session    required 
-    pam_loginuid.so\$@#session    required   pam_loginuid.so@" /etc/pam.d/cron
+    pam_loginuid.so\$@#session    required   pam_loginuid.so@" /etc/pam.d/cron &&
     echo BETA 005 &&
     docker container exec --detach gitlab cron -f &&
     echo BETA 006 &&
@@ -69,5 +72,9 @@ export RUNNER_REGISTRATION_TOKEN=$(uuidgen) &&
 	gitlab-runner \
 	register \
 	--non-interactive \
-	&&
+	--url http://gitlab \
+	--registration-token ${REGISTRATION_TOKEN} \
+	--executor docker \
+	--tag docker \
+	--docker-image docker:18.05.0-ce &&
     echo DONE
