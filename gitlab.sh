@@ -28,8 +28,7 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	BACKUP1=${BACKUP2%_*} &&
 	    BACKUP=${BACKUP1%_*} &&
 	    echo Restoring ${BACKUP} &&
-	    docker container exec --interactive --tty gitlab bash -c "BACKUP=${BACKUP} bash" &&
-	    echo yes | docker container exec --interactive gitlab gitlab-rake gitlab:backup:restore BACKUP=${BACKUP}
+	    docker container exec --interactive --tty gitlab bash -c "BACKUP=${BACKUP} bash"
     fi &&
     docker container exec --interactive --tty gitlab apt-get update --assume-yes &&
     docker container exec --interactive --tty gitlab apt-get install --assume-yes cron &&
