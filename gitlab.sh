@@ -49,4 +49,5 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
     sleep 1m &&
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backups/application &&
     [ "healthy" == $(docker container inspect --format "{{.State.Health.Status}}" gitlab-runner) ] &&
+    docker container exec --interactive --tty gitlab-runner bash &&
     echo DONE
