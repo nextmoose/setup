@@ -1,6 +1,6 @@
 #!/bin/sh
 
-mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs ${HOME}/srv/transient/gitlab/data ${HOME}/srv/permanent/gitlab/backups/application ${HOME}/srv/permanent/gitlab/backups/secrets &&
+mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs ${HOME}/srv/transient/gitlab/data ${HOME}/srv/permanent/gitlab/backups/application ${HOME}/srv/permanent/gitlab/backups/secrets ${HOME}/srv/transient/gitlab-runner/config &&
     sudo \
 	docker \
 	container \
@@ -15,7 +15,14 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/data,destination=/var/opt/gitlab \
 	--mount type=bind,source=${HOME}/srv/permanent/gitlab/backups/application,destination=/var/opt/gitlab/backups \
 	gitlab/gitlab-ce:latest &&
-    docker container start gitlab &&
+    docker \
+	container \
+	create \
+	--name gitlab-runner \
+	--mount type=bind,source=${HOME}/srv/transient/gitlab-runner/config,destination=/etc/gitlab-runner \
+	--mount type=bind,source=/var/run/docker.sock,destination=/var/run/docker.sock,readonly=true \
+	gitlab/gitlab-runner:latest &&
+    docker container start gitlab gitlab-runner &&
     seq 0 9 | while read I
     do
 	sudo docker container inspect --format "${I} -- {{.State.Health.Status}}" gitlab &&
@@ -41,4 +48,5 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backups/application &&
     sleep 1m &&
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backups/application &&
+    [ "healthy" == $(docker container inspect --format "{{.State.Health.Status}}" gitlab-runner) ] &&
     echo DONE
