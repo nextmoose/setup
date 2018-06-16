@@ -25,7 +25,7 @@ export REGISTRATION_TOKEN=$(uuidgen) &&
 	--mount type=bind,source=/var/run/docker.sock,destination=/var/run/docker.sock,readonly=true \
 	--env REGISTRATION_TOKEN \
 	gitlab/gitlab-runner:latest &&
-    docker container start gitlab gitlab-runner &&
+    docker container start gitlab &&
     docker network create gitlab &&
     docker network connect --alias gitlab gitlab gitlab &&
     docker network connect gitlab gitlab-runner &&
@@ -61,6 +61,8 @@ export REGISTRATION_TOKEN=$(uuidgen) &&
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backups/application &&
     sleep 1m &&
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backups/application &&
+    docker container start gitlab-runner &&
+    sleep 1m &&
     [ "healthy" == $(docker container inspect --format "{{.State.Health.Status}}" gitlab-runner) ] &&
     docker container exec --interactive --tty gitlab-runner bash &&
     docker \
