@@ -16,8 +16,7 @@ mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs $
 	--mount type=bind,source=${HOME}/srv/permanent/gitlab/backups/application,destination=/var/opt/gitlab/backups \
 	gitlab/gitlab-ce:latest &&
     docker container start gitlab &&
-    EVENT_FILE=$(mktemp) &&
-    sleep 5m &&
+    sleep 10m &&
     [ "healthy" == $(docker container inspect --format "{{.State.Health.Status}}" gitlab) ] &&
     echo WE ESCAPED THE LOOP &&
     BACKUP2=$(sudo ls -1t ${HOME}/srv/permanent/gitlab/backups/application | head -n 1) &&
