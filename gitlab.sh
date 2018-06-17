@@ -71,6 +71,7 @@ EOF
 	gitlab-runner \
 	gitlab-runner \
 	register \
+	--docker-image docker:18.05.0-ce \
 	--non-interactive \
 	--url http://gitlab \
 	--registration-token ${GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN} \
@@ -80,7 +81,6 @@ EOF
 	--limit 10 \
 	--locked false \
 	--docker-network-mode gitlab \
-	--docker-volumes /var/run/docker.sock:/var/run/docker.sock:ro \
-	--docker-image docker:18.05.0-ce &&
+	--docker-volumes /var/run/docker.sock:/var/run/docker.sock:ro &&
     echo GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN} \
     echo DONE
