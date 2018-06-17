@@ -1,6 +1,12 @@
 #!/bin/sh
 
-export GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN=$(uuidgen) &&
+    if [ -f ${HOME}/srv/transient/gitlab-shared-runners-registration-token ]
+    then
+	GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN="$(cat ${HOME}/srv/transient/gitlab-shared-runners-registration-token)"
+    else
+	GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN=$(uuidgen) &&
+	    echo ${GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN} > ${HOME}/srv/transient/gitlab-shared-runners-registration-token
+    fi
     mkdir -p ${HOME}/srv/transient/gitlab/config ${HOME}/srv/transient/gitlab/logs ${HOME}/srv/transient/gitlab/data ${HOME}/srv/permanent/gitlab/backups/application ${HOME}/srv/permanent/gitlab/backups/secrets ${HOME}/srv/transient/gitlab-runner/config &&
     sudo \
 	docker \
