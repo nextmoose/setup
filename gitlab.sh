@@ -16,7 +16,7 @@
 	--hostname gitlab \
 	--name gitlab \
 	--env GITLAB_OMNIBUS_CONFIG="gitlab_rails['initial_shared_runners_registration_token'] = '${GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN}'" \
-	--publish 127.0.1.101:20022:22 \
+	--publish 20022:22 \
 	--publish 127.0.1.101:80:80 \
 	--publish 127.0.1.101:443:443 \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/config,destination=/etc/gitlab \
@@ -57,7 +57,13 @@ EOF
     docker container exec --interactive --tty gitlab apt-get install --assume-yes cron &&
     echo "* * * * * nice --adjustment 19 gitlab-rake gitlab:backup:create >> /backup.application.log 2>&1" | docker container exec --interactive gitlab crontab - &&
     docker container exec --interactive --tty gitlab sed -i "s@^session    required   pam_loginuid.so\$@#session    required   pam_loginuid.so@" /etc/pam.d/cron &&
+    docker container exec --interactive --tty gitlab gitlab-ctl reconfigure &&
     docker container exec --interactive --tty gitlab gitlab-ctl restart &&
+    seq 0 11 | while read I
+    do
+	sudo docker container inspect --format "${I} -- {{.State.Health.Status}}" gitlab &&
+	    sleep 1m
+    done &&
     docker container exec --detach gitlab cron -f &&
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backups/application &&
     sleep 1m &&
@@ -80,7 +86,7 @@ EOF
 	--executor docker \
 	--maximum-timeout 3600 \
 	--name docker-$(uuidgen) \
-	--limit 10 \
+	--limit 1 \
 	--locked false \
 	--docker-network-mode gitlab \
 	--docker-volumes /var/run/docker.sock:/var/run/docker.sock:ro &&
