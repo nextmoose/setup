@@ -8,7 +8,7 @@ export GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN=$(uuidgen) &&
 	create \
 	--hostname gitlab \
 	--name gitlab \
-	--env GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN \
+	--env GITLAB_OMNIBUS_CONFIG="gitlab_rails['initial_shared_runners_registration_token'] = '${GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN}'" \
 	--publish 127.0.1.101:20022:22 \
 	--publish 127.0.1.101:80:80 \
 	--publish 127.0.1.101:443:443 \
