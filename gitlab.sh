@@ -35,7 +35,7 @@ export REGISTRATION_TOKEN=$(uuidgen) &&
 	    sleep 1m
     done &&
     [ "healthy" == $(docker container inspect --format "{{.State.Health.Status}}" gitlab) ] &&
-    BACKUP2=$(sudo ls -1t ${HOME}/srv/permanent/gitlab/backups/application | head -n 1) &&
+    BACKUP2=$(sudo ls -1t ${HOME}/srv/permanent/gitlab/backups/application | grep "_gitlab_backup.tar\$" | head -n 1) &&
     if [ ! -z "${BACKUP2}" ]
     then
 	BACKUP1=${BACKUP2%_*} &&
