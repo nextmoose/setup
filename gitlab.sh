@@ -82,5 +82,5 @@ EOF
 	--locked false \
 	--docker-network-mode gitlab \
 	--docker-volumes /var/run/docker.sock:/var/run/docker.sock:ro &&
-    echo GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN} \
+    echo ${GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN} &&
     echo DONE
