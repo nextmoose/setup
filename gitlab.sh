@@ -57,7 +57,6 @@ EOF
     sleep 1m &&
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backups/application &&
     sleep 1m &&
-    docker container exec --interactive --tty gitlab-runner bash &&
     docker \
 	container \
 	exec \
