@@ -41,7 +41,12 @@ export REGISTRATION_TOKEN=$(uuidgen) &&
 	BACKUP1=${BACKUP2%_*} &&
 	    BACKUP=${BACKUP1%_*} &&
 	    echo Restoring BACKUP2=${BACKUP2} BACKUP1=${BACKUP1} BACKUP=${BACKUP} &&
-	    (cat | docker container exec --interactive gitlab gitlab-rake gitlab:backup:restore BACKUP=${BACKUP} &&
+	    (cat <<EOF
+yes
+yes
+yes
+EOF
+	    ) | docker container exec --interactive gitlab gitlab-rake gitlab:backup:restore BACKUP=${BACKUP} &&
 	    echo ALPHA 001
     fi &&
     echo BETA 001 &&
