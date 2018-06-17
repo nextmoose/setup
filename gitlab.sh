@@ -57,8 +57,7 @@ EOF
     docker container exec --interactive --tty gitlab apt-get install --assume-yes cron &&
     echo "* * * * * nice --adjustment 19 gitlab-rake gitlab:backup:create >> /backup.application.log 2>&1" | docker container exec --interactive gitlab crontab - &&
     docker container exec --interactive --tty gitlab sed -i "s@^session    required   pam_loginuid.so\$@#session    required   pam_loginuid.so@" /etc/pam.d/cron &&
-    docker container exec --interactive --tty gitlab-ctl restart &&
-    docker container restart gitlab &&
+    docker container exec --interactive --tty gitlab gitlab-ctl restart &&
     docker container exec --detach gitlab cron -f &&
     sudo ls -1 ${HOME}/srv/permanent/gitlab/backups/application &&
     sleep 1m &&
