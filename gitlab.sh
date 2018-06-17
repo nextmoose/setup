@@ -78,7 +78,7 @@ EOF
 	--registration-token ${GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN} \
 	--executor docker \
 	--maximum-timeout 3600 \
-	--name docker \
+	--name docker-$(uuidgen) \
 	--limit 10 \
 	--locked false \
 	--docker-network-mode gitlab \
