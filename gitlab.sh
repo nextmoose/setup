@@ -77,4 +77,5 @@ EOF
 	--docker-network-mode gitlab \
 	--docker-volumes /var/run/docker.sock:/var/run/docker.sock:ro \
 	--docker-image docker:18.05.0-ce &&
+    echo GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN} \
     echo DONE
