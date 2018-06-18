@@ -17,8 +17,8 @@
 	--name gitlab \
 	--env GITLAB_OMNIBUS_CONFIG="gitlab_rails['initial_shared_runners_registration_token'] = '${GITLAB_SHARED_RUNNERS_REGISTRATION_TOKEN}'" \
 	--publish 20022:22 \
-	--publish 127.0.1.101:80:80 \
-	--publish 127.0.1.101:443:443 \
+	--publish 80:80 \
+	--publish 443:443 \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/config,destination=/etc/gitlab \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/logs,destination=/var/log/gitlab \
 	--mount type=bind,source=${HOME}/srv/transient/gitlab/data,destination=/var/opt/gitlab \
