@@ -13,6 +13,11 @@ do
 		git-thunder-repository-organization-list "${@}" &&
 		shift ${#}
 	    ;;
+	remove)
+	    shift &&
+		git-thunder-repository-organization-remove "${@}" &&
+		shift ${#}
+	    ;;
 	*)
 	    echo Unknown Option &&
 		echo ${0} &&
