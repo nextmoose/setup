@@ -83,6 +83,7 @@ EOF
 	gitlab-runner \
 	gitlab-runner \
 	register \
+	--docker-helper-image helper \
 	--pre-clone-script /pre-clone.sh \
 	--pre-build-script /pre-build.sh \
 	--post-build-script /post-build.sh \
