@@ -15,6 +15,7 @@ do
 	    echo Unknown Option &&
 		echo ${0} &&
 		echo ${@} &&
+		shift ${#} &&
 		exit 64
     esac
 done &&
