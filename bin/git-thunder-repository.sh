@@ -3,9 +3,9 @@
 while [ ${#} -gt 0 ]
 do
     case ${1} in
-	init)
+	organization)
 	    shift &&
-		git-thunder-client-init "${@}" &&
+		git-thunder-repository-organization "${@}" &&
 		shift ${#}
 	;;
 	*)

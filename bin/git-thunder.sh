@@ -3,14 +3,9 @@
 while [ ${#} -gt 0 ]
 do
     case ${1} in
-	server)
+	repository)
 	    shift &&
-		git-thunder-server "${@}" &&
-		shift ${#}
-	    ;;
-	client)
-	    shift &&
-		git-thunder-client "${@}" &&
+		git-thunder-repository "${@}" &&
 		shift ${#}
 	    ;;
 	*)

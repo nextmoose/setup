@@ -5,23 +5,19 @@ do
     case ${1} in
 	create)
 	    shift &&
-		git-thunder-server-create "${@}" &&
+		git-thunder-repository-organization-create "${@}" &&
 		shift ${#}
 	    ;;
-	major)
+	list)
 	    shift &&
-		git-thunder-server-major "${@}" &&
+		git-thunder-repository-organization-list "${@}" &&
 		shift ${#}
 	    ;;
-	minor)
-	    shift &&
-		git-thunder-server-minor "${@}" &&
-		shift ${#}
 	*)
 	    echo Unknown Option &&
 		echo ${0} &&
 		echo ${@} &&
 		exit 64
-	    ;;
+	;;
     esac
 done
