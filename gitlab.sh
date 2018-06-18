@@ -59,6 +59,10 @@ EOF
     docker container exec --interactive --tty gitlab sed -i "s@^session    required   pam_loginuid.so\$@#session    required   pam_loginuid.so@" /etc/pam.d/cron &&
     docker container exec --interactive --tty gitlab gitlab-ctl reconfigure &&
     docker container exec --interactive --tty gitlab gitlab-ctl restart &&
+    docker container cp pre-build.sh gitlab-runner:/pre-clone.sh &&
+    docker container cp pre-build.sh gitlab-runner:/pre-build.sh &&
+    docker container cp pre-build.sh gitlab-runner:/post-build.sh &&
+    docker container exec gitlab-runner chmod 0500 /*.sh &&
     seq 0 11 | while read I
     do
 	sudo docker container inspect --format "${I} -- {{.State.Health.Status}}" gitlab &&
@@ -79,6 +83,9 @@ EOF
 	gitlab-runner \
 	gitlab-runner \
 	register \
+	--pre-clone-script /pre-clone.sh \
+	--pre-build-script /pre-build.sh \
+	--post-build-script /post-build.sh \
 	--docker-image docker:18.05.0-ce \
 	--non-interactive \
 	--url http://gitlab \
