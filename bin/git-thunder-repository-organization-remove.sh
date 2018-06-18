@@ -9,7 +9,7 @@ do
 	    ;;
 	--force)
 	    FORCE="--force" &&
-		shift 2
+		shift
 	    ;;
 	*)
 	    echo Unknown Option &&
