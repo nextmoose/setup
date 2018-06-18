@@ -6,12 +6,12 @@ do
 	server)
 	    shift &&
 		git-thunder-server "${@}" &&
-		exit 0
+		shift ${#}
 	    ;;
 	client)
 	    shift &&
 		git-thunder-client "${@}" &&
-		exit 0
+		shift ${#}
 	    ;;
 	*)
 	    echo Unknown Option &&

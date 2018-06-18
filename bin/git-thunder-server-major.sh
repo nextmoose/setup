@@ -16,7 +16,7 @@ do
 		echo ${0} &&
 		echo ${@} &&
 		exit 64
-	    ;;
+	;;
     esac
 done &&
     if [ -z "${ORGANIZATION}" ]
@@ -27,6 +27,4 @@ done &&
     then
 	echo Unspecified PROJECT &&
 	    exit 66
-    fi &&
-    mkdir -p "${HOME}/srv/${ORGANIZATION}/${PROJECT}"/0/0 &&
-    git init --bare "${HOME}/srv/${ORGANIZATION}/${PROJECT}/0/0"
+    fi

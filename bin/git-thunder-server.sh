@@ -5,9 +5,18 @@ do
     case ${1} in
 	create)
 	    shift &&
-		git-thunder-create "${@}" &&
+		git-thunder-server-create "${@}" &&
 		shift ${#}
 	    ;;
+	major)
+	    shift &&
+		git-thunder-server-major "${@}" &&
+		shift ${#}
+	    ;;
+	minor)
+	    shift &&
+		git-thunder-server-minor "${@}" &&
+		shift ${#}
 	*)
 	    echo Unknown Option &&
 		echo ${0} &&
