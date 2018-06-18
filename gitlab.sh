@@ -93,7 +93,8 @@ EOF
 	--executor docker \
 	--maximum-timeout 3600 \
 	--name docker-$(uuidgen) \
-	--limit 1 \
+	--request-concurrency 1 \
+	--run-untagged true \
 	--locked false \
 	--docker-network-mode gitlab \
 	--docker-volumes /var/run/docker.sock:/var/run/docker.sock:ro &&
