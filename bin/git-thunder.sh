@@ -547,6 +547,11 @@ git_thunder() {
 		    shift &&
 			git_thunder_repository_patch_init "${@}" &&
 			shift ${#}
+		    ;;
+		link)
+		    shift &&
+			git_thunder_repository_patch_link "${@}" &&
+			shift ${#}
 		*)
 		    echo Unknown Option &&
 			echo ${0} &&
@@ -576,26 +581,6 @@ git_thunder() {
 		    MINOR="${2}" &&
 			shift 2
 		    ;;
-		--user-name)
-		    USER_NAME="${2}" &&
-			shift 2
-		    ;;
-		--user-email)
-		    USER_EMAIL="${2}" &&
-			shift 2
-		    ;;
-		--ancestor-major)
-		    ANCESTOR_MAJOR="${2}" &&
-			shift 2
-		    ;;
-		--ancestor-minor)
-		    ANCESTOR_MINOR="${2}" &&
-			shift 2
-		    ;;
-		--ancestor-patch)
-		    ANCESTOR_PATCH="${2}" &&
-			shift 2
-		    ;;
 		*)
 		    echo Unknown Option &&
 			echo ${0} &&
@@ -620,32 +605,22 @@ git_thunder() {
 	    then
 		echo Unspecified patch MINOR &&
 		    exit 68
-	    elif [ -z "${USER_NAME}" ]
-	    then
-		echo Unspecified patch USER_NAME &&
-		    exit 69
-	    elif [ -z "${USER_EMAIL}" ]
-	    then
-		echo Unspecified patch USER_EMAIL &&
-		    exit 70
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
 	    then
 		echo The specified organization - ${ORGANIZATION} - does not exist. &&
-		    exit 71
+		    exit 69
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
 	    then
 		echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
-		    exit 72
+		    exit 70
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}" ]
 	    then
 		echo The specified major - ${ORGANIZATION}/${PROJECT}/${MAJOR} - does not exist. &&
-		    exit 73
+		    exit 71
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}" ]
 	    then
 		echo The specified minor - ${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR} - does not exist. &&
-		    exit 74
-	    elif [ ! -z "${ANCESTOR_MAJOR}" ]
-		 
+		    exit 72
 	    fi &&
 	    HEAD=$(ls -1t "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}" | head --lines 1) &&
 	    if [ -z "${HEAD}" ]
@@ -654,16 +629,7 @@ git_thunder() {
 	    else
 		PATCH=$((${HEAD}+1))
 	    fi &&
-	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}" &&
-	    git init --bare "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}" &&
-	    WORK_DIR=$(mktemp -d) &&
-	    git -C ${WORK_DIR} init &&
-	    git -C ${WORK_DIR} config user.name ${USER_NAME} &&
-	    git -C ${WORK_DIR} config user.email ${USER_EMAIL} &&
-	    git -C ${WORK_DIR} remote add origin "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}" &&
-	    git -C ${WORK_DIR} commit --allow-empty --message "initial commit" &&
-	    git -C ${WORK_DIR} push origin master &&
-	    rm --recursive ${WORK_DIR}
+	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}"
     } &&
     git_thunder_repository_patch_list(){
 	while [ ${#} -gt 0 ]
@@ -727,6 +693,189 @@ git_thunder() {
 		    exit 71
 	    fi &&
 	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}"
+    } &&
+    git_thunder_repository_patch_init(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		--organization)
+		    ORGANIZATION="${2}" &&
+			shift 2
+		    ;;
+		--project)
+		    PROJECT="${2}" &&
+			shift 2
+		    ;;
+		--major)
+		    MAJOR="${2}" &&
+			shift 2
+		    ;;
+		--user-name)
+		    USER_NAME="${2}" &&
+			shift 2
+		    ;;
+		--user-email)
+		    USER_EMAIL="${2}" &&
+			shift 2
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done &&
+	    if [ -z "${ORGANIZATION}" ]
+	    then
+		echo Unspecified patch ORGANIZATION &&
+		    exit 65
+	    elif [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified patch PROJECT &&
+		    exit 66
+	    elif [ -z "${MAJOR}" ]
+	    then
+		echo Unspecified patch MAJOR &&
+		    exit 67
+	    elif [ -z "${USER_NAME}" ]
+	    then
+		echo Unspecified patch USER_NAME &&
+		    exit 68
+	    elif [ -z "${USER_EMAIL}" ]
+	    then
+		echo Unspecified patch USER_EMAIL &&
+		    exit 69
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
+		echo The specified organization - ${ORGANIZATION} - does not exist. &&
+		    exit 70
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
+	    then
+		echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
+		    exit 71
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}" ]
+	    then
+		echo The specified major - ${ORGANIZATION}/${PROJECT}/${MAJOR} - does not exist. &&
+		    exit 72
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/0" ]
+	    then
+		echo The specified minor - ${ORGANIZATION}/${PROJECT}/${MAJOR}/0 - does not exist. &&
+		    exit 73
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0" ]
+	    then
+		echo The specified patch - ${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0 - does not exist. &&
+		    exit 74
+	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0/.git" ]
+	    then
+		echo The specified patch - ${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0 - has already been started. &&
+		    exit 75
+	    fi &&
+	    WORK_DIR=$(mktemp -d) &&
+	    git -C ${WORK_DIR} init &&
+	    git -C ${WORK_DIR} config user.name "${USER_NAME}" &&
+	    git -C ${WORK_DIR} config user.email "${USER_EMAIL" &&
+	    git -C ${WORK_DIR} remote add origin "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}" &&
+	    git -C ${WORK_DIR} commit --message "initial commit" &&
+	    git -C ${WORK_DIR} push origin master &&
+	    rm --recursive ${WORK_DIR}
+    } &&
+    git_thunder_repository_patch_link(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		--organization)
+		    ORGANIZATION="${2}" &&
+			shift 2
+		    ;;
+		--project)
+		    PROJECT="${2}" &&
+			shift 2
+		    ;;
+		--major)
+		    MAJOR="${2}" &&
+			shift 2
+		    ;;
+		--ancestor-major)
+		    ANCESTOR_MAJOR="${2}" &&
+			shift 2
+		    ;;
+		--ancestor-minor)
+		    ANCESTOR_MINOR="${2}" &&
+			shift 2
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done &&
+	    if [ -z "${ORGANIZATION}" ]
+	    then
+		echo Unspecified patch ORGANIZATION &&
+		    exit 65
+	    elif [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified patch PROJECT &&
+		    exit 66
+	    elif [ -z "${MAJOR}" ]
+	    then
+		echo Unspecified patch MAJOR &&
+		    exit 67
+	    elif [ -z "${ANCESTOR_MAJOR}" ]
+	    then
+		echo Unspecified patch ANCESTOR_MAJOR &&
+		    exit 68
+	    elif [ -z "${ANCESTOR_MINOR}" ]
+	    then
+		echo Unspecified patch ANCESTOR_MINOR &&
+		    exit 69
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
+		echo The specified organization - ${ORGANIZATION} - does not exist. &&
+		    exit 70
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
+	    then
+		echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
+		    exit 71
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}" ]
+	    then
+		echo The specified major - ${ORGANIZATION}/${PROJECT}/${MAJOR} - does not exist. &&
+		    exit 72
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/0" ]
+	    then
+		echo The specified minor - ${ORGANIZATION}/${PROJECT}/${MAJOR}/0 - does not exist. &&
+		    exit 73
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0" ]
+	    then
+		echo The specified patch - ${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0 - does not exist. &&
+		    exit 74
+	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0/.git" ]
+	    then
+		echo The specified patch - ${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0 - has already been started. &&
+		    exit 75
+	    elif [ ${MAJOR} -lt ${ANCESTOR_MAJOR} ]
+	    then
+		echo The specified ancestor major - ${ANCESTOR_MAJOR} - is not prior to the specified major - ${MAJOR} &&
+		    exit 76
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${ANCESTOR_MAJOR}/${ANCESTOR_MINOR}" ]
+	    then
+		echo The specified minor ancestor ${ORGANIZATION}/${PROJECT}/${ANCESTOR_MAJOR}/${ANCESTOR_MINOR} does not exist. &&
+		    exit 77
+	    fi &&
+	    ANCESTOR_PATCH=$(ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${ANCESTOR_MAJOR}/${ANCESTOR_MINOR}" | head --lines 1) &&
+	    if [ ! -z "${ANCESTOR_PATCH}" ]
+	    then
+		WORK_DIR=$(mktemp -d) &&
+		    git -C ${WORK_DIR} init &&
+		    git -C ${WORK_DIR} remote add ancestor "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${ANCESTOR_MAJOR}/${ANCESTOR_MINOR}/${ANCESTOR_PATCH}" &&
+		    git -C ${WORK_DIR} remote add origin "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0" &&
+		    git -C ${WORK_DIR} fetch ancestor master &&
+		    git -C ${WORK_DIR} push origin master &&
+		    rm --recursive ${WORK_DIR}
+	    fi
     } &&
     mkdir -p ${HOME}/srv/reposititories &&
     git_thunder "${@}"
