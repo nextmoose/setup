@@ -37,6 +37,21 @@ git_thunder() {
 			git_thunder_repository_project "${@}" &&
 			shift ${#}
 		    ;;
+		major)
+		    shift &&
+			git_thunder_repository_major "${@}" &&
+			shift ${#}
+		    ;;
+		minor)
+		    shift &&
+			git_thunder_repository_minor "${@}" &&
+			shift ${#}
+		    ;;
+		patch)
+		    shift &&
+			git_thunder_repository_patch "${@}" &&
+			shift ${#}
+		    ;;
 		*)
 		    echo Unknown Option &&
 			echo ${0} &&
@@ -189,14 +204,6 @@ git_thunder() {
 		    NAME="${2}" &&
 			shift 2
 		    ;;
-		--user-name)
-		    USER_NAME="${2}" &&
-			shift 2
-		    ;;
-		--user-email)
-		    USER_EMAIL="${2}" &&
-			shift 2
-		    ;;
 		*)
 		    echo Unknown Option &&
 			echo ${0} &&
@@ -231,18 +238,7 @@ git_thunder() {
 		    exit 69
 	    fi &&
 	    mkdir -p ${HOME}/srv/reposititories &&
-	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" &&
-	    git -C "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" init --bare &&
-	    WORK_DIR=$(mktemp -d) &&
-	    git -C "${WORK_DIR}" init &&
-	    git -C "${WORK_DIR}" remote add origin "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" &&
-	    touch "${WORK_DIR}/.gitignore" &&
-	    git -C "${WORK_DIR}" add .gitignore &&
-	    git -C "${WORK_DIR}" config user.name "${USER_NAME}" &&
-	    git -C "${WORK_DIR}" config user.name "${USER_NAME}" &&
-	    git -C "${WORK_DIR}" commit --message "initial commit" &&
-	    git -C "${WORK_DIR}" push origin master &&
-	    rm -rf ${WORK_DIR}
+	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}"
     } &&
     git_thunder_repository_project_list(){
 	while [ ${#} -gt 0 ]
@@ -311,5 +307,217 @@ git_thunder() {
 	    fi &&
 	    mkdir -p "${HOME}/srv/repositories" &&
 	    rm --recursive ${FORCE} "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}"
+    } &&
+    git_thunder_repository_major(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		create)
+		    shift &&
+			git_thunder_repository_major_create "${@}" &&
+			shift ${#}
+		    ;;
+		list)
+		    shift &&
+			git_thunder_repository_major_list "${@}" &&
+			shift ${#}
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done
+    } &&
+    git_thunder_repository_major_create(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		--organization)
+		    ORGANIZATION="${2}" &&
+			shift 2
+		    ;;
+		--project)
+		    PROJECT="${2}" &&
+			shift 2
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done &&
+	    if [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified major PROJECT &&
+		    exit 65
+	    elif [ -z "${ORGANIZATION}" ]
+	    then
+		echo Unspecified major ORGANIZATION &&
+		    exit 66
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
+		echo The specified organization - ${ORGANIZATION} - does not exist. &&
+		    exit 67
+	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" ]
+	    then
+		echo The project - ${ORGANIZATION}/${NAME} - already exists. &&
+		    exit 68
+	    fi &&
+	    mkdir -p ${HOME}/srv/reposititories &&
+	    HEAD=$(ls -1t "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" | head --lines 1) &&
+	    if [ -z "${HEAD}" ]
+	    then
+		MAJOR=0
+	    else
+		MAJOR=$((${HEAD}+1))
+	    fi
+	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}"
+    } &&
+    git_thunder_repository_major_list(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		--organization)
+		    ORGANIZATION="${2}" &&
+			shift 2
+		    ;;
+		--project)
+		    PROJECT="${2}" &&
+			shift 2
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done &&
+	    if [ -z "${ORGANIZATION}" ]
+	    then
+		echo Unspecified major ORGANIZATION &&
+		    exit 65
+	    elif [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified major PROJECT &&
+		    exit 66
+	    fi &&
+	    mkdir -p ${HOME}/srv/reposititories &&
+	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}"
+    } &&
+    git_thunder_repository_minor(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		create)
+		    shift &&
+			git_thunder_repository_minor_create "${@}" &&
+			shift ${#}
+		    ;;
+		list)
+		    shift &&
+			git_thunder_repository_minor_list "${@}" &&
+			shift ${#}
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done
+    } &&
+    git_thunder_repository_minor_create(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		--organization)
+		    ORGANIZATION="${2}" &&
+			shift 2
+		    ;;
+		--project)
+		    PROJECT="${2}" &&
+			shift 2
+		    ;;
+		--major)
+		    MAJOR="${2}" &&
+			shift 2
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done &&
+	    if [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified minor PROJECT &&
+		    exit 65
+	    elif [ -z "${ORGANIZATION}" ]
+	    then
+		echo Unspecified minor ORGANIZATION &&
+		    exit 66
+	    elif [ -z "${MAJOR}" ]
+	    then
+		echo Unspecified minor MAJOR &&
+		    exit 67
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
+		echo The specified organization - ${ORGANIZATION} - does not exist. &&
+		    exit 68
+	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
+	    then
+		echo The project - ${ORGANIZATION}/${NAME} - already exists. &&
+		    exit 69
+	    fi &&
+	    mkdir -p ${HOME}/srv/reposititories &&
+	    HEAD=$(ls -1t "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" | head --lines 1) &&
+	    if [ -z "${HEAD}" ]
+	    then
+		MAJOR=0
+	    else
+		MAJOR=$((${HEAD}+1))
+	    fi
+	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}"
+    } &&
+    git_thunder_repository_major_list(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		--organization)
+		    ORGANIZATION="${2}" &&
+			shift 2
+		    ;;
+		--project)
+		    PROJECT="${2}" &&
+			shift 2
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done &&
+	    if [ -z "${ORGANIZATION}" ]
+	    then
+		echo Unspecified major ORGANIZATION &&
+		    exit 65
+	    elif [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified major PROJECT &&
+		    exit 66
+	    fi &&
+	    mkdir -p ${HOME}/srv/reposititories &&
+	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}"
     } &&
     git_thunder "${@}"
