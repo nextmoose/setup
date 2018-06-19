@@ -1080,5 +1080,13 @@ git_thunder_working_emacs(){
 	    echo The specified patch - ${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH} - has already been published. &&
 		exit 77
 	fi &&
+	cd $(mktemp -d "${HOME}/srv/working/XXXXXXXX") &&
+	git init &&
+	git config user.name "${USER_NAME}" &&
+	git config user.email "${USER_EMAIL}" &&
+	git remote add origin "${HOME}/srv/repository/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}" &&
+	git fetch origin master &&
+	git checkout -b origin/master &&
+	emacs . &
 } &&
 git_thunder "${@}"
