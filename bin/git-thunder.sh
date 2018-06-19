@@ -24,6 +24,7 @@ git_thunder() {
     done
 } &&
     git_thunder_repository() {
+	mkdir -p ${HOME}/srv/reposititories &&
 	while [ ${#} -gt 0 ]
 	do
 	    case ${1} in
@@ -866,6 +867,9 @@ git_thunder() {
 		    exit 77
 	    fi &&
 	    ANCESTOR_PATCH=$(ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${ANCESTOR_MAJOR}/${ANCESTOR_MINOR}" | head --lines 1) &&
+	    mkdir -p "${HOME}/srv/links/${ORGANIZATION}/${PROJECT}/${MAJOR}" &&
+	    echo ${ANCESTOR_MAJOR} > "${HOME}/srv/links/${ORGANIZATION}/${PROJECT}/${MAJOR}/major" &&
+	    echo ${ANCESTOR_MINOR} > "${HOME}/srv/links/${ORGANIZATION}/${PROJECT}/${MAJOR}/minor" &&
 	    if [ ! -z "${ANCESTOR_PATCH}" ]
 	    then
 		WORK_DIR=$(mktemp -d) &&
@@ -879,5 +883,34 @@ git_thunder() {
 		    rm --recursive ${WORK_DIR}
 	    fi
     } &&
-    mkdir -p ${HOME}/srv/reposititories &&
+    git_thunder_working(){
+	while [ ${1} -gt 0 ]
+	do
+	    case ${1} in
+		emacs)
+		    shift &&
+			git_thunder_working_emacs "${@}" &&
+			shift ${#}
+		;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		;;
+	    esac
+	done
+    } &&
+    git_thunder_working_emacs(){
+	while [ ${1} -gt 0 ]
+	do
+	    case ${1} in
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+	    esac
+	done
+    } &&
     git_thunder "${@}"
