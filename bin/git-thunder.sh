@@ -543,6 +543,10 @@ git_thunder() {
 			git_thunder_repository_patch_list "${@}" &&
 			shift ${#}
 		    ;;
+		init)
+		    shift &&
+			git_thunder_repository_patch_init "${@}" &&
+			shift ${#}
 		*)
 		    echo Unknown Option &&
 			echo ${0} &&
@@ -582,19 +586,19 @@ git_thunder() {
 	done &&
 	    if [ -z "${ORGANIZATION}" ]
 	    then
-		echo Unspecified minor ORGANIZATION &&
+		echo Unspecified patch ORGANIZATION &&
 		    exit 65
 	    elif [ -z "${PROJECT}" ]
 	    then
-		echo Unspecified minor PROJECT &&
+		echo Unspecified patch PROJECT &&
 		    exit 66
 	    elif [ -z "${MAJOR}" ]
 	    then
-		echo Unspecified minor MAJOR &&
+		echo Unspecified patch MAJOR &&
 		    exit 67
 	    elif [ -z "${MINOR}" ]
 	    then
-		echo Unspecified minor MINOR &&
+		echo Unspecified patch MINOR &&
 		    exit 68
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
 	    then
@@ -619,10 +623,11 @@ git_thunder() {
 		PATCH=0
 	    else
 		PATCH=$((${HEAD}+1))
-	    fi
-	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}"
+	    fi &&
+	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}" &&
+	    git init --bare "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}"
     } &&
-    git_thunder_repository_minor_list(){
+    git_thunder_repository_patch_list(){
 	while [ ${#} -gt 0 ]
 	do
 	    case ${1} in
@@ -652,19 +657,19 @@ git_thunder() {
 	done &&
 	    if [ -z "${ORGANIZATION}" ]
 	    then
-		echo Unspecified minor ORGANIZATION &&
+		echo Unspecified patch ORGANIZATION &&
 		    exit 65
 	    elif [ -z "${PROJECT}" ]
 	    then
-		echo Unspecified minor PROJECT &&
+		echo Unspecified patch PROJECT &&
 		    exit 66
 	    elif [ -z "${MAJOR}" ]
 	    then
-		echo Unspecified minor MAJOR &&
+		echo Unspecified patch MAJOR &&
 		    exit 67
 	    elif [ -z "${MINOR}" ]
 	    then
-		echo Unspecified minor MINOR &&
+		echo Unspecified patch MINOR &&
 		    exit 68
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
 	    then
@@ -680,10 +685,102 @@ git_thunder() {
 		    exit 71
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}" ]
 	    then
-		echo The specified minor - ${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR} - does not exist. &&
+		echo The specified patch - ${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR} - does not exist. &&
 		    exit 71
 	    fi &&
 	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}"
+    } &&
+    git_thunder_repository_patch_init(){
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		--organization)
+		    ORGANIZATION="${2}" &&
+			shift 2
+		    ;;
+		--project)
+		    PROJECT="${2}" &&
+			shift 2
+		    ;;
+		--major)
+		    MAJOR="${2}" &&
+			shift 2
+		    ;;
+		--minor)
+		    MINOR="${2}" &&
+			shift 2
+		    ;;
+		--patch)
+		    PATCH="${2}" &&
+			shift 2
+		    ;;
+		--user-name)
+		    USER_NAME="${2}" &&
+			shift 2
+		    ;;
+		--user-email)
+		    USER_EMAIL="${2}" &&
+			shift 2
+		    ;;
+		*)
+		    echo Unknown Option &&
+			echo ${0} &&
+			echo ${@} &&
+			exit 64
+		    ;;
+	    esac
+	done &&
+	    if [ -z "${ORGANIZATION}" ]
+	    then
+		echo Unspecified patch ORGANIZATION &&
+		    exit 65
+	    elif [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified patch PROJECT &&
+		    exit 66
+	    elif [ -z "${MAJOR}" ]
+	    then
+		echo Unspecified patch MAJOR &&
+		    exit 67
+	    elif [ -z "${MINOR}" ]
+	    then
+		echo Unspecified patch MINOR &&
+		    exit 68
+	    elif [ -z "${PATCH}" ]
+	    then
+		echo Unspecified patch MINOR &&
+		    exit 68
+	    elif [ -z "${USER_NAME}" ]
+	    then
+		echo Unspecified patch USER_NAME &&
+		    exit 69
+	    elif [ -z "${USER_EMAIL}" ]
+	    then
+		echo Unspecified patch USER_EMAIL &&
+		    exit 70
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
+		echo The specified organization - ${ORGANIZATION} - does not exist. &&
+		    exit 71
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
+	    then
+		echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
+		    exit 72
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}" ]
+	    then
+		echo The specified major - ${ORGANIZATION}/${PROJECT}/${MAJOR} - does not exist. &&
+		    exit 73
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}" ]
+	    then
+		echo The specified minor - ${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR} - does not exist. &&
+		    exit 74
+	    fi &&
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH}" ]
+	    then
+		echo The specified minor - ${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}/${PATCH} - does not exist. &&
+		    exit 75
+	    fi &&
+	    git 
     } &&
     mkdir -p ${HOME}/srv/reposititories &&
     git_thunder "${@}"
