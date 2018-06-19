@@ -94,7 +94,7 @@ git_thunder() {
 		echo The organization - ${NAME} - already exists. &&
 		    exit 66
 	    fi &&
-	    mkdir -p "${HOME}/srv/reposititories" &&
+	    mkdir -p "${HOME}/srv/repositories" &&
 	    mkdir "${HOME}/srv/repositories/${NAME}"
     } &&
     git_thunder_repository_organization_list(){
@@ -109,7 +109,7 @@ git_thunder() {
 		    ;;
 	    esac
 	done &&
-	    mkdir -p "${HOME}/srv/reposititories" &&
+	    mkdir -p "${HOME}/srv/repositories" &&
 	    ls -1 "${HOME}/srv/repositories"
     } &&
     git_thunder_repository_organization_remove(){
@@ -141,7 +141,7 @@ git_thunder() {
 		echo The organization - ${NAME} - does not exist. &&
 		    exit 66
 	    fi &&
-	    mkdir -p ${HOME}/srv/reposititories &&
+	    mkdir -p ${HOME}/srv/repositories &&
 	    rm --recursive ${FORCE} "${HOME}/srv/repositories/${NAME}"
     } &&
     git_thunder_repository_project(){
@@ -266,16 +266,19 @@ git_thunder() {
 		echo Unspecified project NAME &&
 		    exit 65
 	    elif [ -z "${ORGANIZATION}" ]
+	    then
 		 echo unspecified project ORGANIZATION &&
 		     exit 66
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
 		 echo The specified organization - ${ORGANIZATION} - does not exist. &&
 		     exit 67
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
+	    then
 		 echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
 		     exit 68
 	    fi &&
-	    mkdir -p "${HOME}/srv/reposititories" &&
+	    mkdir -p "${HOME}/srv/repositories" &&
 	    rm --recursive ${FORCE} "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}"
     } &&
     git_thunder "${@}"
