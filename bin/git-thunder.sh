@@ -504,14 +504,30 @@ git_thunder() {
 	done &&
 	    if [ -z "${ORGANIZATION}" ]
 	    then
-		echo Unspecified major ORGANIZATION &&
+		echo Unspecified minor ORGANIZATION &&
 		    exit 65
 	    elif [ -z "${PROJECT}" ]
 	    then
-		echo Unspecified major PROJECT &&
+		echo Unspecified minor PROJECT &&
 		    exit 66
+	    elif [ -z "${MAJOR}" ]
+	    then
+		echo Unspecified minor MAJOR &&
+		    exit 67
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
+		echo The specified organization - ${ORGANIZATION} - does not exist. &&
+		    exit 68
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
+	    then
+		echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
+		    exit 69
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}" ]
+	    then
+		echo The specified major - ${ORGANIZATION}/${PROJECT}/${MAJOR} - does not exist. &&
+		    exit 70
 	    fi &&
-	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}"
+	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}"
     } &&
     mkdir -p ${HOME}/srv/reposititories &&
     git_thunder "${@}"
