@@ -9,6 +9,11 @@ git_thunder() {
 		    git_thunder_repository "${@}" &&
 		    shift ${#}
 		;;
+	    working)
+		shift &&
+		    git_thunder_working "${@}" &&
+		    shift ${#}
+		;;
 	    *)
 		echo Unknown Option &&
 		    echo ${0} &&
@@ -184,6 +189,14 @@ git_thunder() {
 		    NAME="${2}" &&
 			shift 2
 		    ;;
+		--user-name)
+		    USER_NAME="${2}" &&
+			shift 2
+		    ;;
+		--user-email)
+		    USER_EMAIL="${2}" &&
+			shift 2
+		    ;;
 		*)
 		    echo Unknown Option &&
 			echo ${0} &&
@@ -208,10 +221,28 @@ git_thunder() {
 	    then
 		echo The project - ${ORGANIZATION}/${NAME} - already exists. &&
 		    exit 68
+	    elif [ -z "${USER_NAME}" ]
+	    then
+		echo Unspecified project USER_NAME &&
+		    exit 69
+	    elif [ -z "${USER_EMAIL}" ]
+	    then
+		echo Unspecified project USER_EMAIL &&
+		    exit 69
 	    fi &&
 	    mkdir -p ${HOME}/srv/reposititories &&
 	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" &&
-	    git -C "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" init --bare
+	    git -C "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" init --bare &&
+	    WORK_DIR=$(mktemp -d) &&
+	    git -C "${WORK_DIR}" init &&
+	    git -C "${WORK_DIR}" remote add origin "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" &&
+	    touch "${WORK_DIR}/.gitignore" &&
+	    git -C "${WORK_DIR}" add .gitignore &&
+	    git -C "${WORK_DIR}" config user.name "${USER_NAME}" &&
+	    git -C "${WORK_DIR}" config user.name "${USER_NAME}" &&
+	    git -C "${WORK_DIR}" commit --message "initial commit" &&
+	    git -C "${WORK_DIR}" push origin master &&
+	    rm -rf ${WORK_DIR}
     } &&
     git_thunder_repository_project_list(){
 	while [ ${#} -gt 0 ]
