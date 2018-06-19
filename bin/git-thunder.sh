@@ -93,8 +93,8 @@ git_thunder() {
 	while [ ${#} -gt 0 ]
 	do
 	    case ${1} in
-		--name)
-		    NAME="${2}" &&
+		--organization)
+		    ORGANIZATION="${2}" &&
 			shift 2
 		    ;;
 		*)
@@ -105,17 +105,16 @@ git_thunder() {
 		    ;;
 	    esac
 	done &&
-	    if [ -z "${NAME}" ]
+	    if [ -z "${ORGANIZATION}" ]
 	    then
-		echo Unspecified organization NAME &&
+		echo Unspecified organization ORGANIZATION &&
 		    exit 65
-	    elif [ -d "${HOME}/srv/repositories/${NAME}" ]
+	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
 	    then
-		echo The organization - ${NAME} - already exists. &&
+		echo The organization - ${ORGANIZATION} - already exists. &&
 		    exit 66
 	    fi &&
-	    mkdir -p "${HOME}/srv/repositories" &&
-	    mkdir "${HOME}/srv/repositories/${NAME}"
+	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}"
     } &&
     git_thunder_repository_organization_list(){
 	while [ ${#} -gt 0 ]
@@ -129,20 +128,15 @@ git_thunder() {
 		    ;;
 	    esac
 	done &&
-	    mkdir -p "${HOME}/srv/repositories" &&
 	    ls -1 "${HOME}/srv/repositories"
     } &&
     git_thunder_repository_organization_remove(){
 	while [ ${#} -gt 0 ]
 	do
 	    case ${1} in
-		--name)
-		    NAME="${2}" &&
+		--organization)
+		    ORGANIZATION="${2}" &&
 			shift 2
-		    ;;
-		--force)
-		    FORCE=--force &&
-			shift
 		    ;;
 		*)
 		    echo Unknown Option &&
@@ -152,17 +146,16 @@ git_thunder() {
 		    ;;
 	    esac
 	done &&
-	    if [ -z "${NAME}" ]
+	    if [ -z "${ORGANIZATION}" ]
 	    then
-		echo Unspecified organization NAME &&
+		echo Unspecified organization ORGANIZATION &&
 		    exit 65
-	    elif [ ! -d "${HOME}/srv/repositories/${NAME}" ]
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
 	    then
-		echo The organization - ${NAME} - does not exist. &&
+		echo The organization - ${ORGANIZATION} - does not exist. &&
 		    exit 66
 	    fi &&
-	    mkdir -p ${HOME}/srv/repositories &&
-	    rm --recursive ${FORCE} "${HOME}/srv/repositories/${NAME}"
+	    rm --recursive "${HOME}/srv/repositories/${ORGANIZATION}"
     } &&
     git_thunder_repository_project(){
 	while [ ${#} -gt 0 ]
@@ -200,8 +193,8 @@ git_thunder() {
 		    ORGANIZATION="${2}" &&
 			shift 2
 		    ;;
-		--name)
-		    NAME="${2}" &&
+		--project)
+		    PROJECT="${2}" &&
 			shift 2
 		    ;;
 		*)
@@ -212,32 +205,22 @@ git_thunder() {
 		    ;;
 	    esac
 	done &&
-	    if [ -z "${NAME}" ]
-	    then
-		echo Unspecified project NAME &&
-		    exit 65
-	    elif [ -z "${ORGANIZATION}" ]
+	    if [ -z "${ORGANIZATION}" ]
 	    then
 		echo Unspecified project ORGANIZATION &&
+		    exit 65
+	    elif [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified project PROJECT &&
 		    exit 66
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
 	    then
 		echo The specified organization - ${ORGANIZATION} - does not exist. &&
 		    exit 67
-	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" ]
+	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
 	    then
-		echo The project - ${ORGANIZATION}/${NAME} - already exists. &&
+		echo The project - ${ORGANIZATION}/${PROJECT} - already exists. &&
 		    exit 68
-	    elif [ -z "${USER_NAME}" ]
-	    then
-		echo Unspecified project USER_NAME &&
-		    exit 69
-	    elif [ -z "${USER_EMAIL}" ]
-	    then
-		echo Unspecified project USER_EMAIL &&
-		    exit 69
-	    fi &&
-	    mkdir -p ${HOME}/srv/reposititories &&
 	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}"
     } &&
     git_thunder_repository_project_list(){
@@ -260,8 +243,11 @@ git_thunder() {
 	    then
 		echo Unspecified project ORGANIZATION &&
 		    exit 65
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
+		echo The specified organization - ${ORGANIZATION} - does not exist. &&
+		    exit 66
 	    fi &&
-	    mkdir -p ${HOME}/srv/reposititories &&
 	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}"
     } &&
     git_thunder_repository_project_remove(){
@@ -272,13 +258,9 @@ git_thunder() {
 		    ORGANIZATION="${2}" &&
 			shift 2
 		    ;;
-		--name)
-		    NAME="${2}" &&
+		--project)
+		    PROJECT="${2}" &&
 			shift 2
-		    ;;
-		--force)
-		    FORCE=--force &&
-			shift
 		    ;;
 		*)
 		    echo Unknown Option &&
@@ -288,13 +270,13 @@ git_thunder() {
 		    ;;
 	    esac
 	done &&
-	    if [ -z "${NAME}" ]
+	    if [ -z "${ORGANIZATION}" ]
 	    then
-		echo Unspecified project NAME &&
+		echo Unspecified project ORGANIZATION &&
 		    exit 65
-	    elif [ -z "${ORGANIZATION}" ]
+	    elif [ -z "${PROJECT}" ]
 	    then
-		 echo unspecified project ORGANIZATION &&
+		 echo unspecified project PROJECT &&
 		     exit 66
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
 	    then
@@ -305,7 +287,6 @@ git_thunder() {
 		 echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
 		     exit 68
 	    fi &&
-	    mkdir -p "${HOME}/srv/repositories" &&
 	    rm --recursive ${FORCE} "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}"
     } &&
     git_thunder_repository_major(){
@@ -351,24 +332,23 @@ git_thunder() {
 		    ;;
 	    esac
 	done &&
-	    if [ -z "${PROJECT}" ]
-	    then
-		echo Unspecified major PROJECT &&
-		    exit 65
-	    elif [ -z "${ORGANIZATION}" ]
+	    if [ -z "${ORGANIZATION}" ]
 	    then
 		echo Unspecified major ORGANIZATION &&
+		    exit 65
+	    elif [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified major PROJECT &&
 		    exit 66
 	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
 	    then
 		echo The specified organization - ${ORGANIZATION} - does not exist. &&
 		    exit 67
-	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}" ]
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
 	    then
-		echo The project - ${ORGANIZATION}/${NAME} - already exists. &&
+		echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
 		    exit 68
 	    fi &&
-	    mkdir -p ${HOME}/srv/reposititories &&
 	    HEAD=$(ls -1t "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" | head --lines 1) &&
 	    if [ -z "${HEAD}" ]
 	    then
@@ -406,8 +386,15 @@ git_thunder() {
 	    then
 		echo Unspecified major PROJECT &&
 		    exit 66
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}" ]
+	    then
+		echo The specified organization - ${ORGANIZATION} - does not exist. &&
+		    echo 67
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
+	    then
+		echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
+		    echo 68
 	    fi &&
-	    mkdir -p ${HOME}/srv/reposititories &&
 	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}"
     } &&
     git_thunder_repository_minor(){
@@ -457,13 +444,13 @@ git_thunder() {
 		    ;;
 	    esac
 	done &&
-	    if [ -z "${PROJECT}" ]
-	    then
-		echo Unspecified minor PROJECT &&
-		    exit 65
-	    elif [ -z "${ORGANIZATION}" ]
+	    if [ -z "${ORGANIZATION}" ]
 	    then
 		echo Unspecified minor ORGANIZATION &&
+		    exit 65
+	    elif [ -z "${PROJECT}" ]
+	    then
+		echo Unspecified minor PROJECT &&
 		    exit 66
 	    elif [ -z "${MAJOR}" ]
 	    then
@@ -473,22 +460,25 @@ git_thunder() {
 	    then
 		echo The specified organization - ${ORGANIZATION} - does not exist. &&
 		    exit 68
-	    elif [ -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" ]
 	    then
-		echo The project - ${ORGANIZATION}/${NAME} - already exists. &&
+		echo The specified project - ${ORGANIZATION}/${PROJECT} - does not exist. &&
 		    exit 69
+	    elif [ ! -d "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}" ]
+	    then
+		echo The specified major - ${ORGANIZATION}/${PROJECT}/${MAJOR} - does not exist. &&
+		    exit 70
 	    fi &&
-	    mkdir -p ${HOME}/srv/reposititories &&
-	    HEAD=$(ls -1t "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}" | head --lines 1) &&
+	    HEAD=$(ls -1t "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}" | head --lines 1) &&
 	    if [ -z "${HEAD}" ]
 	    then
-		MAJOR=0
+		MINOR=0
 	    else
-		MAJOR=$((${HEAD}+1))
+		MINOR=$((${HEAD}+1))
 	    fi
-	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}"
+	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/${MINOR}"
     } &&
-    git_thunder_repository_major_list(){
+    git_thunder_repository_minor_list(){
 	while [ ${#} -gt 0 ]
 	do
 	    case ${1} in
@@ -498,6 +488,10 @@ git_thunder() {
 		    ;;
 		--project)
 		    PROJECT="${2}" &&
+			shift 2
+		    ;;
+		--major)
+		    MAJOR="${2}" &&
 			shift 2
 		    ;;
 		*)
@@ -517,7 +511,7 @@ git_thunder() {
 		echo Unspecified major PROJECT &&
 		    exit 66
 	    fi &&
-	    mkdir -p ${HOME}/srv/reposititories &&
 	    ls -1 "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}"
     } &&
+    mkdir -p ${HOME}/srv/reposititories &&
     git_thunder "${@}"
