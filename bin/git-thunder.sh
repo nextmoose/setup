@@ -873,6 +873,8 @@ git_thunder() {
 		    git -C ${WORK_DIR} remote add ancestor "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${ANCESTOR_MAJOR}/${ANCESTOR_MINOR}/${ANCESTOR_PATCH}" &&
 		    git -C ${WORK_DIR} remote add origin "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}/${MAJOR}/0/0" &&
 		    git -C ${WORK_DIR} fetch ancestor master &&
+		    git -C ${WORK_DIR} checkout ancestor/master &&
+		    git -C ${WORK_DIR} checkout -b master &&
 		    git -C ${WORK_DIR} push origin master &&
 		    rm --recursive ${WORK_DIR}
 	    fi
