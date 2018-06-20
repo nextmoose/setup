@@ -2,7 +2,7 @@
 
 mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
-    mkfs.ext4 -L ROOT /dev/sda3 &&
+    mkfs.ext4 -f -L ROOT /dev/sda3 &&
     mount /dev/sda3 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
