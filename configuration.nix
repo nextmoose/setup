@@ -35,6 +35,7 @@
     vim
     emacs
     chromium
+    git
 ];
 
   # Some programs need SUID wrappers, can be configured further or are
@@ -90,5 +91,8 @@
   # should.
   system.stateVersion = "18.03"; # Did you read the comment?
 
-  virtualization.libvirtd.enable = true;
+  programs.virtualbox.host.enable = true;
+  virtualisation.virtualbox.host.enable = true;
+#  virtualisation.libvirtd.enable = true;
+#  virtualisation.libvirtd.qemuPackage = pkgs.qemu_kvm;
 }
