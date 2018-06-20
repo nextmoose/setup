@@ -84,6 +84,11 @@
     uid = 1000;
     extraGroups = [ "wheel" "networkmanager" ];
   };
+  users.extraUsers.luser = {
+    isNormalUser = true;
+    uid = 1001;
+    extraGroups = [ "wheel" "networkmanager" ];
+  };
 
   # This value determines the NixOS release with which your system is to be
   # compatible, in order to avoid breaking some software such as database
