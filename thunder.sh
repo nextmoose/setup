@@ -3,6 +3,8 @@
 rm -rf ${HOME}/bin &&
     mkdir -p ${HOME}/bin &&
     cp bin/git-thunder.sh ${HOME}/bin/git-thunder &&
+    chmod 0500 ${HOME}/bin/git-thunder &&
+    export PATH=${PATH}:/home/user/bin &&
     rm -rf ${HOME}/srv &&
     git thunder repository organization create --organization acme &&
     git thunder repository project create --organization acme --project motor &&
