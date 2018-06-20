@@ -90,5 +90,5 @@
   # should.
   system.stateVersion = "18.03"; # Did you read the comment?
 
-  virtualization.virtualbox.host.enable = true;
+  virtualization.libvirtd.enable = true;
 }
