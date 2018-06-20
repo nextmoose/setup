@@ -222,7 +222,8 @@ git_thunder() {
 	    then
 		echo The project - ${ORGANIZATION}/${PROJECT} - already exists. &&
 		    exit 68
-		mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${NAME}"
+	    fi &&
+	    mkdir "${HOME}/srv/repositories/${ORGANIZATION}/${PROJECT}"
     } &&
     git_thunder_repository_project_list(){
 	while [ ${#} -gt 0 ]
