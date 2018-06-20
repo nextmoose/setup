@@ -1,9 +1,13 @@
 #!/bin/sh
 
-mkdir -p ${HOME}/bin &&
-    ls -1 bin | while read FILE
-    do
-	cp bin/${FILE} ${HOME}/bin/${FILE%.*} &&
-	    chmod 0700 ${HOME}/bin/${FILE%.*}
-    done
-
+rm -rf ${HOME}/bin &&
+    mkdir -p ${HOME}/bin &&
+    cp bin/git-thunder.sh ${HOME}/bin/git-thunder &&
+    rm -rf ${HOME}/srv &&
+    git thunder repository organization create --organization acme &&
+    git thunder repository project create --organization acme --project motor &&
+    git thunder repository major create --organization acme --project motor &&
+    git thunder repository minor create --organization acme --project motor --major 0 &&
+    git thunder repository patch create --organization acme --project motor --major 0 --patch 0 &&
+    git thunder repository patch link --organization acme --project motor --major 0
+    true
