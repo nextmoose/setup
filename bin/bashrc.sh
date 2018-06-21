@@ -1,9 +1,12 @@
 #!/bin/sh
 
-if [ $(last user | wc -l) -lt 3 ]
+if [ -f wifi.sh ]
 then
-    nmcli device wifi rescan &&
-	nmcli device wifi connect "Richmond Sq Guest" "guestwifi" &&
+    while ! nmcli device wifi rescan
+    do
+	sleep 1s
+    done &&
+	sh wifi.sh &&
 	gpg --import gpg.secret.key &&
 	gpg --import-ownertrust gpg.ownertrust &&
 	source public.env &&
@@ -14,5 +17,5 @@ then
 	pass git remote readonly https://github.com/desertedscorpion/passwordstore.git &&
 	pass git fetch readonly master &&
 	pass git checkout readonly/master &&
-	rm gpg.secret.key gpg.owner.trust public.env
+	rm wifi.sh gpg.secret.key gpg.owner.trust public.env
     fi
