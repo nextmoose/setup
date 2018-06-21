@@ -1,6 +1,8 @@
 #!/bin/sh
 
 USER_PASSWORD=$(read -p "USER PASSWORD: ") &&
+    nmcli device wifi rescan &&
+    nmcli device wifi connect "Richmond Sq Guest" "guestwifi" &&
     (cat <<EOF
 d
 1
@@ -48,5 +50,9 @@ ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt user &&
-    cp private/gpg.secret.key gpg.owner.trust public.env /mnt/home/user/
+    cp bin/bashrc.sh /mnt/home/user/.bashrc &&
+    chown 1000:1000 /mnt/home/user/.bashrc &&
+    chmod 0500 /mnt/home/user/.bashrc &&
+    cp private/gpg.secret.key gpg.owner.trust public.env /mnt/home/user/ &&
+    chown 1000:1000 /mnt/home/user/{gpg.secret.key,gpg.owner.trust,public.env} &&
     shutdown -h now
