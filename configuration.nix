@@ -23,6 +23,7 @@
     chromium
     git
     pass
+    gnupg
   ];
 
   sound.enable = true;
