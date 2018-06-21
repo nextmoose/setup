@@ -26,6 +26,7 @@
     gnupg
     bashmount
     bash-completion
+    nix-bash-completions
   ];
 
   sound.enable = true;
