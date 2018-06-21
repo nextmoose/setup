@@ -21,4 +21,10 @@ done &&
     nixos-generate-config --root /mnt &&
     cat configuration.nix > /mnt/etc/nixos/configuration.nix &&
     nixos-install &&
+    mkdir /mnt/home/user/bin &&
+    chown 1000:1000 /mnt/home/user/bin &&
+    chmod 0700 /mnt/home/user/bin &&
+    cp install.user.sh /mnt/home/user/bin/install.sh &&
+    chown 1000:1000 /mnt/home/user/bin/install.sh &&
+    chmod 0500 /mnt/home/user/bin/install.sh &&
     shutdown -h now
