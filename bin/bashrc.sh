@@ -8,7 +8,7 @@ then
     done &&
 	sh wifi.sh &&
 	gpg --import gpg.secret.key &&
-	gpg --import-ownertrust gpg.ownertrust &&
+	gpg --import-ownertrust gpg.owner.trust &&
 	source public.env &&
 	pass init "${GPG_KEY_ID}" &&
 	pass git init &&

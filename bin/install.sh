@@ -5,7 +5,8 @@ source private/private.env &&
 	-e "s#^#nmcli device wifi connect \"#" \
 	-e "s#\t#\" password \"#" \
 	-e "s#\$#\"#" \
-	-e "w/tmp/wifi.sh" &&
+	-e "w/tmp/wifi.sh" \
+	bin/wifi.txt &&
     while ! nmcli device wifi rescan
     do
         sleep 1s
