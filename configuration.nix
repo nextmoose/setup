@@ -22,6 +22,7 @@
     emacs
     chromium
     git
+    pass
   ];
 
   sound.enable = true;
