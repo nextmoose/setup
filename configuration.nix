@@ -24,6 +24,7 @@
     git
     pass
     gnupg
+    bashmount
   ];
 
   sound.enable = true;

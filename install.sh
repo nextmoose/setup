@@ -1,6 +1,17 @@
 #!/bin/sh
 
-mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
+while [ ${#} -gt 0 ]
+do
+    case "${1}" in
+	*)
+	    echo Unknown Option &&
+		echo ${0} &&
+		echo ${@} &&
+		exit 64
+	    ;;
+    esac
+done &&
+    mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
     echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
     mount /dev/sda3 /mnt &&
