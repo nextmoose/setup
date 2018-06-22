@@ -1,6 +1,6 @@
 #!/bin/sh
 
 [ $(id -u) == 1000 ] &&
-    sudo rm -f /etc/nixos/*.nix &&
-    sudo cp *.nix /etc/nixos/ &&
+    sudo cp configuration.nix /etc/nixos/configuration.nix &&
+    sudo cp configuration.d/*.nix /etc/nixos/configuration.d &&
     sudo nixos-rebuild switch
