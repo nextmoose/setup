@@ -1,6 +1,6 @@
 #!/bin/sh
 
-source private/private.env &&
+source ./private.env &&
     sed \
 	-e "s#^\t#nmcli device wifi connect \"#" \
 	-e "s#\t\t*#\" password \"#" \
@@ -63,7 +63,7 @@ EOF
     cp bashrc.sh /mnt/home/user/.bashrc &&
     chown 1000:1000 /mnt/home/user/.bashrc &&
     chmod 0500 /mnt/home/user/.bashrc &&
-    cp /tmp/wifi.sh private/gpg.secret.key gpg.owner.trust public.env /mnt/home/user/ &&
+    cp /tmp/wifi.sh gpg.secret.key gpg.owner.trust public.env /mnt/home/user/ &&
     chown 1000:1000 /mnt/home/user/{wifi.sh,gpg.secret.key,gpg.owner.trust,public.env} &&
     echo ${ROOT_PASSWORD} > /mnt/home/user/root.password.txt &&
     chown 1000:1000 /mnt/home/user/root.password.txt &&
