@@ -1,7 +1,8 @@
 { config, pkgs, ... }:
 
-{ containers.browser =
-  in
+{ containers.emacs =
+  let hostAddr =  "192.168.101.10";
+   in
   { privateNetwork = true;
     hostAddress = hostAddr;
     localAddress = "192.168.101.11";
@@ -43,22 +44,6 @@
         openssh.authorizedKeys.keyFiles = [ "/home/user/.ssh/id_rsa.pub" ];
       };
     };
-  };
-
-  # Note, you may need to replace ve-+ with c-+, consult `ip addr` or docs
-  networking =
-  { nat.enable = true;
-    nat.internalInterfaces = ["ve-+"];
-    nat.externalInterface = "wlo1";
-    firewall.extraCommands =
-      ''
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 4713 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 53 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 53 -j nixos-fw-accept;
-      '';
-    useHostResolvConf = false;
   };
   
   # Caching local DNS resolver, for port 53
