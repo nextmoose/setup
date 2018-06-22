@@ -57,8 +57,6 @@
 
       programs.ssh.setXAuthLocation = true;
 
-      users.mutableUsers = false;
-
       users.extraUsers.kr2 =
       { name = "kr2";
         group = "users";
