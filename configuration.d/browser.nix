@@ -57,15 +57,15 @@
 
       programs.ssh.setXAuthLocation = true;
 
-      users.extraUsers.kr2 =
-      { name = "kr2";
+      users.extraUsers.user =
+      { name = "user";
         group = "users";
         uid = 1000;
         createHome = true;
         home = "/tmp";
         password = "...."; # TODO: set password
         shell = "/run/current-system/sw/bin/bash";
-        openssh.authorizedKeys.keyFiles = [ "/home/kr2/.ssh/id_rsa.pub" "/home/kr2/.ssh/id_rsa_pen.pub" ];
+        openssh.authorizedKeys.keyFiles = [ "/home/user/.ssh/id_rsa.pub" "/home/user/.ssh/id_rsa_pen.pub" ];
       };
     };
   };
