@@ -65,7 +65,7 @@
         home = "/tmp";
         password = "...."; # TODO: set password
         shell = "/run/current-system/sw/bin/bash";
-        openssh.authorizedKeys.keyFiles = [ "/home/user/.ssh/id_rsa.pub" "/home/user/.ssh/id_rsa_pen.pub" ];
+        openssh.authorizedKeys.keyFiles = [ "/home/user/.ssh/id_rsa.pub" ];
       };
     };
   };
