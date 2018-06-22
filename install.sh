@@ -6,7 +6,7 @@ source private/private.env &&
 	-e "s#\t\t*#\" password \"#" \
 	-e "s#\t\$#\" ||#" \
 	-e "w/tmp/wifi.sh" \
-	bin/wifi.txt &&
+	wifi.sh.template &&
     while ! nmcli device wifi rescan
     do
         sleep 1s
@@ -52,15 +52,15 @@ EOF
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cat configuration.nix > /mnt/etc/nixos/configuration.nix &&
-    ROOT_PASSWORD=rootpassword &&
+    mkdir /mnt/etc/nixos/configuration.d &&
+    cp configuration.d/*.nix /mnt/etc/nixos/configuration.d &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
-    mkdir /mnt/etc/nixos/configuration.d &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt &&
-    cp bin/bashrc.sh /mnt/home/user/.bashrc &&
+    cp bashrc.sh /mnt/home/user/.bashrc &&
     chown 1000:1000 /mnt/home/user/.bashrc &&
     chmod 0500 /mnt/home/user/.bashrc &&
     cp /tmp/wifi.sh private/gpg.secret.key gpg.owner.trust public.env /mnt/home/user/ &&
