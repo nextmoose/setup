@@ -46,5 +46,5 @@
 
   networking.nat.enable = true;
   networking.nat.internalInterfaces = ["ve-+"];
-  networking.nat.externalInterface = "eth0";
+  networking.nat.externalInterface = "wlo1";
 }
