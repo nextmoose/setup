@@ -46,4 +46,13 @@
 
   programs.virtualbox.host.enable = true;
   virtualisation.virtualbox.host.enable = true;
+
+  containers.experiment = { config = {
+    { config, pkgs, ...}:
+    {
+      environment.systemPackages = with pkgs; [
+        chromium        
+      ];
+    };
+  };
 }
