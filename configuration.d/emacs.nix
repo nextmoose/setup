@@ -1,7 +1,6 @@
 { config, pkgs, ... }:
 
 { containers.browser =
-  let hostAddr =  "192.168.101.10";
   in
   { privateNetwork = true;
     hostAddress = hostAddr;
