@@ -1,6 +1,3 @@
-# vim: set softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent syntax=nix nocompatible :
-# Containers
-
 { config, pkgs, ... }:
 
 { containers.browser =
@@ -22,8 +19,7 @@
       nixpkgs.config =
         let
           plugins = 
-          { enableAdobeFlash = true;
-            enablePepperFlash = true;
+          {
             enablePepperPDF = true;
             enableGoogleTalkPlugin = true;
             # jre = true;
