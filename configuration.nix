@@ -8,19 +8,6 @@
   networking.hostName = "duke";
   networking.networkmanager.enable=true;
 
-  networking.nat.enable = true;
-  networking.nat.internalInterfaces = ["ve-+"];
-  networking.nat.externalInterface = "wlp3s0";
-  networking.firewall.extraCommands =
-    ''
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 4713 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 53 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 53 -j nixos-fw-accept;
-    '';
-  networking.useHostResolvConf = false;
-
   i18n = {
     consoleFont = "Lat2-Terminus16";
     consoleKeyMap = "us";
@@ -56,8 +43,4 @@
   };
 
   system.stateVersion = "18.03";
-
-  programs.virtualbox.host.enable = true;
-  virtualisation.virtualbox.host.enable = true;
-
 }
