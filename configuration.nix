@@ -43,8 +43,4 @@
   };
 
   system.stateVersion = "18.03";
-
-  networking.nat.enable = true;
-  networking.nat.internalInterfaces = ["ve-+"];
-  networking.nat.externalInterface = "wlo1";
 }
