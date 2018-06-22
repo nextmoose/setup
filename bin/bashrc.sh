@@ -14,7 +14,7 @@ then
 	pass git init &&
 	pass git config user.name "${USER_NAME}" &&
 	pass git config user.email "${USER_EMAIL}" &&
-	pass git remote readonly https://github.com/desertedscorpion/passwordstore.git &&
+	pass git remote add readonly https://github.com/desertedscorpion/passwordstore.git &&
 	pass git fetch readonly master &&
 	pass git checkout readonly/master &&
 	rm wifi.sh gpg.secret.key gpg.owner.trust public.env

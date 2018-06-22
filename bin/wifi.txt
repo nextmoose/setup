@@ -1,2 +1,5 @@
-Richmond Sq Guest	guestwifi
-56LYL	K3Z3ZNNKD9D6B4MC
+#!/bin/sh
+
+	Richmond Sq Guest		guestwifi	
+	56LYL				K3Z3ZNNKD9D6B4MC	
+false

@@ -2,9 +2,9 @@
 
 source private/private.env &&
     sed \
-	-e "s#^#nmcli device wifi connect \"#" \
-	-e "s#\t#\" password \"#" \
-	-e "s#\$#\"#" \
+	-e "s#^\t#nmcli device wifi connect \"#" \
+	-e "s#\t\t*#\" password \"#" \
+	-e "s#\t\$#\" ||#" \
 	-e "w/tmp/wifi.sh" \
 	bin/wifi.txt &&
     while ! nmcli device wifi rescan
@@ -52,7 +52,7 @@ EOF
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cat configuration.nix > /mnt/etc/nixos/configuration.nix &&
-    ROOT_PASSWORD=$(uuidgen) &&
+    ROOT_PASSWORD=rootpassword &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
@@ -65,4 +65,6 @@ EOF
     chmod 0500 /mnt/home/user/.bashrc &&
     cp /tmp/wifi.sh private/gpg.secret.key gpg.owner.trust public.env /mnt/home/user/ &&
     chown 1000:1000 /mnt/home/user/{wifi.sh,gpg.secret.key,gpg.owner.trust,public.env} &&
+    echo ${ROOT_PASSWORD} > /mnt/home/user/root.password.txt &&
+    chown 1000:1000 /mnt/home/user/root.password.txt &&
     shutdown -h now
