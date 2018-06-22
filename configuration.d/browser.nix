@@ -17,7 +17,6 @@
       [ firefoxWrapper
         chromium
         alsaLib
-        pulseaudio
       ];
 
       nixpkgs.config =
@@ -35,7 +34,6 @@
           allowUnfree = true;
         };
 
-      hardware.pulseaudio.enable = true;
       hardware.bumblebee.enable = true;
       environment.variables.PULSE_SERVER = "tcp:" + hostAddr;
 
