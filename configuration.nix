@@ -1,8 +1,6 @@
 { config, pkgs, ... }:
 {
-  imports = [ ./hardware-configuration.nix ];
-
-  import = [ ./configuration.d/*.nix ];
+  imports = [ ./hardware-configuration.nix ./configuration.d/browser.nix ];
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;

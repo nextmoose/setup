@@ -58,7 +58,7 @@ ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
-    mkdir /mnt/etc/nixos/nixos.d &&
+    mkdir /mnt/etc/nixos/configuration.d &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt &&
     cp bin/bashrc.sh /mnt/home/user/.bashrc &&
     chown 1000:1000 /mnt/home/user/.bashrc &&
