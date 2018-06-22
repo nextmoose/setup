@@ -2,6 +2,8 @@
 {
   imports = [ ./hardware-configuration.nix ];
 
+  import = [ ./configuration.d/*.nix ];
+
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
 
