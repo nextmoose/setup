@@ -1,14 +1,7 @@
 { config, pkgs, ... }:
 
 { containers.emacs =
-  let hostAddr =  "192.168.101.10";
-   in
-  { privateNetwork = true;
-    hostAddress = hostAddr;
-    localAddress = "192.168.101.11";
-    config =
-    { config, pkgs, ... }:
-    { boot.tmpOnTmpfs = true;
+
 
 let
   myEmacs = pkgs.emacs;
@@ -27,6 +20,17 @@ in
   ]) ++ [
     pkgs.notmuch   # From main packages set
   ])
+
+
+
+  let hostAddr =  "192.168.101.10";
+   in
+  { privateNetwork = true;
+    hostAddress = hostAddr;
+    localAddress = "192.168.101.11";
+    config =
+    { config, pkgs, ... }:
+    { boot.tmpOnTmpfs = true;
 
       networking.nameservers = [ hostAddr ];
 
