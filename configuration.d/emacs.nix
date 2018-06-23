@@ -13,9 +13,6 @@
 
       networking.nameservers = [ hostAddr ];
 
-      services.emacs.enable = true;
-      services.emacs.package = import /home/cassou/.emacs.d { pkgs = pkgs; };
-
       services =
       { openssh =
         { enable = true;
