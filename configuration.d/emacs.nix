@@ -10,10 +10,23 @@
     { config, pkgs, ... }:
     { boot.tmpOnTmpfs = true;
 
-      environment.systemPackages = with pkgs;
-      [ emacs
-        git
-      ];
+let
+  myEmacs = pkgs.emacs; 2
+  emacsWithPackages = (pkgs.emacsPackagesNgGen myEmacs).emacsWithPackages; 3
+in
+  emacsWithPackages (epkgs: (with epkgs.melpaStablePackages; [ 4
+    magit          # ; Integrate git <C-x g>
+    zerodark-theme # ; Nicolas' theme
+  ]) ++ (with epkgs.melpaPackages; [ 5
+    undo-tree      # ; <C-x u> to show the undo tree
+    zoom-frm       # ; increase/decrease font size for all buffers %lt;C-x C-+>
+  ]) ++ (with epkgs.elpaPackages; [ 6
+    auctex         # ; LaTeX mode
+    beacon         # ; highlight my cursor when scrolling
+    nameless       # ; hide current package name everywhere in elisp code
+  ]) ++ [
+    pkgs.notmuch   # From main packages set 7
+  ])
 
       networking.nameservers = [ hostAddr ];
 
