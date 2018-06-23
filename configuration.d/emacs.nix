@@ -19,7 +19,13 @@
           forwardX11 = true;
         };
 
-        emacs.enable = true;
+
+  environment.systemPackages = with pkgs; [
+    emacs
+    git
+    pass
+    gnupg
+  ];
 
         avahi =
         { enable = true;
