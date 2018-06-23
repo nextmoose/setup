@@ -22,6 +22,8 @@
           forwardX11 = true;
         };
 
+        emacs.enable = true;
+
         avahi =
         { enable = true;
           browseDomains = [];
