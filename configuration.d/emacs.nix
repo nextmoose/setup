@@ -13,6 +13,14 @@
 
       networking.nameservers = [ hostAddr ];
 
+  environment.systemPackages = with pkgs; [
+    emacs
+    git
+    pass
+    gnupg
+  ];
+
+
       services =
       { openssh =
         { enable = true;
@@ -20,12 +28,6 @@
         };
 
 
-  environment.systemPackages = with pkgs; [
-    emacs
-    git
-    pass
-    gnupg
-  ];
 
         avahi =
         { enable = true;
