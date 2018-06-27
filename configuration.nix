@@ -43,8 +43,10 @@
   users.extraUsers.user = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
   system.stateVersion = "18.03";
+
+  virtualisation.docker.enable = true;
 }
