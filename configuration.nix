@@ -40,6 +40,8 @@
   services.xserver.windowManager.i3.enable = true;
   services.xserver.libinput.enable = true;
 
+  users.groups.docker = {};
+  
   users.extraUsers.user = {
     isNormalUser = true;
     uid = 1000;
