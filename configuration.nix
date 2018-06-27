@@ -2,8 +2,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./configuration.d/browser.nix
-    ./configuration.d/emacs.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
