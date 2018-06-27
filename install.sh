@@ -54,6 +54,7 @@ EOF
     cat configuration.nix > /mnt/etc/nixos/configuration.nix &&
     mkdir /mnt/etc/nixos/configuration.d &&
     cp configuration.d/*.nix /mnt/etc/nixos/configuration.d &&
+    ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
@@ -65,6 +66,4 @@ EOF
     chmod 0500 /mnt/home/user/.bashrc &&
     cp /tmp/wifi.sh gpg.secret.key gpg.owner.trust public.env /mnt/home/user/ &&
     chown 1000:1000 /mnt/home/user/{wifi.sh,gpg.secret.key,gpg.owner.trust,public.env} &&
-    echo ${ROOT_PASSWORD} > /mnt/home/user/root.password.txt &&
-    chown 1000:1000 /mnt/home/user/root.password.txt &&
     shutdown -h now
