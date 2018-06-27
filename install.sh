@@ -66,4 +66,11 @@ EOF
     chmod 0500 /mnt/home/user/.bashrc &&
     cp /tmp/wifi.sh gpg.secret.key gpg.owner.trust public.env /mnt/home/user/ &&
     chown 1000:1000 /mnt/home/user/{wifi.sh,gpg.secret.key,gpg.owner.trust,public.env} &&
+    mkdir /home/user/setup &&
+    nix-env --install git &&
+    git -C /home/user/setup init &&
+    git -C /home/user/setup config user.name ${USER_NAME} &&
+    git -C /home/user/setup config user.email ${USER_EMAIL} &&
+    git -C /home/user/setup remote add origin https://github.com/nextmoose/setup.git &&
+    chown -R 1000:1000 /home/user/setup &&
     shutdown -h now
