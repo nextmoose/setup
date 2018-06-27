@@ -29,6 +29,7 @@
     bashmount
     bash-completion
     nix-bash-completions
+    lvm2
   ];
 
   sound.enable = true;
