@@ -49,7 +49,14 @@
 
   system.stateVersion = "18.03";
 
-  virtualisation.docker.junk = true;
-  virtualisation.docker.enable = true;
-  virtualisation.docker.autoPrune.enable = true;
+  virtualisation.docker = {
+    enable = true;
+    autoPrune.enable = true;
+    plugins = {
+      volume = {
+        enable = false;
+	volumeGroup = docker;
+      };
+    };
+  };
 }
