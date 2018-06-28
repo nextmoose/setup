@@ -53,10 +53,6 @@
     enable = true;
     autoPrune.enable = true;
     plugins = {
-      volume = {
-        enable = false;
-	volumeGroup = docker;
-      };
     };
   };
 }
