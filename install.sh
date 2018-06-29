@@ -55,6 +55,9 @@ EOF
     cat configuration.nix > /mnt/etc/nixos/configuration.nix &&
     mkdir /mnt/etc/nixos/configuration.d &&
     cp configuration.d/*.nix /mnt/etc/nixos/configuration.d &&
+    mkdir /home/user &&
+    mkdir /home/user/.ssh &&
+    ssh-keygen -f /home/user/.ssh/id_rsa - P "" -C "internal key" &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
@@ -74,4 +77,10 @@ EOF
     git -C /mnt/home/user/setup config user.email ${USER_EMAIL} &&
     git -C /mnt/home/user/setup remote add origin https://github.com/nextmoose/setup.git &&
     chown -R 1000:1000 /mnt/home/user/setup &&
+    mkdir /mnt/home/user/.ssh &&
+    chmod 0700 /mnt/home/user/.ssh &&
+    cp /home/user/.ssh/id_rsa /mnt/home/user/.ssh/id_rsa &&
+    cp config.ssh.txt /mnt/home/user/.ssh/config &&
+    chmod 0600 /mnt/home/user/.ssh/id_rsa /mnt/home/user/.ssh/config &&
+    chmod --recursive 1000:1000 /mnt/home/.ssh &&
     shutdown -h now
