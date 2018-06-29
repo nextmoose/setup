@@ -1,7 +1,9 @@
 Host browser
 HostName 192.168.100.10
 IdentityFile ~/.ssh/id_rsa
+ForwardX11 yes
 
 Host emacs
 HostName 192.168.101.11
-IdentityFile ~/.ssh/keys.d/id_rsa
+IdentityFile ~/.ssh/id_rsa
+ForwardX11 yes
