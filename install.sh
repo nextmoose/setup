@@ -82,5 +82,5 @@ EOF
     cp /home/user/.ssh/id_rsa /mnt/home/user/.ssh/id_rsa &&
     cp config.ssh.txt /mnt/home/user/.ssh/config &&
     chmod 0600 /mnt/home/user/.ssh/id_rsa /mnt/home/user/.ssh/config &&
-    chmod --recursive 1000:1000 /mnt/home/.ssh &&
+    chown --recursive 1000:1000 /mnt/home/user/.ssh &&
     shutdown -h now
