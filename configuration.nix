@@ -50,11 +50,4 @@
   };
 
   system.stateVersion = "18.03";
-
-  virtualisation.docker = {
-    enable = true;
-    autoPrune.enable = true;
-    plugins = {
-    };
-  };
 }

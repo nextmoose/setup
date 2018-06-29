@@ -57,7 +57,7 @@ EOF
     cp configuration.d/*.nix /mnt/etc/nixos/configuration.d &&
     mkdir /home/user &&
     mkdir /home/user/.ssh &&
-    ssh-keygen -f /home/user/.ssh/id_rsa - P "" -C "internal key" &&
+    ssh-keygen -f /home/user/.ssh/id_rsa -P "" -C "internal key" &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
