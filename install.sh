@@ -34,17 +34,12 @@ n
 
 
 +8G
-
-n
-
-
-+64G
 8200
 n
 
 
 
-8E00
+
 w
 Y
 EOF
@@ -79,6 +74,4 @@ EOF
     git -C /mnt/home/user/setup config user.email ${USER_EMAIL} &&
     git -C /mnt/home/user/setup remote add origin https://github.com/nextmoose/setup.git &&
     chown -R 1000:1000 /mnt/home/user/setup &&
-    pvcreate /dev/sdb4 &&
-    vgcreate docker /dev/sdb4 &&
     shutdown -h now
