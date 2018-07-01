@@ -32,6 +32,7 @@
     bash-completion
     nix-bash-completions
     lvm2
+    paperwork
   ];
 
   sound.enable = true;
@@ -41,12 +42,15 @@
   services.xserver.windowManager.i3.enable = true;
   services.xserver.libinput.enable = true;
 
-  users.groups.docker = {};
-  
   users.extraUsers.user = {
     isNormalUser = true;
     uid = 1000;
     extraGroups = [ "wheel" "networkmanager" "docker" ];
+  };
+
+  virtualisation.docker = {
+    enable = true;
+    autoPrune = {};
   };
 
   system.stateVersion = "18.03";
