@@ -28,6 +28,8 @@
     git
     pass
     gnupg
+    gnucash
+    deja-dup
     bashmount
     bash-completion
     nix-bash-completions
@@ -51,6 +53,9 @@
   virtualisation.docker = {
     enable = true;
     autoPrune = {};
+  };
+
+  services.security.pass = {
   };
 
   system.stateVersion = "18.03";
