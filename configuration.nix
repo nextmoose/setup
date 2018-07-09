@@ -55,8 +55,5 @@
     autoPrune = {};
   };
 
-  services.security.pass = {
-  };
-
   system.stateVersion = "18.03";
 }
