@@ -8,4 +8,8 @@ done &&
 	sudo docker volume ls --quiet | while read VOLUME
 	do
 		sudo docker volume rm ${VOLUME}
+	done &&
+	sudo docker network ls --quiet --filter label=timestamp | while read NETWORK
+	do
+		sudo docker network rm ${NETWORK}
 	done

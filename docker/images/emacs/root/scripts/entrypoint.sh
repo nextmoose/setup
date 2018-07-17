@@ -4,7 +4,7 @@ git init &&
 	if [ ! -z "${UPSTREAM_URL}" ]
 	then
 		git remote add upstream "${UPSTREAM_URL}" &&
-			git remote set-url --push origin no_push &&
+			git remote set-url --push upstream no_push &&
 			if [ ! -z "${MASTER_BRANCH}" ]
 			then
 				git fetch upstream ${MASTER_BRANCH} &&

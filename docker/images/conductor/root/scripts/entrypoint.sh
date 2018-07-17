@@ -68,12 +68,12 @@ TIMESTAMP=$(date +%s) &&
 		container \
 		run \
 		--interactive \
+		--tty \
 		--rm \
 		--volume ${GPG_SECRETS}:/output \
 		alpine:3.5 \
 		chmod 0400 /output/gpg.secret.key \
 		&&
-	echo MARKER 002 &&
 	cat /gpg.owner.trust | docker \
 		container \
 		run \
@@ -83,18 +83,16 @@ TIMESTAMP=$(date +%s) &&
 		alpine:3.5 \
 		tee /output/gpg.owner.trust \
 		&&
-	echo MARKER 003 &&
-#	echo docker \
-#		container \
-#		run \
-#		--interactive \
-#		--tty \
-#		--rm \ 
-#		--volume ${GPG_SECRETS}:/output \
-#		alpine:3.5 \
-#		chmod 0400 /output/gpg.owner.trust \
-#		&&
-	echo MARKER 001 &&
+	docker \
+		container \
+		run \
+		--interactive \
+		--tty \
+		--rm \
+		--volume ${GPG_SECRETS}:/output \
+		alpine:3.5 \
+		chmod 0400 /output/gpg.owner.trust \
+		&&
 	docker \
 		container \
 		run \
@@ -125,9 +123,46 @@ TIMESTAMP=$(date +%s) &&
 		alpine:3.5 \
 		mkdir /output/sbin \
 		&&
+	docker \
+		container \
+		run \
+		--interactive \
+		--tty \
+		--rm \
+		--volume ${SCRIPTS}:/output \
+		alpine:3.5 \
+		chmod 0500 /output/sbin \
+		&&
+	docker \
+		container \
+		run \
+		--interactive \
+		--tty \
+		--rm \
+		--volume ${SCRIPTS}:/output \
+		alpine:3.5 \
+		mkdir /output/completion \
+		&&
+	docker \
+		container \
+		run \
+		--interactive \
+		--tty \
+		--rm \
+		--volume ${SCRIPTS}:/output \
+		alpine:3.5 \
+		chmod 0555 /output/completion \
+		&&
 	for SCRIPT in $(ls -1 /opt/scripts/sbin)
 	do
-		cat /opt/scripts/sbin/${SCRIPT} | docker \
+		(cat <<EOF
+#!/bin/sh
+
+while [ \${1} -gt 0 ]
+do
+	case \${1} in
+EOF
+		) | docker \
 			container \
 			run \
 			--interactive \
@@ -136,52 +171,140 @@ TIMESTAMP=$(date +%s) &&
 			alpine:3.5 \
 			tee /output/sbin/${SCRIPT} \
 			&&
-		docker \
-			container \
-			run \
-			--interactive \
-			--volume ${SCRIPTS}:/output \
-			alpine:3.5 \
-			chmod 0500 /output/sbin/${SCRIPT} \
-			&&
-		(cat <<EOF
+                        cat /opt/scripts/config/${SCRIPT%.*}.csv | while read LINE
+                        do
+				SWITCH=$(echo ${LINE} | cut -f 1 -d " ") &&
+					VARIABLE=$(echo ${LINE} | cut -f 2 -d " ") &&
+					case $(echo ${LINE} | cut -f 3 -d " ") in
+						string)
+							VALUE="\${2}"
+							;;
+						secret)
+							VALUE="\$(pass show \${2}"
+							;;
+						*)
+							echo Unknown Type &&
+								exit 65
+					esac &&
+                                	echo -e "\t\t--${SWITCH}) export ${VARIABLE}=\"${VALUE}\" && shift 2 ;;"
+                        done | docker \
+                                container \
+                                run \
+                                --interactive \
+                                --rm \
+                                --volume ${SCRIPTS}:/output \
+                                alpine:3.5 \
+                                tee -a /output/sbin/${SCRIPT} \
+                                alpine:3.5 \
+                                tee -a /output/sbin/${SCRIPT} \
+                                &&
+			(cat <<EOF
+		*) echo Unknown Option && echo ${1} && echo ${0} && echo ${@} && exit 64 ;;
+	esac
+done &&
+	
+EOF
+			) | docker \
+				container \
+				run \
+				--interactive \
+				--rm \
+				--volume ${SCRIPTS}:/output \
+				alpine:3.5 \
+				tee -a /output/sbin/${SCRIPT} \
+				&&
+			tail -n +3 /opt/scripts/sbin/${SCRIPT} | docker \
+				container \
+				run \
+				--interactive \
+				--rm \
+				--volume ${SCRIPTS}:/output \
+				alpine:3.5 \
+				tee -a /output/sbin/${SCRIPT} \
+				&&
+			docker \
+				container \
+				run \
+				--interactive \
+				--rm \
+				--volume ${SCRIPTS}:/output \
+				alpine:3.5 \
+				chmod 0500 /output/sbin/${SCRIPT} \
+				&&
+			(cat <<EOF
 #!/bin/sh
 
 sudo --preserve-env /opt/root/scripts/sbin/${SCRIPT} "\${@}"
 EOF
-		) | docker \
-			container \
-			run \
-			--interactive \
-			--volume ${SCRIPTS}:/output \
-			alpine:3.5 \
-			tee /output/bin/${SCRIPT%.*} \
-			&&
-		docker \
-			container \
-			run \
-			--interactive \
-			--volume ${SCRIPTS}:/output \
-			alpine:3.5 \
-			chmod 0555 /output/bin/${SCRIPT%.*} \
-			&&
-		echo user "ALL=(ALL) SETENV:NOPASSWD:/opt/root/scripts/sbin/${SCRIPT}" | docker \
-			container \
-			run \
-			--interactive \
-			--volume ${SUDOERS}:/output \
-			alpine:3.5 \
-			tee /output/${SCRIPT%.*} \
-			&&
-		docker \
-			container \
-			run \
-			--interactive \
-			--volume ${SUDOERS}:/output \
-			alpine:3.5 \
-			chmod 0444 /output/${SCRIPT%.*} \
-			&&
-		true
+			) | docker \
+				container \
+				run \
+				--interactive \
+				--rm \
+				--volume ${SCRIPTS}:/output \
+				alpine:3.5 \
+				tee /output/bin/${SCRIPT%.*} \
+			 	&&
+			docker \
+				container \
+				run \
+				--interactive \
+				--tty \
+				--rm \
+				--volume ${SCRIPTS}:/output \
+				alpine:3.5 \
+				chmod 0555 /output/bin/${SCRIPT%.*} \
+				&&
+			(cat <<EOF
+#!/bin/sh
+
+_UseGetOpt_${SCRIPT%.*}(){
+	local CUR &&
+		COMPREPLY=() &&
+		CUR=\${COMP_WORDS[COMP_CWORD]} &&
+		case \${CUR} in
+			*) COMPREPLY=(\$(compgen -W "$(cut -f1 -d \" \" /opt/scripts/completion/scripts))) ;;
+		esac
+} &&
+	complete -o ${SCRIPT%.*} _UseGetOpt_${SCRIPT%.*}
+EOF
+			) | docker \
+				container \
+				run \
+				--interactive \
+				--rm \
+				--volume ${SCRIPTS}:/output \
+				alpine:3.5 \
+				tee /output/completion/${SCRIPT} \
+				&&
+			docker \
+				container \
+				run \
+				--interactive \
+				--tty \
+				--volume ${SCRIPTS}:/output \
+				alpine:3.5 \
+				chmod 0555 /output/completion/${SCRIPT} \
+				&&
+			echo user "ALL=(ALL) SETENV:NOPASSWD:/opt/root/scripts/sbin/${SCRIPT}" | docker \
+				container \
+				run \
+				--interactive \
+				--rm \
+				--volume ${SUDOERS}:/output \
+				alpine:3.5 \
+				tee /output/${SCRIPT%.*} \
+				&&
+			docker \
+				container \
+				run \
+				--interactive \
+				--rm \
+				--volume ${SUDOERS}:/output \
+				alpine:3.5 \
+				chmod 0444 /output/${SCRIPT%.*} \
+				&&
+			true
 	done &&
 	(cat > /srv/bin/shell <<EOF
 #!/bin/sh
