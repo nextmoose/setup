@@ -61,6 +61,7 @@ TIMESTAMP=$(date +%s) &&
 		--interactive \
 		--rm \
 		--volume ${GPG_SECRETS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		tee /output/gpg.secret.key \
 		&&
@@ -71,6 +72,7 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--rm \
 		--volume ${GPG_SECRETS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		chmod 0400 /output/gpg.secret.key \
 		&&
@@ -80,6 +82,7 @@ TIMESTAMP=$(date +%s) &&
 		--interactive \
 		--rm \
 		--volume ${GPG_SECRETS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		tee /output/gpg.owner.trust \
 		&&
@@ -90,6 +93,7 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--rm \
 		--volume ${GPG_SECRETS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		chmod 0400 /output/gpg.owner.trust \
 		&&
@@ -100,6 +104,7 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--rm \
 		--volume ${SCRIPTS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		mkdir /output/bin \
 		&&
@@ -110,6 +115,7 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--rm \
 		--volume ${SCRIPTS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		chmod 0555 /output/bin \
 		&&
@@ -120,6 +126,7 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--rm \
 		--volume ${SCRIPTS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		mkdir /output/sbin \
 		&&
@@ -130,6 +137,7 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--rm \
 		--volume ${SCRIPTS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		chmod 0500 /output/sbin \
 		&&
@@ -140,6 +148,7 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--rm \
 		--volume ${SCRIPTS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		mkdir /output/completion \
 		&&
@@ -150,17 +159,42 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--rm \
 		--volume ${SCRIPTS}:/output \
+		--label timestamp=${TIMESTAMP} \
 		alpine:3.5 \
 		chmod 0555 /output/completion \
 		&&
+	echo BEFORE LOOP &&
 	for SCRIPT in $(ls -1 /opt/scripts/sbin)
 	do
+		echo SCRIPT=${SCRIPT%.*} &&
 		(cat <<EOF
 #!/bin/sh
 
-while [ \${1} -gt 0 ]
+while [ \${#} -gt 0 ]
 do
 	case \${1} in
+$(cat /opt/scripts/config/${SCRIPT%.*}.csv | while read LINE
+do
+	SWITCH=$(echo ${LINE} | cut -f 1 -d " ") &&
+		VARIABLE=$(echo ${LINE} | cut -f 2 -d " ") &&
+		case $(echo ${LINE} | cut -f 3 -d " ") in
+			string)
+				VALUE="\${2}"
+				;;
+			secret)
+				VALUE="\$pass show \${2}"
+			;;
+			*)
+				echo Unknown Type &&
+					exit 65
+				;;
+		esac &&
+		echo -e "\t\t${SWITCH} export ${VARIABLE}=\"${VALUE}\" && shift 2"
+done)
+		*) echo Unknown Option && echo ${1} && echo ${0} && echo ${@} && exit 64 ;;
+	esac
+done &&
+	$(tail -n +3 /opt/scripts/sbin/${SCRIPT})
 EOF
 		) | docker \
 			container \
@@ -168,66 +202,17 @@ EOF
 			--interactive \
 			--rm \
 			--volume ${SCRIPTS}:/output \
+			--label timestamp=${TIMESTAMP} \
 			alpine:3.5 \
 			tee /output/sbin/${SCRIPT} \
 			&&
-                        cat /opt/scripts/config/${SCRIPT%.*}.csv | while read LINE
-                        do
-				SWITCH=$(echo ${LINE} | cut -f 1 -d " ") &&
-					VARIABLE=$(echo ${LINE} | cut -f 2 -d " ") &&
-					case $(echo ${LINE} | cut -f 3 -d " ") in
-						string)
-							VALUE="\${2}"
-							;;
-						secret)
-							VALUE="\$(pass show \${2}"
-							;;
-						*)
-							echo Unknown Type &&
-								exit 65
-					esac &&
-                                	echo -e "\t\t--${SWITCH}) export ${VARIABLE}=\"${VALUE}\" && shift 2 ;;"
-                        done | docker \
-                                container \
-                                run \
-                                --interactive \
-                                --rm \
-                                --volume ${SCRIPTS}:/output \
-                                alpine:3.5 \
-                                tee -a /output/sbin/${SCRIPT} \
-                                alpine:3.5 \
-                                tee -a /output/sbin/${SCRIPT} \
-                                &&
-			(cat <<EOF
-		*) echo Unknown Option && echo ${1} && echo ${0} && echo ${@} && exit 64 ;;
-	esac
-done &&
-	
-EOF
-			) | docker \
-				container \
-				run \
-				--interactive \
-				--rm \
-				--volume ${SCRIPTS}:/output \
-				alpine:3.5 \
-				tee -a /output/sbin/${SCRIPT} \
-				&&
-			tail -n +3 /opt/scripts/sbin/${SCRIPT} | docker \
-				container \
-				run \
-				--interactive \
-				--rm \
-				--volume ${SCRIPTS}:/output \
-				alpine:3.5 \
-				tee -a /output/sbin/${SCRIPT} \
-				&&
 			docker \
 				container \
 				run \
 				--interactive \
 				--rm \
 				--volume ${SCRIPTS}:/output \
+				--label timestamp=${TIMESTAMP} \
 				alpine:3.5 \
 				chmod 0500 /output/sbin/${SCRIPT} \
 				&&
@@ -242,6 +227,7 @@ EOF
 				--interactive \
 				--rm \
 				--volume ${SCRIPTS}:/output \
+				--label timestamp=${TIMESTAMP} \
 				alpine:3.5 \
 				tee /output/bin/${SCRIPT%.*} \
 			 	&&
@@ -252,6 +238,7 @@ EOF
 				--tty \
 				--rm \
 				--volume ${SCRIPTS}:/output \
+				--label timestamp=${TIMESTAMP} \
 				alpine:3.5 \
 				chmod 0555 /output/bin/${SCRIPT%.*} \
 				&&
@@ -263,10 +250,9 @@ _UseGetOpt_${SCRIPT%.*}(){
 		COMPREPLY=() &&
 		CUR=\${COMP_WORDS[COMP_CWORD]} &&
 		case \${CUR} in
-			*) COMPREPLY=(\$(compgen -W "$(cut -f1 -d \" \" /opt/scripts/completion/scripts))) ;;
 		esac
 } &&
-	complete -o ${SCRIPT%.*} _UseGetOpt_${SCRIPT%.*}
+	complete -F _UseGetOpt_${SCRIPT%.*} -o filenames ${SCRIPT%.*}
 EOF
 			) | docker \
 				container \
@@ -274,6 +260,7 @@ EOF
 				--interactive \
 				--rm \
 				--volume ${SCRIPTS}:/output \
+				--label timestamp=${TIMESTAMP} \
 				alpine:3.5 \
 				tee /output/completion/${SCRIPT} \
 				&&
@@ -282,11 +269,13 @@ EOF
 				run \
 				--interactive \
 				--tty \
+				--rm \
 				--volume ${SCRIPTS}:/output \
+				--label timestamp=${TIMESTAMP} \
 				alpine:3.5 \
 				chmod 0555 /output/completion/${SCRIPT} \
 				&&
-			echo user "ALL=(ALL) SETENV:NOPASSWD:/opt/root/scripts/sbin/${SCRIPT}" | docker \
+			echo "user ALL=(ALL) SETENV:NOPASSWD:/opt/root/scripts/sbin/${SCRIPT}" | docker \
 				container \
 				run \
 				--interactive \

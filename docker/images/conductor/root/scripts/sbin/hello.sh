@@ -1,3 +1,3 @@
 #!/bin/sh
 
-echo hello to "${@}"
+echo hello to "${GREETEE}"
