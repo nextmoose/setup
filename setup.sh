@@ -4,4 +4,5 @@
     cd native/${1}/${2} &&
         ./setup.sh
 ) &&
-    sh docker/configure.sh
+    # sh docker/configure.sh
+    true
