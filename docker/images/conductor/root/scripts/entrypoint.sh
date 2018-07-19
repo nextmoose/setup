@@ -189,7 +189,7 @@ do
 					exit 65
 				;;
 		esac &&
-		echo -e "\t\t${SWITCH} export ${VARIABLE}=\"${VALUE}\" && shift 2"
+		echo -e "\t\t${SWITCH}) export ${VARIABLE}=\"${VALUE}\" && shift 2 ;;"
 done)
 		*) echo Unknown Option && echo ${1} && echo ${0} && echo ${@} && exit 64 ;;
 	esac
@@ -250,6 +250,9 @@ _UseGetOpt_${SCRIPT%.*}(){
 		COMPREPLY=() &&
 		CUR=\${COMP_WORDS[COMP_CWORD]} &&
 		case \${CUR} in
+			*)
+				COMPREPLY=(\$(compgen -W '$(cut -f1 -d " " /opt/scripts/config/${SCRIPT%.*}.csv)'))
+				;;
 		esac
 } &&
 	complete -F _UseGetOpt_${SCRIPT%.*} -o filenames ${SCRIPT%.*}
@@ -290,6 +293,7 @@ EOF
 				--interactive \
 				--rm \
 				--volume ${SUDOERS}:/output \
+				--label timestamp=${TIMESTAMP} \
 				alpine:3.5 \
 				chmod 0444 /output/${SCRIPT%.*} \
 				&&
@@ -319,6 +323,7 @@ CID_FILE=\$(mktemp) &&
 		--volume /tmp/.X11-unix:/tmp/.X11-unix:ro \
 		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
 		--privileged \
+		--label timestamp=\$(date +%s) \
 		local/fedora \
 		&&
 	sudo chown user:user \${CID_FILE} &&
