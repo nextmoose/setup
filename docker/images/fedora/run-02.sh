@@ -22,7 +22,13 @@ EOF
 			do
 				ALPHA=$(echo ${LINE} | cut -f 1 -d " ") &&
 				BETA=$(echo ${LINE} | cut -f2 -d " ") &&
-				echo -e "\t\t${ALPHA}) export ${BETA} && shift 2 ;;"
+				if [ $(echo ${LINE} | cut -f3 -d " ") == "string" ]
+				then
+					GAMMA="\${2}"
+				else
+					GAMMA="\$(pass show \${2})"
+				fi &&
+				echo -e "\t\t${ALPHA}) export ${BETA}=\"${GAMMA}\" && shift 2 ;;"
 			done | tee --append /opt/system/sbin/${SCRIPT} &&
 			(cat >> /opt/system/sbin/${SCRIPT} <<EOF
 		*) echo Unknown Option && echo \${1} && echo \${0} && echo \${@} && exit 64 ;;

@@ -32,6 +32,44 @@ TIMESTAMP=$(date +%s) &&
 		--label timestamp=${TIMESTAMP} \
 		) \
 		&&
+	cat /gpg.secret.key | docker \
+		container \
+		run \
+		--interactive \
+		--rm \
+		--volume ${GPG_SECRETS}:/output \
+		alpine:3.5 \
+		tee /output/gpg.secret.key \
+		&&
+	docker \
+		container \
+		run \
+		--interactive \
+		--tty \
+		--rm \
+		--volume ${GPG_SECRETS}:/output \
+		alpine:3.5 \
+		chmod 0400 /output/gpg.secret.key \
+		&&
+	cat /gpg.owner.trust | docker \
+		container \
+		run \
+		--interactive \
+		--rm \
+		--volume ${GPG_SECRETS}:/output \
+		alpine:3.5 \
+		tee /output/gpg.owner.trust \
+		&&
+	docker \
+		container \
+		run \
+		--interactive \
+		--tty \
+		--rm \
+		--volume ${GPG_SECRETS}:/output \
+		alpine:3.5 \
+		chmod 0400 /output/gpg.owner.trust \
+		&&
 	MAIN=$(docker network create --label timestamp=${TIMESTAMP} $(uuidgen)) &&
 	(cat > /srv/bin/shell <<EOF
 #!/bin/sh
