@@ -33,7 +33,6 @@ TIMESTAMP=$(date +%s) &&
 		) \
 		&&
 	MAIN=$(docker network create --label timestamp=${TIMESTAMP} $(uuidgen)) &&
-	echo AAAAAAAAAAAAAAAA &&
 	(cat > /srv/bin/shell <<EOF
 #!/bin/sh
 
@@ -65,9 +64,7 @@ CID_FILE=\$(mktemp) &&
 	true
 EOF
 	) &&
-	echo BBBBBBBBBBBBBBBBBBB &&
 	chown 1000:1000 /srv/bin/shell &&
 	chmod 0500 /srv/bin/shell &&
-	echo CCCCCCCCCCCCCCCCCCCCCC &&
 	true
 
