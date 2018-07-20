@@ -32,6 +32,8 @@ EOF
 			) &&
 			echo -en "\t" >> /opt/system/sbin/${SCRIPT} &&
 			tail -n +3 /opt/system/germ/scripts/sbin/${SCRIPT} >> /opt/system/sbin/${SCRIPT} &&
-			chmod 0500 /opt/system/sbin/${SCRIPT}
+			chmod 0500 /opt/system/sbin/${SCRIPT} &&
+			echo "user ALL=(ALL) SETENV:NOPASSWD:/opt/system/sbin/${SCRIPT}" > /opt/system/sudo/${SCRIPT%.*} &&
+			chmod 0444 /opt/system/sudo/${SCRIPT%.*} &&
 			true
 	done
