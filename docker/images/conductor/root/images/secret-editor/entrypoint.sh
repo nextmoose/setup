@@ -12,10 +12,11 @@ Host origin
 HostName ${ORIGIN_HOST}
 Port ${ORIGIN_PORT}
 User ${ORIGIN_USER}
-IdentityFile ~/origin.id_rsa
+IdentityFile ~/.ssh/origin.id_rsa
 EOF
 	) &&
 	echo "${ORIGIN_ID_RSA}" > ${HOME}/.ssh/origin.id_rsa &&
+	ssh-keyscan -p ${ORIGIN_PORT} ${ORIGIN_HOST} > ${HOME}/.ssh/known_hosts &&
 	chmod 0600 ${HOME}/.ssh/config ${HOME}/.ssh/origin.id_rsa &&
 	pass init $(gpg --list-keys | grep "^pub" | sed -e "s#^pub.*/##" -e "s# .*\$##") &&
 	pass git init &&
