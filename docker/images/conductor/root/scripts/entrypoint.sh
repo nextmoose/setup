@@ -52,6 +52,7 @@ TIMESTAMP=$(date +%s) &&
 		create \
 		--driver lvm \
 		--opt thinpool \
+		--opt size=8G \
 		--opt key=$(keyfile) \
 		--label name=cron \
 		--label timestamp=${TIMESTAMP} \

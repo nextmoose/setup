@@ -56,7 +56,7 @@ EOF
 				ALPHA=$(echo ${LINE} | cut -f 1 -d " ") &&
 					echo -n "${ALPHA} "
 			done >> /etc/bash_completion.d/${SCRIPT} &&
-			echo -e "\"))" >> /etc/bash_completion.d/${SCRIPT} &&
+			echo -e "\" -- \${CUR} ))" >> /etc/bash_completion.d/${SCRIPT} &&
 			(cat >> /etc/bash_completion.d/${SCRIPT} <<EOF
 		case "${CUR}" in
 		esac
