@@ -41,5 +41,30 @@ EOF
 			chmod 0500 /opt/system/sbin/${SCRIPT} &&
 			echo "user ALL=(ALL) SETENV:NOPASSWD:/opt/system/sbin/${SCRIPT}" > /opt/system/sudo/${SCRIPT%.*} &&
 			chmod 0444 /opt/system/sudo/${SCRIPT%.*} &&
+			(cat > /etc/bash_completion.d/${SCRIPT} <<EOF
+#!/bin/sh
+
+_UseGetOpt_${SCRIPT%.*}(){
+	local CUR &&
+		COMPREPLY=() &&
+		CUR=\${COMP_WORDS[COMP_CWORD]} &&
+EOF
+			) &&
+			echo -en "\t\tCOMPREPLY=(\$( compgen -W \"" >> /etc/bash_completion.d/${SCRIPT} &&
+			cat /opt/system/germ/scripts/config/${SCRIPT%.*}.csv | while read LINE
+			do
+				ALPHA=$(echo ${LINE} | cut -f 1 -d " ") &&
+					echo -n "${ALPHA} "
+			done >> /etc/bash_completion.d/${SCRIPT} &&
+			echo -e "\"))" >> /etc/bash_completion.d/${SCRIPT} &&
+			(cat >> /etc/bash_completion.d/${SCRIPT} <<EOF
+		case "${CUR}" in
+		esac
+	return 0
+} &&
+	complete -F _UseGetOpt_${SCRIPT%.*} -o filenames ${SCRIPT%.*}
+EOF
+			) &&
+			chmod 0555 /etc/bash_completion.d/${SCRIPT} &&
 			true
 	done
