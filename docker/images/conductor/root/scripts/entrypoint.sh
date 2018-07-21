@@ -6,6 +6,12 @@ TIMESTAMP=$(date +%s) &&
 			uuidgen > ${KEYFILE} &&
 			echo ${KEYFILE}	
 	} &&
+	mkdir /tmp/containers &&
+	cidfile(){
+		CIDFILE=$(mktemp /tmp/containers/XXXXXXXX) &&
+			rm -f ${CIDFILE} &&
+			echo ${CIDFILE}
+	} &&
 	docker image pull fedora:28 &&
 	docker image pull alpine:3.5 &&
 	for IMAGE in $(ls -1 /opt/images)
@@ -40,6 +46,16 @@ TIMESTAMP=$(date +%s) &&
 		--label timestamp=${TIMESTAMP} \
 		) \
 		&&
+	CRON=$( \
+		docker \
+		volume \
+		create \
+		--driver lvm \
+		--opt thinpool \
+		--opt key=$(keyfile) \
+		--label name=cron \
+		--label timestamp=${TIMESTAMP} \
+	) &&
 	cat /gpg.secret.key | docker \
 		container \
 		run \
@@ -78,6 +94,14 @@ TIMESTAMP=$(date +%s) &&
 		alpine:3.5 \
 		chmod 0400 /output/gpg.owner.trust \
 		&&
+	CRON_CONTAINER=$(cidfile) &&
+	docker \
+		container \
+		create \
+		--cidfile ${CRON_CONTAINER} \
+		--volume ${CRON}:/var/spool/cron/crontabs:ro \
+		local/cron \
+		&&
 	MAIN=$(docker network create --label timestamp=${TIMESTAMP} $(uuidgen)) &&
 	(cat > /srv/bin/shell <<EOF
 #!/bin/sh
@@ -112,5 +136,9 @@ EOF
 	) &&
 	chown 1000:1000 /srv/bin/shell &&
 	chmod 0500 /srv/bin/shell &&
+	docker container start $(ls -1 /tmp/containers | while read CONTAINER
+	do
+		cat /tmp/containers/${CONTAINER}
+	done) &&
 	true
 
