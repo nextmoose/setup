@@ -8,6 +8,14 @@ TIMESTAMP=$(date +%s) &&
 	} &&
 	docker image pull fedora:28 &&
 	docker image pull alpine:3.5 &&
+	for IMAGE in $(ls -1 /opt/images)
+	do
+		while ! docker image build --tag local/${IMAGE} /opt/images/${IMAGE}
+		do
+			echo FAILED TO BUILD IMAGE ${IMAGE} &&
+				sleep 10s
+		done
+	done &&
 	HOMEY=$( \
 		docker \
 		volume \
