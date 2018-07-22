@@ -24,7 +24,9 @@ EOF
 	pass git config user.name "${COMMITTER_NAME}" &&
 	pass git config user.email "${COMMITTER_EMAIL}" &&
 	pass git fetch origin master &&
-	cp /post-commit.sh ${HOME}/.password-store/.git/hooks/post-commit &&
+	pass git checkout master &&
+	cp /opt/system/scripts/bin/post-commit.sh ${HOME}/.password-store/.git/hooks/post-commit &&
 	chmod 0500 ${HOME}/.password-store/.git/hooks/post-commit &&
+	bash &&
 	true
 	
