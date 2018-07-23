@@ -22,18 +22,6 @@ TIMESTAMP=$(date +%s) &&
 				sleep 10s
 		done
 	done &&
-	HOMEY=$( \
-		docker \
-		volume \
-		create \
-		--driver lvm \
-		--opt thinpool \
-		--opt size=8G \
-		--opt key=$(keyfile) \
-		--label name=home \
-		--label timestamp=${TIMESTAMP} \
-		) \
-		&&
 	GPG_SECRETS=$( \
 		docker \
 		volume \
@@ -46,17 +34,6 @@ TIMESTAMP=$(date +%s) &&
 		--label timestamp=${TIMESTAMP} \
 		) \
 		&&
-	CRON=$( \
-		docker \
-		volume \
-		create \
-		--driver lvm \
-		--opt thinpool \
-		--opt size=8G \
-		--opt key=$(keyfile) \
-		--label name=cron \
-		--label timestamp=${TIMESTAMP} \
-	) &&
 	cat /gpg.secret.key | docker \
 		container \
 		run \
@@ -95,14 +72,6 @@ TIMESTAMP=$(date +%s) &&
 		alpine:3.5 \
 		chmod 0400 /output/gpg.owner.trust \
 		&&
-	CRON_CONTAINER=$(cidfile) &&
-	docker \
-		container \
-		create \
-		--cidfile ${CRON_CONTAINER} \
-		--volume ${CRON}:/var/spool/cron/crontabs:ro \
-		local/cron \
-		&&
 	MAIN=$(docker network create --label timestamp=${TIMESTAMP} $(uuidgen)) &&
 	(cat > /srv/bin/shell <<EOF
 #!/bin/sh
@@ -121,7 +90,6 @@ CID_FILE=\$(mktemp) &&
 		--tty \
 		--rm \
 		--env DISPLAY \
-		--volume ${HOMEY}:/home \
 		--volume ${GPG_SECRETS}:/run/gpg.secrets:ro \
 		--volume /tmp/.X11-unix:/tmp/.X11-unix:ro \
 		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
@@ -137,9 +105,5 @@ EOF
 	) &&
 	chown 1000:1000 /srv/bin/shell &&
 	chmod 0500 /srv/bin/shell &&
-	docker container start $(ls -1 /tmp/containers | while read CONTAINER
-	do
-		cat /tmp/containers/${CONTAINER}
-	done) &&
 	true
 
