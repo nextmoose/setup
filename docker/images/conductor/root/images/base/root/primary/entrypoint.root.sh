@@ -19,5 +19,5 @@ fi &&
 	then
 		nohup sh /opt/system/secondary/post.root.sh &
 	fi &&
-	bash &&
-	echo su -c "sh /opt/system/primary/entrypoint.user.sh" user
+	sudo --user root bash &&
+	true
