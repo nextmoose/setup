@@ -25,6 +25,17 @@ do
 	case "${1}" in 
 EOF
 			) &&
+				if [ -f /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env ]
+				then
+					cat /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env | while read LINE
+					do
+						VARIABLE=$(echo ${LINE} | sed -e "s#=.*\$##) &&
+							SWITCH=$(echo ${VARIABLE} | -e "s#_#-#" -e "s#^#--#") &&
+							EXPRESSION=$(echo ${LINE} | sed -e "s#^.*=##") &&
+							echo -e "\t\t\t${SWITCH}) ${VARIABLE}=${EXPRESSION} ;;" >> /opt/system/tertiary/scripts/bin/${SCRIPT%.*} &&
+							true
+					done
+				fi &&
 				(cat >> /opt/system/tertiary/bin/${SCRIPT%.*} <<EOF
 		*) echo Unknown Option && echo \${1} && echo \${0} && echo \${@} && exit 64 ;;
 	esac
