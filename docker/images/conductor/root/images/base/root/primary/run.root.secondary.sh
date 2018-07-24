@@ -17,14 +17,19 @@ mkdir /opt/system/tertiary &&
 	then
 		for SCRIPT in $(ls -1 /opt/system/secondary/scripts/sbin | grep "[.]sh\$")
 		do
-			if [ -f /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env ]
-			then
-				source /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env				
-			fi &&
 			(cat > /opt/system/tertiary/bin/${SCRIPT%.*} <<EOF
 #!/bin/sh
 
-sudo --preserve-env /opt/system/tertiary/sbin/${SCRIPT} "\${@}"
+while [ \${#} -gt 0 ]
+do
+	case "${1}" in 
+EOF
+			) &&
+				(cat >> /opt/system/tertiary/bin/${SCRIPT%.*} <<EOF
+		*) echo Unknown Option && echo \${1} && echo \${0} && echo \${@} && exit 64 ;;
+	esac
+done &&
+	sudo --preserve-env /opt/system/tertiary/sbin/${SCRIPT} "\${@}"
 EOF
 		) &&
 				chmod 0555 /opt/system/tertiary/bin/${SCRIPT%.*} &&
