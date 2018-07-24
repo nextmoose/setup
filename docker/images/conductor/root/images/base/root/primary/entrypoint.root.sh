@@ -19,5 +19,10 @@ fi &&
 	then
 		nohup sh /opt/system/secondary/post.root.sh &
 	fi &&
-	sudo --user root bash &&
+	if [ -f /opt/system/primary/entrypoint.user.sh ]
+	then
+		sudo --user user sh /opt/system/primary/entrypoint.user.sh
+	else
+		sudo --user user bash
+	fi &&
 	true
