@@ -32,7 +32,8 @@ EOF
 						VARIABLE=$(echo ${LINE} | sed -e "s#=.*\$##) &&
 							SWITCH=$(echo ${VARIABLE} | -e "s#_#-#" -e "s#^#--#") &&
 							EXPRESSION=$(echo ${LINE} | sed -e "s#^.*=##") &&
-							echo -e "\t\t\t${SWITCH}) ${VARIABLE}=${EXPRESSION} ;;" >> /opt/system/tertiary/scripts/bin/${SCRIPT%.*} &&
+							TERMINATOR=";;" &&
+							echo -e "\t\t\t${SWITCH}) ${VARIABLE}=${EXPRESSION} ${TERMINATOR}" >> /opt/system/tertiary/scripts/bin/${SCRIPT%.*} &&
 							true
 					done
 				fi &&
