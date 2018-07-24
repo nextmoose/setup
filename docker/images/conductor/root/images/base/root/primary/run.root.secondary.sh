@@ -22,7 +22,7 @@ mkdir /opt/system/tertiary &&
 
 while [ \${#} -gt 0 ]
 do
-	case "${1}" in 
+	case "\${1}" in 
 EOF
 			) &&
 				if [ -f /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env ]
@@ -30,9 +30,9 @@ EOF
 					cat /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env | while read LINE
 					do
 						VARIABLE=$(echo ${LINE} | sed -e "s#=.*\$##") &&
-							SWITCH=$(echo ${VARIABLE} | sed -e "s#_#-#" -e "s#^#--#") &&
+							SWITCH=$(echo ${VARIABLE} | sed -e "s#_#-#" -e "s#^#--#" | tr [A-Z] [a-z]) &&
 							EXPRESSION=$(echo ${LINE} | sed -e "s#^.*=##") &&
-							echo -e "\t\t\t${SWITCH}) ${VARIABLE}=${EXPRESSION} ;;" >> /opt/system/tertiary/bin/${SCRIPT%.*} &&
+							echo -e "\t\t${SWITCH}) ${VARIABLE}=${EXPRESSION} ;;" >> /opt/system/tertiary/bin/${SCRIPT%.*} &&
 							true
 					done &&
 					true
