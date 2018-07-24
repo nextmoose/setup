@@ -17,6 +17,10 @@ mkdir /opt/system/tertiary &&
 	then
 		for SCRIPT in $(ls -1 /opt/system/secondary/scripts/sbin | grep "[.]sh\$")
 		do
+			if [ -f /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env ]
+			then
+				source /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env				
+			fi &&
 			(cat > /opt/system/tertiary/bin/${SCRIPT%.*} <<EOF
 #!/bin/sh
 
