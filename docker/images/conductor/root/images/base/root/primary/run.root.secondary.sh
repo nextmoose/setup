@@ -4,6 +4,7 @@ mkdir /opt/system/tertiary &&
 	mkdir /opt/system/tertiary/bin &&
 	mkdir /opt/system/tertiary/sbin &&
 	mkdir /opt/system/tertiary/sudo &&
+	mkdir /opt/system/tertiary/completion &&
 	if [ -d /opt/system/secondary/scripts/bin ]
 	then
 		for SCRIPT in $(ls -1 /opt/system/secondary/scripts/bin | grep "[.]sh\$")
@@ -32,7 +33,7 @@ EOF
 						VARIABLE=$(echo ${LINE} | sed -e "s#=.*\$##") &&
 							SWITCH=$(echo ${VARIABLE} | sed -e "s#_#-#" -e "s#^#--#" | tr [A-Z] [a-z]) &&
 							EXPRESSION=$(echo ${LINE} | sed -e "s#^.*=##") &&
-							echo -e "\t\t${SWITCH}) ${VARIABLE}=${EXPRESSION} ;;" >> /opt/system/tertiary/bin/${SCRIPT%.*} &&
+							echo -e "\t\t${SWITCH}) export ${VARIABLE}=${EXPRESSION} ;;" >> /opt/system/tertiary/bin/${SCRIPT%.*} &&
 							true
 					done &&
 					true
@@ -41,15 +42,35 @@ EOF
 		*) echo Unknown Option && echo \${1} && echo \${0} && echo \${@} && exit 64 ;;
 	esac
 done &&
-	sudo --preserve-env /opt/system/tertiary/sbin/${SCRIPT} "\${@}"
+	sudo --preserve-env /opt/system/tertiary/sbin/${SCRIPT}
 EOF
-		) &&
+				) &&
 				chmod 0555 /opt/system/tertiary/bin/${SCRIPT%.*} &&
 				cp /opt/system/secondary/scripts/sbin/${SCRIPT} /opt/system/tertiary/sbin/${SCRIPT} &&
 				chmod 0500 /opt/system/tertiary/sbin/${SCRIPT} &&
 				echo "user ALL=(ALL) NOPASSWD:SETENV: /opt/system/tertiary/sbin/${SCRIPT}" > /opt/system/tertiary/sudo/${SCRIPT%.*} &&
 				chmod 0444 /opt/system/tertiary/sudo/${SCRIPT%.*} &&
-				true
+				if [ -f /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env ]
+				then
+					TAGS=$(sed -e "s#=.*\$##" -e "s#_#-#" -e "s#^#--#" /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env | tr [A-Z] [a-z]) &&
+						(cat > /opt/system/tertiary/completion/${SCRIPT} <<EOF
+#!/bin/sh
+
+_UseGetOpt_${SCRIPT%.*}() {
+	local CUR &&
+		COMPREPLY=() &&
+		CUR=\${COMP_WORDS[COMP_CWORD]} &&
+		case "\${CUR}" in
+			*) COMPREPLY=(\$(compgen -W "${TAGS}" -- \${CUR})) ;; 
+		esac &&
+		return 0
+} &&
+	complete -F _UseGetOpt_${SCRIPT%.*} -o filenames ${SCRIPT%.*}
+EOF
+						) &&
+						cp /opt/system/tertiary/completion/${SCRIPT} /etc/bash_completion.d/${SCRIPT%.*} &&
+						chmod a+rwx /etc/bash_completion.d/${SCRIPT%.*}
+				fi
 		done
 	fi &&
 	true

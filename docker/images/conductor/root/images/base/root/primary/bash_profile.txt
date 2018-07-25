@@ -1,0 +1,6 @@
+
+ls -1 /opt/system/tertiary/completion | while read COMPLETION
+do
+	source /opt/system/tertiary/completion/${COMPLETION}
+done &&
+	export PATH=${PATH}:/opt/system/tertiary/bin

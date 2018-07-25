@@ -15,5 +15,13 @@ fi &&
 	then
 		nohup sh /opt/system/secondary/post.user.sh &
 	fi &&
+	if [ -d /opt/system/tertiary/completion ]
+	then
+		for COMPLETION in $(ls -1 /opt/system/tertiary/completion)
+		do
+			source /opt/system/tertiary/completion/${COMPLETION}
+		done
+	fi &&
+	cd /home/user &&
 	export PATH=${PATH}:/opt/system/tertiary/bin &&
 	bash

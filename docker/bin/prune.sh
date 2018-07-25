@@ -9,6 +9,7 @@ done &&
 	do
 		sudo docker volume rm ${VOLUME}
 	done &&
+	# sudo rm -f /run/keys/. &&
 	sudo docker network ls --quiet --filter label=timestamp | while read NETWORK
 	do
 		sudo docker network rm ${NETWORK}
