@@ -1,5 +1,5 @@
 
-ls -1 /opt/system/tertiary/completion | while read COMPLETION
+for COMPLETION in $(ls -1 /opt/system/tertiary/completion)
 do
 	source /opt/system/tertiary/completion/${COMPLETION}
 done &&

@@ -7,4 +7,4 @@ dnf update --assumeyes &&
 	echo "user ALL=(ALL) NOPASSWD:SETENV: ALL" > /etc/sudoers.d/breaker &&
 	chmod 0444 /etc/sudoers.d/breaker &&
 	chmod 0444 /etc/sudoers.d/system &&
-	cat /opt/system/primary/bash_profile.txt >> /home/user/.bash_profile
+	cat /opt/system/primary/bash_profile.txt >> /home/user/.bashrc
