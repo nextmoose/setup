@@ -61,7 +61,7 @@ _UseGetOpt_${SCRIPT%.*}() {
 		COMPREPLY=() &&
 		CUR=\${COMP_WORDS[COMP_CWORD]} &&
 		case "\${CUR}" in
-			*) COMPREPLY=(\$(compgen -W "${TAGS}" -- \${CUR})) ;; 
+			-*) COMPREPLY=(\$(compgen -W "${TAGS}" -- \${CUR})) ;; 
 		esac &&
 		return 0
 } &&
