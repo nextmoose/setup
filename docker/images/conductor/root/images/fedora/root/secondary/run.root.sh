@@ -1,3 +1,3 @@
 #!/bin/sh
 
-dnf install --assumeyes pass gnupg
+dnf install --assumeyes pass gnupg docker

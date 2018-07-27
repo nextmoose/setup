@@ -52,11 +52,12 @@ EOF
 				chmod 0444 /opt/system/tertiary/sudo/${SCRIPT%.*} &&
 				if [ -f /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env ]
 				then
-					TAGS=$(sed -e "s#=.*\$##" -e "s#_#-#" -e "s#^#--#" /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env | tr [A-Z] [a-z]) &&
+					TAGS=$(sed -e "s#=.*\$##" -e "s#_#-#g" -e "s#^#--#" /opt/system/secondary/scripts/sbin/${SCRIPT%.*}.env | tr [A-Z] [a-z] | sort) &&
+						COMPLETION_SCRIPT="$(echo ${SCRIPT%.*} | sed -e 's#^#_UseGetOpt_#' -e 's#-#_#')" &&
 						(cat > /opt/system/tertiary/completion/${SCRIPT} <<EOF
 #!/bin/sh
 
-_UseGetOpt_${SCRIPT%.*}() {
+${COMPLETION_SCRIPT}() {
 	local CUR &&
 		COMPREPLY=() &&
 		CUR=\${COMP_WORDS[COMP_CWORD]} &&
@@ -65,7 +66,7 @@ _UseGetOpt_${SCRIPT%.*}() {
 		esac &&
 		return 0
 } &&
-	complete -F _UseGetOpt_${SCRIPT%.*} -o filenames ${SCRIPT%.*}
+	complete -F ${COMPLETION_SCRIPT} -o filenames ${SCRIPT%.*}
 EOF
 						) &&
 						cp /opt/system/tertiary/completion/${SCRIPT} /etc/bash_completion.d/${SCRIPT%.*} &&
