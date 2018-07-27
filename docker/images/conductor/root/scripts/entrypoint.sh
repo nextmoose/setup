@@ -51,7 +51,7 @@ TIMESTAMP=$(date +%s) &&
 		--rm \
 		--volume ${GPG_SECRETS}:/output \
 		alpine:3.5 \
-		chmod 0400 /output/gpg.secret.key \
+		chmod 0444 /output/gpg.secret.key \
 		&&
 	cat /gpg.owner.trust | docker \
 		container \
@@ -70,7 +70,7 @@ TIMESTAMP=$(date +%s) &&
 		--rm \
 		--volume ${GPG_SECRETS}:/output \
 		alpine:3.5 \
-		chmod 0400 /output/gpg.owner.trust \
+		chmod 0444 /output/gpg.owner.trust \
 		&&
 	MAIN=$(docker network create --label timestamp=${TIMESTAMP} $(uuidgen)) &&
 	(cat > /srv/bin/shell <<EOF
@@ -90,6 +90,9 @@ CID_FILE=\$(mktemp) &&
 		--tty \
 		--rm \
 		--env DISPLAY \
+		--env UPSTREAM_HOST="github.com" \
+		--env UPSTREAM_ORGANIZATION="nextmoose" \
+		--env UPSTREAM_REPOSITORY="secrets" \
 		--volume ${GPG_SECRETS}:/run/gpg.secrets:ro \
 		--volume /tmp/.X11-unix:/tmp/.X11-unix:ro \
 		--volume /var/run/docker.sock:/var/run/docker.sock:ro \

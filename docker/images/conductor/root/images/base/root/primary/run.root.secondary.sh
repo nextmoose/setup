@@ -73,4 +73,8 @@ EOF
 				fi
 		done
 	fi &&
+	if [ -f /opt/system/secondary/run.root.sh ]
+	then
+		sh /opt/system/secondary/run.root.sh
+	fi &&
 	true
