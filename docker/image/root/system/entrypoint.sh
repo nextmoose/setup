@@ -2,7 +2,7 @@
 
 TIMESTAMP=$(date +%s) &&
 	key_file(){
-		KEY_FILE=$(mktemp /run/keys/XXXXXXXX) &&
+		KEY_FILE=$(mktemp /run/docker/encrypted/key-XXXXXXXX) &&
 			uuidgen > ${KEY_FILE} &&
 			echo ${KEY_FILE}
 	} &&
