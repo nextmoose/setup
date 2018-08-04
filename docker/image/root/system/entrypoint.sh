@@ -25,6 +25,8 @@ TIMESTAMP=$(date +%s) &&
 		--tty \
 		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
 		--volume ${WORKSPACE_VOLUME}:/opt/cloud9/workspace \
+		--volume /run/docker/encrypted:/run/docker/encrypted \
+		--volume /run/docker/unencrypted:/run/docker/unencrypted \
 		--env PROJECT_NAME=inner \
 		--env CLOUD9_PORT=18326 \
 		--env GPG_SECRET_KEY \
