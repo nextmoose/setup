@@ -6,6 +6,7 @@ TIMESTAMP=$(date +%s) &&
 			uuidgen > ${KEY_FILE} &&
 			echo ${KEY_FILE}
 	} &&
+	WORKSPACE_VOLUME=$(docker volume create --driver lvm --opt thinpool --opt size=1G) &&
 	docker \
 		container \
 		create \
@@ -20,11 +21,24 @@ TIMESTAMP=$(date +%s) &&
 		container \
 		create \
 		--cidfile inner.cid \
-		--privileged \
-		--label timestamp=${TIMESTAMP} \
-		--env CLOUD9_WORKSPACE=/opt/cloud9/workspace \
+		--interactive \
+		--tty \
+		--volume /var/run/docker.sock:/var/run/docker.sock:ro \
+		--volume ${WORKSPACE_VOLUME}:/opt/cloud9/workspace \
+		--env PROJECT_NAME=inner \
 		--env CLOUD9_PORT=18326 \
-		rebelplutonium/cloud9:1.4.12 \
+		--env GPG_SECRET_KEY \
+		--env GPG_OWNER_TRUST \
+		--env GPG2_SECRET_KEY \
+		--env GPG2_OWNER_TRUST \
+		--env GPG_KEY_ID=D65D3F8C \
+		--env USER_NAME \
+		--env USER_EMAIL \
+		--env SECRETS_HOST \
+		--env SECRETS_ORGANIZATION \
+		--env SECRETS_REPOSITORY \
+		--label timestamp=${TIMESTAMP} \
+		rebelplutonium/inner:1.0.9 \
 		&&
 	MAIN=$(docker network create $(uuidgen) --label timestamp=${TIMESTAMP}) &&
 	docker network connect ${MAIN} $(cat browser.cid) &&
