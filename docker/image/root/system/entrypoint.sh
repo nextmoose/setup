@@ -33,14 +33,11 @@ TIMESTAMP=$(date +%s) &&
 		--env GPG_OWNER_TRUST \
 		--env GPG2_SECRET_KEY \
 		--env GPG2_OWNER_TRUST \
-		--env GPG_KEY_ID=D65D3F8C \
-		--env USER_NAME \
-		--env USER_EMAIL \
 		--env SECRETS_HOST \
 		--env SECRETS_ORGANIZATION \
 		--env SECRETS_REPOSITORY \
 		--label timestamp=${TIMESTAMP} \
-		rebelplutonium/inner:1.0.12 \
+		rebelplutonium/inner:1.0.13 \
 		&&
 	MAIN=$(docker network create $(uuidgen) --label timestamp=${TIMESTAMP}) &&
 	docker network connect ${MAIN} $(cat browser.cid) &&
