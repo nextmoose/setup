@@ -40,7 +40,7 @@ TIMESTAMP=$(date +%s) &&
 		--env SECRETS_ORGANIZATION \
 		--env SECRETS_REPOSITORY \
 		--label timestamp=${TIMESTAMP} \
-		rebelplutonium/inner:1.0.10 \
+		rebelplutonium/inner:1.0.11 \
 		&&
 	MAIN=$(docker network create $(uuidgen) --label timestamp=${TIMESTAMP}) &&
 	docker network connect ${MAIN} $(cat browser.cid) &&
