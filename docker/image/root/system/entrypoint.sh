@@ -7,11 +7,7 @@ TIMESTAMP=$(date +%s) &&
 			echo ${KEY_FILE}
 	} &&
 	WORKSPACE_VOLUME=$(docker volume create --driver lvm --opt thinpool --opt size=1G) &&
-	GITLAB_CONFIG_VOLUME=$(docker volume create --driver lvm --opt thinpool --opt size=1G) &&
-	GITLAB_LOGS_VOLUME=$(docker volume create --driver lvm --opt thinpool --opt size=1G) &&
-	GITLAB_DATA_VOLUME=$(docker volume create --driver lvm --opt thinpool --opt size=1G) &&
 	export MAIN_NETWORK=$(docker network create $(uuidgen) --label timestamp=${TIMESTAMP}) &&
-	export GITLAB_NETWORK=$(docker network create $(uuidgen) --label timestamp=${TIMESTAMP}) &&
 	docker \
 		container \
 		create \
@@ -46,19 +42,8 @@ TIMESTAMP=$(date +%s) &&
 		--label timestamp=${TIMESTAMP} \
 		rebelplutonium/inner:1.0.13 \
 		&&
-	docker \
-		container \
-		create \
-		--cidfile gitlab.cid \
-		--volume ${GITLAB_CONFIG_VOLUME}:/etc/gitlab \
-		--volume ${GITLAB_LOGS_VOLUME}:/var/log/gitlab \
-		--volume ${GITLAB_DATA_VOLUME}:/var/opt/gitlab \
-		gitlab/gitlab-ce:11.1.4-ce.0 \
-		&&
 	docker network connect ${MAIN_NETWORK} $(cat browser.cid) &&
 	docker network connect --alias inner ${MAIN_NETWORK} $(cat inner.cid) &&
-	docker network connect --alias gitlab ${MAIN_NETWORK} $(cat gitlab.cid) &&
 	docker network disconnect bridge $(cat inner.cid) &&
-	docker network disconnect bridge $(cat gitlab.cid) &&
-	docker container start $(cat browser.cid) $(cat inner.cid) $(cat gitlab.cid) &&
+	docker container start $(cat browser.cid) $(cat inner.cid) &&
 	true
