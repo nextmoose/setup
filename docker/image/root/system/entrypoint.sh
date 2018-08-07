@@ -11,6 +11,7 @@ TIMESTAMP=$(date +%s) &&
 	GITLAB_LOGS_VOLUME=$(docker volume create --driver lvm --opt thinpool --opt size=1G) &&
 	GITLAB_DATA_VOLUME=$(docker volume create --driver lvm --opt thinpool --opt size=1G) &&
 	export MAIN_NETWORK=$(docker network create $(uuidgen) --label timestamp=${TIMESTAMP}) &&
+	export GITLAB_NETWORK=$(docker network create $(uuidgen) --label timestamp=${TIMESTAMP}) &&
 	docker \
 		container \
 		create \
