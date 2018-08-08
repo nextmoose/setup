@@ -1,7 +1,7 @@
 #!/bin/sh
 
 time sudo dnf update --assumeyes &&
-	sudo dnf install --assumeyes docker &&
+	./install-docker.sh &&
     ./install-docker-lvm-plugin.sh &&
     ./lvm-setup.sh &&
     ./start-docker.sh &&
