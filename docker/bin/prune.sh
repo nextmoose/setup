@@ -4,10 +4,6 @@ if [ ! -z "$(sudo docker container ls --quiet --all)" ]
 then
 	sudo docker container rm --force --volumes $(sudo docker container ls --quiet --all)
 fi &&
-	if [ ! -z "$(sudo docker image ls --quiet)" ]
-	then
-		sudo docker image rm --force $(sudo docker image ls --quiet)
-	fi &&
 	if [ ! -z "$(sudo docker volume ls --quiet)" ]
 	then
 		sudo docker volume rm $(sudo docker volume ls --quiet)
