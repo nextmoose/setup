@@ -33,8 +33,13 @@ n
 n
 
 
++64G
+
+n
 
 
+
+8E00
 w
 Y
 EOF
@@ -42,6 +47,8 @@ EOF
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
     echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
+    pvcreate /dev/sda4 &&
+    vgcreate volumes /dev/sda4 &&
     mount /dev/sda3 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
