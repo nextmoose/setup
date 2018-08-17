@@ -1,6 +1,6 @@
 #!/bin/sh
 
-read -p USER PASSWORD? USER_PASSWORD &&
+read -p "USER PASSWORD?" USER_PASSWORD &&
     echo USER_PASSWORD=${USER_PASSWORD} &&
     sleep 30s &&
     sh ../private/wifi.sh &&
