@@ -1,13 +1,7 @@
 #!/bin/sh
 
 read -p "USER PASSWORD?" USER_PASSWORD &&
-    echo USER_PASSWORD=${USER_PASSWORD} &&
-    sleep 30s &&
     sh ../private/wifi.sh &&
-    while ! nmcli device wifi rescan
-    do
-        sleep 1s
-    done &&
     (cat <<EOF
 d
 1
@@ -15,6 +9,8 @@ d
 2
 d
 3
+d
+4
 w
 Y
 EOF
@@ -61,5 +57,12 @@ ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
+    mkdir /mnt/home/user/bin &&
+    ls -1 bin | while read FILE
+    do
+	cat bin/${FILE} /mnt/home/user/bin/${FILE%.*} &&
+	    chmod 0500 /mnt/home/user/bin/${FILE%.*} &&
+	    chown 1000:1000 /mnt/home/user/bin/${FILE%.*}
+    done &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt &&
     shutdown -h now
