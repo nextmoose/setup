@@ -55,14 +55,15 @@ EOF
     mkswap -L SWAP /dev/sda2 &&
     echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
     cryptsetup luksFormat /dev/sda4 &&
-    cryptsetup luksOpen /dev/sda4 keys &&
-    mkfs.ext4 /dev/keys &&
+    # cryptsetup luksOpen /dev/sda4 keys &&
+    # mkfs.ext4 /dev/keys &&
     pvcreate --force /dev/sda5 &&
     vgcreate volumes /dev/sda5 &&
     mount /dev/sda3 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
-    mount /dev/keys /mnt/keys/ &&
+    # mkdir /mnt/keys &&
+    # mount /dev/keys /mnt/keys/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cat configuration.nix > /mnt/etc/nixos/configuration.nix &&
