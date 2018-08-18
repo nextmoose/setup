@@ -78,6 +78,6 @@ EOF
 	    chmod 0500 /mnt/home/user/bin/${FILE%.*} &&
 	    chown 1000:100 /mnt/home/user/bin/${FILE%.*}
     done &&
-    chown 1000:100 /mnt/home/user &&
+    chown 1000:100 /mnt/home/user/bin &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt &&
     shutdown -h now
