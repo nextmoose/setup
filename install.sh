@@ -21,11 +21,6 @@ n
 n
 
 
-+1G
-
-n
-
-
 
 8E00
 w
@@ -37,16 +32,11 @@ EOF
     echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
     KEY_FILE=$(mktemp) &&
     echo "${USER_PASSWORD}" > ${KEY_FILE} &&
-    cryptsetup --key-file ${KEY_FILE} luksFormat /dev/sda4 &&
-    cryptsetup --key-file ${KEY_FILE} luksOpen /dev/sda4 keys &&
-    # mkfs.ext4 /dev/keys &&
-    pvcreate --force /dev/sda5 &&
-    vgcreate volumes /dev/sda5 &&
+    pvcreate --force /dev/sda4 &&
+    vgcreate volumes /dev/sda4 &&
     mount /dev/sda3 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
-    # mkdir /mnt/keys &&
-    # mount /dev/keys /mnt/keys/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cat configuration.nix > /mnt/etc/nixos/configuration.nix &&
