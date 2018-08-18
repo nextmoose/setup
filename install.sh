@@ -2,6 +2,12 @@
 
 read -p "USER PASSWORD?" USER_PASSWORD &&
     sh ../private/wifi.sh &&
+    lvs --options NAME volumes | tail -n -1 | while read NAME
+    do
+	    (lvremove --force /dev/volumes/${NAME} || true)
+    done &&
+	    (vgremove --force /dev/volumes || true) &&
+	    (pvremove --force /dev/volumes || true) &&
     (cat <<EOF
 d
 1
@@ -62,7 +68,7 @@ EOF
     mkfs.ext4 /dev/volumes/${PRIVATE_VOLUME} &&
     DIR=$(mktemp -d) &&
     mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
-    cat ../private/wifi.sh > ${DIR} &&
+    cat ../private/wifi.sh > ${DIR}/wifi.sh &&
     chmod 0500 ${DIR}/wifi.sh &&
     chown 1000:100 ${DIR}/wifi.sh &&
     mkdir /mnt/home/user/bin &&
