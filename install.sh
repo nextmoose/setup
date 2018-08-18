@@ -54,6 +54,12 @@ EOF
     cat ../private/wifi.sh > ${DIR}/wifi.sh &&
     chmod 0500 ${DIR}/wifi.sh &&
     chown 1000:100 ${DIR}/wifi.sh &&
+    cat ../private/gpg.secret.key > ${DIR}/gpg.secret.key &&
+    chmod 0500 ${DIR}/gpg.secret.key &&
+    chown 1000:100 ${DIR}/gpg.secret.key &&
+    cat ../private/gpg2.secret.key > ${DIR}/gpg2.secret.key &&
+    chmod 0500 ${DIR}/gpg2.secret.key &&
+    chown 1000:100 ${DIR}/gpg2.secret.key &&
     mkdir /mnt/home/user/bin &&
     ls -1 bin | while read FILE
     do

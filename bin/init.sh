@@ -6,7 +6,9 @@ PRIVATE_VOLUME=24fd963r &&
 	DIR=$(mktemp -d /tmp/XXXXXXXX) &&
 	    sudo mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
 	    sh ${DIR}/wifi.sh &&
+	    gpg import ${DIR}/gpg.secret.key &&
 	    sudo umount ${DIR} &&
-	    rm -rf ${DIR} &&
-	    lvremove --force /dev/volumes/${PRIVATE_VOLUME}
+	    # rm -rf ${DIR} &&
+	    # lvremove --force /dev/volumes/${PRIVATE_VOLUME}
+	    echo ${DIR}
     fi
