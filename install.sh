@@ -65,7 +65,7 @@ EOF
     ) | nixos-install &&
     PRIVATE_VOLUME=24fd963r &&
     lvcreate --size 1G --name ${PRIVATE_VOLUME} volumes &&
-    mkfs.ext4 /dev/volumes/${PRIVATE_VOLUME} &&
+    mkfs.ext4 -F /dev/volumes/${PRIVATE_VOLUME} &&
     DIR=$(mktemp -d) &&
     mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
     cat ../private/wifi.sh > ${DIR}/wifi.sh &&
