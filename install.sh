@@ -2,25 +2,6 @@
 
 read -p "USER PASSWORD?" USER_PASSWORD &&
     sh ../private/wifi.sh &&
-    lvs --options NAME volumes | tail -n -1 | while read NAME
-    do
-	    (lvremove --force /dev/volumes/${NAME} || true)
-    done &&
-	    (vgremove --force /dev/volumes || true) &&
-	    (pvremove --force /dev/volumes || true) &&
-    (cat <<EOF
-d
-1
-d
-2
-d
-3
-d
-4
-w
-Y
-EOF
-    ) | gdisk /dev/sda &&
     (cat <<EOF
 n
 
@@ -54,8 +35,10 @@ EOF
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
     echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
-    cryptsetup luksFormat /dev/sda4 &&
-    # cryptsetup luksOpen /dev/sda4 keys &&
+    KEY_FILE=$(mktemp) &&
+    echo "${USER_PASSWORD}" > ${KEY_FILE} &&
+    cryptsetup --key-file ${KEY_FILE} luksFormat /dev/sda4 &&
+    cryptsetup --key-file ${KEY_FILE} luksOpen /dev/sda4 keys &&
     # mkfs.ext4 /dev/keys &&
     pvcreate --force /dev/sda5 &&
     vgcreate volumes /dev/sda5 &&
