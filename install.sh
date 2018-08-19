@@ -30,8 +30,6 @@ EOF
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
     echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
-    KEY_FILE=$(mktemp) &&
-    echo "${USER_PASSWORD}" > ${KEY_FILE} &&
     pvcreate --force /dev/sda4 &&
     vgcreate volumes /dev/sda4 &&
     mount /dev/sda3 /mnt &&
@@ -48,7 +46,7 @@ EOF
     ) | nixos-install &&
     PRIVATE_VOLUME=24fd963r &&
     lvcreate --size 1G --name ${PRIVATE_VOLUME} volumes &&
-    mkfs.ext4 -F /dev/volumes/${PRIVATE_VOLUME} &&
+    mkfs.ext4 -q /dev/volumes/${PRIVATE_VOLUME} &&
     DIR=$(mktemp -d) &&
     mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
     cat ../private/wifi.sh > ${DIR}/wifi.sh &&
@@ -69,4 +67,5 @@ EOF
     done &&
     chown 1000:100 /mnt/home/user/bin &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt &&
-    shutdown -h now
+    shutdown -h now &&
+    true
