@@ -1,6 +1,6 @@
 #!/bin/sh
 
-read -p "USER PASSWORD?" USER_PASSWORD &&
+read -p "User Password:  " -s USER_PASSWORD &&
     sh ../private/wifi.sh &&
     (cat <<EOF
 n
