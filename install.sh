@@ -48,7 +48,8 @@ EOF
     ) | nixos-install &&
     PRIVATE_VOLUME=24fd963r &&
     lvcreate --size 1G --name ${PRIVATE_VOLUME} volumes &&
-    # dd if=/dev/zero of=/dev/volumes/${PRIVATE_VOLUME} blocks=1k 
+    # dd if=/dev/zero of=/dev/volumes/${PRIVATE_VOLUME} blocks=1k
+    wipefs -a /dev/volumes/${PRIVATE_VOLUME} &&
     mkfs.ext4 /dev/volumes/${PRIVATE_VOLUME} &&
     DIR=$(mktemp -d) &&
     mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
@@ -73,6 +74,14 @@ EOF
 	cat bin/${FILE} > /mnt/home/user/bin/${FILE%.*} &&
 	    chmod 0500 /mnt/home/user/bin/${FILE%.*} &&
 	    chown 1000:100 /mnt/home/user/bin/${FILE%.*}
+    done &&
+    chown 1000:100 /mnt/home/user/bin &&
+    mkdir /mnt/home/user/completion &&
+    ls -1 completion | while read FILE
+    do
+	cat completion/${FILE} > /mnt/home/user/completion/${FILE%.*} &&
+	    chmod 0400 /mnt/home/user/completion/${FILE} &&
+	    chmown 1000:100 /mnt/home/user/completion/${FILE}
     done &&
     chown 1000:100 /mnt/home/user/bin &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt &&

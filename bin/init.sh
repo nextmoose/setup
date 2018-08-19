@@ -28,6 +28,10 @@ PRIVATE_VOLUME=24fd963r &&
 	    pass git checkout origin/master &&
 	    sudo umount ${DIR} &&
 	    rm -rf ${DIR} &&
-	    lvremove --force /dev/volumes/${PRIVATE_VOLUME} &&
+	    sudo lvremove --force /dev/volumes/${PRIVATE_VOLUME} &&
 	    true
-    fi
+    fi &&
+    ls -1 ${HOME}/completion | while read FILE
+    do
+	source ${HOME}/completion/${FILE}
+    done

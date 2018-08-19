@@ -27,7 +27,7 @@ do
 	    UPSTREAM_BRANCH="${2}" &&
 		shift 2
 	    ;;
-y	--origin-host)
+	--origin-host)
 	    ORIGIN_HOST="${2}" &&
 		shift 2
 	;;
