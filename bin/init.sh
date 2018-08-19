@@ -21,12 +21,13 @@ PRIVATE_VOLUME=24fd963r &&
 	    gpg --import-ownertrust ${DIR}/gpg.owner.trust &&
 	    gpg2 --import ${DIR}/gpg2.secret.key &&
 	    gpg2 --import-ownertrust ${DIR}/gpg2.owner.trust &&
-	    pass init $(gpg --list-keys --with-colon | head --lines 5 | tail --lines 5 | cut --fields 5 --delimiter ":") &&
+	    pass init $(gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":") &&
 	    pass git init &&
 	    pass git remote add origin https://github.com/nextmoose/secrets.git &&
 	    pass git fetch origin master &&
-	    # sudo umount ${DIR} &&
-	    # rm -rf ${DIR} &&
-	    # lvremove --force /dev/volumes/${PRIVATE_VOLUME}
-	    echo ${DIR}
+	    pass git checkout origin/master &&
+	    sudo umount ${DIR} &&
+	    rm -rf ${DIR} &&
+	    lvremove --force /dev/volumes/${PRIVATE_VOLUME} &&
+	    true
     fi

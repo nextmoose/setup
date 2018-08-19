@@ -48,7 +48,7 @@ EOF
     ) | nixos-install &&
     PRIVATE_VOLUME=24fd963r &&
     lvcreate --size 1G --name ${PRIVATE_VOLUME} volumes &&
-    dd if=/dev/zero of=/dev/volumes/${PRIVATE_VOLUME} blocks=1k 
+    # dd if=/dev/zero of=/dev/volumes/${PRIVATE_VOLUME} blocks=1k 
     mkfs.ext4 -q /dev/volumes/${PRIVATE_VOLUME} &&
     DIR=$(mktemp -d) &&
     mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
