@@ -1,6 +1,8 @@
 #!/bin/sh
 
 read -p "User Password:  " -s USER_PASSWORD &&
+    read -p "Verify User Password:  " -s VERIFY_USER_PASSWORD &&
+    [ "${USER_PASSWORD}" = "${VERIFY_USER_PASSWORD}" ] &&
     sh ../private/wifi.sh &&
     (cat <<EOF
 n
