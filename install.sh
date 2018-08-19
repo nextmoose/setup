@@ -46,6 +46,7 @@ EOF
     ) | nixos-install &&
     PRIVATE_VOLUME=24fd963r &&
     lvcreate --size 1G --name ${PRIVATE_VOLUME} volumes &&
+    dd if=/dev/zero of=/dev/volumes/${PRIVATE_VOLUME} blocks=1k 
     mkfs.ext4 -q /dev/volumes/${PRIVATE_VOLUME} &&
     DIR=$(mktemp -d) &&
     mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
@@ -55,9 +56,15 @@ EOF
     cat ../private/gpg.secret.key > ${DIR}/gpg.secret.key &&
     chmod 0500 ${DIR}/gpg.secret.key &&
     chown 1000:100 ${DIR}/gpg.secret.key &&
+    cat ../private/gpg.owner.trust > ${DIR}/gpg.owner.trust &&
+    chmod 0500 ${DIR}/gpg.owner.trust &&
+    chown 1000:100 ${DIR}/gpg.owner.trust &&
     cat ../private/gpg2.secret.key > ${DIR}/gpg2.secret.key &&
     chmod 0500 ${DIR}/gpg2.secret.key &&
     chown 1000:100 ${DIR}/gpg2.secret.key &&
+    cat ../private/gpg2.owner.trust > ${DIR}/gpg2.owner.trust &&
+    chmod 0500 ${DIR}/gpg2.owner.trust &&
+    chown 1000:100 ${DIR}/gpg2.owner.trust &&
     mkdir /mnt/home/user/bin &&
     ls -1 bin | while read FILE
     do
