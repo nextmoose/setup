@@ -68,6 +68,8 @@ EOF
     cat ../private/gpg2.owner.trust > ${DIR}/gpg2.owner.trust &&
     chmod 0500 ${DIR}/gpg2.owner.trust &&
     chown 1000:100 ${DIR}/gpg2.owner.trust &&
+    touch /mnt/home/user/.${PRIVATE_VOLUME} &&
+    chown 1000:100 /mnt/home/user/.${PRIVATE_VOLUME} &&
     mkdir /mnt/home/user/bin &&
     ls -1 bin | while read FILE
     do
