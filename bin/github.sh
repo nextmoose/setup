@@ -108,8 +108,8 @@ Port ${UPSTREAM_PORT}
 User ${UPSTREAM_USER}
 IdentityFile ${SSH_DIR}/upstream.id_rsa
 EOF
-	    ) &&
-    fi
+	    )
+    fi &&
     if [ ! -z "${ORIGIN_ID_RSA}" ]
     then
 	echo "${ORIGIN_ID_RSA}" > ${SSH_DIR}/origin.id_rsa &&
