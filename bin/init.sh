@@ -31,7 +31,7 @@ PRIVATE_VOLUME=24fd963r &&
 	    sudo lvremove --force /dev/volumes/${PRIVATE_VOLUME} &&
 	    true
     fi &&
-    ls -1 ${HOME}/completion | while read FILE
+    for FILE in $(ls -1 ${HOME}/completion)
     do
 	source ${HOME}/completion/${FILE}
     done
