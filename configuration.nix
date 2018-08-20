@@ -41,6 +41,9 @@
   services.xserver.enable = true;
   services.xserver.windowManager.i3.enable = true;
   services.xserver.libinput.enable = true;
+  services.xserver.displayManager.auto.enable = true;
+  services.xserver.displayManager.user = "user";
+  services.xserver.displayManager.default = "i3";
 
   users.extraUsers.user = {
     isNormalUser = true;
