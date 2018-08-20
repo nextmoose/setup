@@ -169,7 +169,7 @@ HostName ${UPSTREAM_HOST}
 Port ${UPSTREAM_PORT}
 User ${UPSTREAM_USER}
 IdentityFile ${SSH_DIR}/upstream.id_rsa
-UserKnownHostsFile ${SSH_DIR}/upstream.known_hosts
+UserKnownHostsFile ${SSH_DIR}/known_hosts
 
 EOF
 	    ) &&
@@ -185,7 +185,7 @@ HostName ${ORIGIN_HOST}
 Port ${ORIGIN_PORT}
 User ${ORIGIN_USER}
 IdentityFile ${SSH_DIR}/origin.id_rsa
-UserKnownHostsFile ${SSH_DIR}/origin.known_hosts
+UserKnownHostsFile ${SSH_DIR}/known_hosts
 
 EOF
 	    ) &&
@@ -201,7 +201,7 @@ HostName ${REPORT_HOST}
 Port ${REPORT_PORT}
 User ${REPORT_USER}
 IdentityFile ${SSH_DIR}/report.id_rsa
-UserKnownHostsFile ${SSH_DIR}/report.known_hosts
+UserKnownHostsFile ${SSH_DIR}/known_hosts
 
 EOF
 	    ) &&
