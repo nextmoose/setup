@@ -48,10 +48,5 @@
     extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
-  virtualisation.docker = {
-    enable = true;
-    autoPrune = {};
-  };
-
   system.stateVersion = "18.03";
 }
