@@ -28,7 +28,7 @@ do
 		shift 2
 	    ;;
 	--upstream-id-rsa)
-	    UPSTREAM_ID_RSA="${2}" &&
+	    UPSTREAM_ID_RSA="$(pass show ${2})" &&
 		shift 2
 	    ;;
 	--origin-host)
@@ -117,6 +117,7 @@ HostName ${UPSTREAM_HOST}
 Port ${UPSTREAM_PORT}
 User ${UPSTREAM_USER}
 IdentityFile ${SSH_DIR}/upstream.id_rsa
+
 EOF
 	    )
     fi &&
@@ -130,6 +131,7 @@ HostName ${ORIGIN_HOST}
 Port ${ORIGIN_PORT}
 User ${ORIGIN_USER}
 IdentityFile ${SSH_DIR}/origin.id_rsa
+
 EOF
 	    )
     fi &&
@@ -146,7 +148,7 @@ IdentityFile ${SSH_DIR}/report.id_rsa
 EOF
 	    )
     fi &&
-    export GIT_SSH_COMMAND="ssh -F ${SSH_DIR}" &&
+    export GIT_SSH_COMMAND="ssh -F ${SSH_DIR}/config" &&
     WORK_DIR=$(mktemp -d) &&
     cd ${WORK_DIR} &&
     git init &&
