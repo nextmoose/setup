@@ -50,7 +50,7 @@ EOF
     lvcreate --size 1G --name ${PRIVATE_VOLUME} volumes &&
     # dd if=/dev/zero of=/dev/volumes/${PRIVATE_VOLUME} blocks=1k
     # wipefs -a /dev/volumes/${PRIVATE_VOLUME} &&
-    mkfs.ext4 /dev/volumes/${PRIVATE_VOLUME} &&
+    yes | mkfs.ext4 /dev/volumes/${PRIVATE_VOLUME} &&
     DIR=$(mktemp -d) &&
     mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
     cat ../private/wifi.sh > ${DIR}/wifi.sh &&
