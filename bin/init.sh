@@ -12,7 +12,7 @@ do
     esac
 done
 PRIVATE_VOLUME=24fd963r &&
-    if [ ! -z $(sudo lvs --options lv_name volumes | grep "^\s*${PRIVATE_VOLUME}\s*\$") ]
+    if [ -f ${HOME}/.${PRIVATE_VOLUME} ]
     then
 	DIR=$(mktemp -d /tmp/XXXXXXXX) &&
 	    sudo mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
@@ -29,6 +29,7 @@ PRIVATE_VOLUME=24fd963r &&
 	    sudo umount ${DIR} &&
 	    rm -rf ${DIR} &&
 	    sudo lvremove --force /dev/volumes/${PRIVATE_VOLUME} &&
+	    rm -f ${HOME}/.${PRIVATE_VOLUME} &&
 	    true
     fi &&
     for FILE in $(ls -1 ${HOME}/completion)
