@@ -31,6 +31,10 @@ do
 	    UPSTREAM_ID_RSA="$(pass show ${2})" &&
 		shift 2
 	    ;;
+	--upstream-known-hosts)
+	    UPSTREAM_KNOWN_HOSTS="$(pass show ${2})" &&
+		shift 2
+	    ;;
 	--origin-host)
 	    ORIGIN_HOST="${2}" &&
 		shift 2
@@ -58,6 +62,10 @@ do
 	--origin-id-rsa)
 	    ORIGIN_ID_RSA="$(pass show ${2})" &&
 	    	shift 2
+	    ;;
+	--origin-known-hosts)
+	    ORIGIN_KNOWN_HOSTS="$(pass show ${2})" &&
+		shift 2
 	    ;;
 	--report-host)
 	    REPORT_HOST="${2}" &&
@@ -87,6 +95,10 @@ do
 	    REPORT__ID_RSA="$(pass show ${2})" &&
 	    	shift 2
 	    ;;
+	--report-known-hosts)
+	    REPORT_KNOWN_HOSTS="$(pass show ${2})" &&
+		shift 2
+	    ;;
 	--committer-name)
 	    COMMITTER_NAME="${2}" &&
 		shift 2
@@ -103,11 +115,14 @@ do
 		exit 64
     esac
 done &&
-    SSH_DIR=$(mktemp -d) &&
+    PROJECT_DIR=$(mktemp -d) &&
+    SSH_DIR=${PROJECT_DIR}/.ssh &&
+    mkdir ${SSH_DIR} &&
     chmod 0700 ${SSH_DIR} &&
     touch ${SSH_DIR}/config &&
     chmod 0600 ${SSH_DIR}/config &&
-    if [ ! -z "${UPSTREAM_ID_RSA}" ]
+    touch ${SSH_DIR}/known_hosts &&
+    if [ ! -z "${UPSTREAM_HOST}" ] && [ "${UPSTREAM_PORT}" ] && [ "${UPSTREAM_USER}" ] && [ ! -z "${UPSTREAM_ID_RSA}" ]
     then
 	echo "${UPSTREAM_ID_RSA}" > ${SSH_DIR}/upstream.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/upstream.id_rsa &&
@@ -119,9 +134,10 @@ User ${UPSTREAM_USER}
 IdentityFile ${SSH_DIR}/upstream.id_rsa
 
 EOF
-	    )
+	    ) &&
+	    echo "${UPSTREAM_KNOWN_HOSTS}" >> ${SSH_DIR}/
     fi &&
-    if [ ! -z "${ORIGIN_ID_RSA}" ]
+    if [ ! -z "${ORIGIN_HOST}" ] && [ "${ORIGIN_PORT}" ] && [ "${ORIGIN_USER}" ] && [ ! -z "${ORIGIN_ID_RSA}" ]
     then
 	echo "${ORIGIN_ID_RSA}" > ${SSH_DIR}/origin.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/origin.id_rsa &&
@@ -133,9 +149,10 @@ User ${ORIGIN_USER}
 IdentityFile ${SSH_DIR}/origin.id_rsa
 
 EOF
-	    )
+	    ) &&
+	    echo "${ORIGIN_KNOWN_HOSTS}" >> ${SSH_DIR}/
     fi &&
-    if [ ! -z "${REPORT_ID_RSA}" ]
+    if [ ! -z "${REPORT_HOST}" ] && [ "${REPORT_PORT}" ] && [ "${REPORT_USER}" ] && [ ! -z "${REPORT_ID_RSA}" ]
     then
 	echo "${REPORT_ID_RSA}" > ${SSH_DIR}/report.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/report.id_rsa &&
@@ -146,14 +163,17 @@ Port ${REPORT_PORT}
 User ${REPORT_USER}
 IdentityFile ${SSH_DIR}/report.id_rsa
 EOF
-	    )
+	    ) &&
+	    echo "${ORIGIN_KNOWN_HOSTS}" >> ${SSH_DIR}/
     fi &&
     export GIT_SSH_COMMAND="ssh -F ${SSH_DIR}/config" &&
-    WORK_DIR=$(mktemp -d) &&
+    WORK_DIR=${PROJECT_DIR}/work &&
+    mkdir ${WORK_DIR} &&
     cd ${WORK_DIR} &&
     git init &&
     git config user.name "${COMMITTER_NAME}" &&
     git config user.email "${COMMITER_EMAIL}" &&
+    git config --global user.signingkey $(gpg-key-id) &&
     ln --symbolic ${HOME}/bin/post-commit ${HOME}/bin/pre-push .git/hooks &&
     git remote add upstream upstream:${UPSTREAM_ORGANIZATION}/${UPSTREAM_REPOSITORY}.git &&
     git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
@@ -169,4 +189,5 @@ EOF
 	    git checkout -b scratch/$(uuidgen)
     fi &&
     emacs . &&
+    rm -rf ${PROJECT_DIR} &&
     true
