@@ -16,5 +16,5 @@ ${I}
 w
 y
 EOF
-	    ) | gdisk /dev/sda &&
+	    ) | gdisk /dev/sda
     done
