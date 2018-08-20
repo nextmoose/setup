@@ -14,5 +14,6 @@ github \
     --origin-organization nextmoose \
     --origin-repository setup \
     --origin-id-rsa origin.id_rsa \
+    --origin-branch nixos-5 \
     --committer-name "Emory Merryman" \
     --committer-email emory.merryman@gmail.com
