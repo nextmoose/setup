@@ -115,6 +115,42 @@ do
 		exit 64
     esac
 done &&
+    if [ -z "${UPSTREAM_HOST}" ]
+    then
+	UPSTREAM_HOST=github.com
+    fi &&
+    if [ -z "${UPSTREAM_PORT}" ]
+    then
+	UPSTREAM_PORT=22
+    fi &&
+    if [ -z "${UPSTREAM_USER}" ]
+    then
+	UPSTREAM_USER=git
+    fi &&
+    if [ -z "${ORIGIN_HOST}" ]
+    then
+	ORIGIN_HOST=github.com
+    fi &&
+    if [ -z "${ORIGIN_PORT}" ]
+    then
+	ORIGIN_PORT=22
+    fi &&
+    if [ -z "${ORIGIN_USER}" ]
+    then
+	ORIGIN_USER=git
+    fi &&
+    if [ -z "${REPORT_HOST}" ]
+    then
+	REPORT_HOST=github.com
+    fi &&
+    if [ -z "${REPORT_PORT}" ]
+    then
+	REPORT_PORT=22
+    fi &&
+    if [ -z "${REPORT_USER}" ]
+    then
+	REPORT_USER=git
+    fi &&
     PROJECT_DIR=$(mktemp -d) &&
     SSH_DIR=${PROJECT_DIR}/.ssh &&
     mkdir ${SSH_DIR} &&
@@ -122,6 +158,7 @@ done &&
     touch ${SSH_DIR}/config &&
     chmod 0600 ${SSH_DIR}/config &&
     touch ${SSH_DIR}/known_hosts &&
+    chmod 0600 ${SSH_DIR}/known_hosts &&
     if [ ! -z "${UPSTREAM_HOST}" ] && [ "${UPSTREAM_PORT}" ] && [ "${UPSTREAM_USER}" ] && [ ! -z "${UPSTREAM_ID_RSA}" ]
     then
 	echo "${UPSTREAM_ID_RSA}" > ${SSH_DIR}/upstream.id_rsa &&
@@ -135,7 +172,7 @@ IdentityFile ${SSH_DIR}/upstream.id_rsa
 
 EOF
 	    ) &&
-	    echo "${UPSTREAM_KNOWN_HOSTS}" >> ${SSH_DIR}/
+	    echo "${UPSTREAM_KNOWN_HOSTS}" >> ${SSH_DIR}/known_hosts
     fi &&
     if [ ! -z "${ORIGIN_HOST}" ] && [ "${ORIGIN_PORT}" ] && [ "${ORIGIN_USER}" ] && [ ! -z "${ORIGIN_ID_RSA}" ]
     then
@@ -150,7 +187,7 @@ IdentityFile ${SSH_DIR}/origin.id_rsa
 
 EOF
 	    ) &&
-	    echo "${ORIGIN_KNOWN_HOSTS}" >> ${SSH_DIR}/
+	    echo "${UPSTREAM_KNOWN_HOSTS}" >> ${SSH_DIR}/known_hosts
     fi &&
     if [ ! -z "${REPORT_HOST}" ] && [ "${REPORT_PORT}" ] && [ "${REPORT_USER}" ] && [ ! -z "${REPORT_ID_RSA}" ]
     then
@@ -164,7 +201,7 @@ User ${REPORT_USER}
 IdentityFile ${SSH_DIR}/report.id_rsa
 EOF
 	    ) &&
-	    echo "${ORIGIN_KNOWN_HOSTS}" >> ${SSH_DIR}/
+	    echo "${UPSTREAM_KNOWN_HOSTS}" >> ${SSH_DIR}/known_hosts
     fi &&
     export GIT_SSH_COMMAND="ssh -F ${SSH_DIR}/config" &&
     WORK_DIR=${PROJECT_DIR}/work &&

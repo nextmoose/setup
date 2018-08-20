@@ -84,6 +84,7 @@ EOF
 	    chown 1000:100 /mnt/home/user/completion/${FILE%.*}
     done &&
     chown 1000:100 /mnt/home/user/bin &&
+    echo init >> /mnt/home/user/.bashrc &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt &&
     shutdown -h now &&
     true
