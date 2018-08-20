@@ -169,6 +169,7 @@ HostName ${UPSTREAM_HOST}
 Port ${UPSTREAM_PORT}
 User ${UPSTREAM_USER}
 IdentityFile ${SSH_DIR}/upstream.id_rsa
+UserKnownHostsFile ${SSH_DIR}/upstream.known_hosts
 
 EOF
 	    ) &&
@@ -184,6 +185,7 @@ HostName ${ORIGIN_HOST}
 Port ${ORIGIN_PORT}
 User ${ORIGIN_USER}
 IdentityFile ${SSH_DIR}/origin.id_rsa
+UserKnownHostsFile ${SSH_DIR}/origin.known_hosts
 
 EOF
 	    ) &&
@@ -199,6 +201,8 @@ HostName ${REPORT_HOST}
 Port ${REPORT_PORT}
 User ${REPORT_USER}
 IdentityFile ${SSH_DIR}/report.id_rsa
+UserKnownHostsFile ${SSH_DIR}/report.known_hosts
+
 EOF
 	    ) &&
 	    echo "${UPSTREAM_KNOWN_HOSTS}" >> ${SSH_DIR}/known_hosts
@@ -215,6 +219,7 @@ EOF
     git remote add upstream upstream:${UPSTREAM_ORGANIZATION}/${UPSTREAM_REPOSITORY}.git &&
     git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
     git remote add report report:${REPORT_ORGANIZATION}/${REPORT_REPOSITORY}.git &&
+    bash &&
     if [ ! -z "${ORIGIN_BRANCH}" ]
     then
 	git fetch origin ${ORIGIN_BRANCH} &&
