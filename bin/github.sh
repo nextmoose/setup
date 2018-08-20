@@ -109,7 +109,7 @@ User ${UPSTREAM_USER}
 IdentityFile ${SSH_DIR}/upstream.id_rsa
 EOF
 	    ) &&
-    fi &&
+    fi
     if [ ! -z "${ORIGIN_ID_RSA}" ]
     then
 	echo "${ORIGIN_ID_RSA}" > ${SSH_DIR}/origin.id_rsa &&
@@ -121,7 +121,7 @@ Port ${ORIGIN_PORT}
 User ${ORIGIN_USER}
 IdentityFile ${SSH_DIR}/origin.id_rsa
 EOF
-	    ) &&
+	    )
     fi &&
     if [ ! -z "${REPORT_ID_RSA}" ]
     then
@@ -134,7 +134,7 @@ Port ${REPORT_PORT}
 User ${REPORT_USER}
 IdentityFile ${SSH_DIR}/report.id_rsa
 EOF
-	    ) &&
+	    )
     fi &&
     export GIT_SSH_COMMAND="ssh -F ${SSH_DIR}" &&
     WORK_DIR=$(mktemp -d) &&
