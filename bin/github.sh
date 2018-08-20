@@ -27,6 +27,10 @@ do
 	    UPSTREAM_BRANCH="${2}" &&
 		shift 2
 	    ;;
+	--upstream-id-rsa)
+	    UPSTREAM_ID_RSA="${2}" &&
+		shift 2
+	    ;;
 	--origin-host)
 	    ORIGIN_HOST="${2}" &&
 		shift 2
@@ -91,6 +95,12 @@ do
 	    COMMITER_EMAIL="${2}" &&
 		shift 2
 	    ;;
+	*)
+	    echo Unsupported Option &&
+		echo ${1} &&
+		echo ${@} &&
+		echo ${0} &&
+		exit 64
     esac
 done &&
     SSH_DIR=$(mktemp -d) &&
@@ -101,7 +111,7 @@ done &&
     then
 	echo "${UPSTREAM_ID_RSA}" > ${SSH_DIR}/upstream.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/upstream.id_rsa &&
-	    (cat > ${SSH_DIR}/config <<EOF
+	    (cat >> ${SSH_DIR}/config <<EOF
 Host upstream
 HostName ${UPSTREAM_HOST}
 Port ${UPSTREAM_PORT}
@@ -114,7 +124,7 @@ EOF
     then
 	echo "${ORIGIN_ID_RSA}" > ${SSH_DIR}/origin.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/origin.id_rsa &&
-	    (cat > ${SSH_DIR}/config <<EOF
+	    (cat >> ${SSH_DIR}/config <<EOF
 Host origin
 HostName ${ORIGIN_HOST}
 Port ${ORIGIN_PORT}
@@ -127,7 +137,7 @@ EOF
     then
 	echo "${REPORT_ID_RSA}" > ${SSH_DIR}/report.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/report.id_rsa &&
-	    (cat > ${SSH_DIR}/config <<EOF
+	    (cat >> ${SSH_DIR}/config <<EOF
 Host report
 HostName ${REPORT_HOST}
 Port ${REPORT_PORT}
