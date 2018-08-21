@@ -19,6 +19,42 @@ do
 	    export GPG2_OWNER_TRUST="$(pass show ${2})" &&
 		shift 2
 	    ;;
+	--origin-host)
+	    export ORIGIN_HOST="${2}" &&
+		shift 2
+	    ;;
+	--origin-port)
+	    export ORIGIN_PORT="${2}" &&
+		shift 2
+	    ;;
+	--origin-user)
+	    export ORIGIN_USER="${2}" &&
+		shift 2
+	    ;;
+	--origin-organization)
+	    export ORIGIN_ORGANIZATION="${2}" &&
+		shift 2
+	    ;;
+	--origin-repository)
+	    export ORIGIN_REPOSITORY="${2}" &&
+		shift 2
+	    ;;
+	--origin-id-rsa)
+	    export ORIGIN_ID_RSA="$(pass show ${2})" &&
+		shift 2
+	    ;;
+	--origin-known-hosts)
+	    export ORIGIN_KNOWN_HOSTS="$(pass show ${2})" &&
+		shift 2
+	    ;;
+	--committer-name)
+	    export COMMITTER_NAME="${2}" &&
+		shift 2
+	    ;;
+	--committer-email)
+	    export COMMITTER_EMAIL="${2}" &&
+		shift 2
+	    ;;
 	*)
 	    echo Unknown Option &&
 		echo ${1} &&
@@ -27,6 +63,18 @@ do
 		exit 64
     esac
 done &&
+    if [ -z "${ORIGIN_HOST}" ]
+    then
+	ORIGIN_HOST=github.com
+    fi &&
+    if [ -z "${ORIGIN_PORT}" ]
+    then
+	ORIGIN_PORT=22
+    fi &&
+    if [ -z "${ORIGIN_USER}" ]
+    then
+	ORIGIN_USER=git
+    fi &&
     if [ -z "${GPG_SECRET_KEY}" ]
     then
 	echo Unspecified GPG_SECRET_KEY &&
@@ -43,6 +91,18 @@ done &&
     then
 	echo Unspecified GPG2_OWNER_TRUST &&
 	    exit 68
+    elif [ -z "${ORIGIN_ORGANIZATION}" ]
+    then
+	 echo Unspecified ORIGIN_ORGANIZATION &&
+	     exit 69
+    elif [ -z "${ORIGIN_REPOSITORY}" ]
+    then
+	 echo Unspecified ORIGIN_REPOSITORY &&
+	     exit 70
+    elif [ -z "${ORIGIN_ID_RSA}" ]
+    then
+	 echo Unspecified ORIGIN_ID_RSA &&
+	     exit 71
     fi &&
     export HOME=$(mktemp -d) &&
     cd ${HOME} &&
@@ -54,8 +114,38 @@ done &&
     gpg --import-ownertrust gpg.owner.trust &&
     gpg2 --import gpg2.secret.key &&
     gpg2 --import-ownertrust gpg2.owner.trust &&
-    pass git init $(gpg-key-id) &&
-    pass git remote add origin git@github.com/desertedscorpion/passwordstore.git &&
+    mkdir .ssh &&
+    chmod 0700 .ssh &&
+    (cat > .ssh/config <<EOF
+Host origin
+HostName ${ORIGIN_HOST}
+Port ${ORIGIN_PORT}
+User ${ORIGIN_USER}
+IdentityFile ${HOME}/.ssh/origin.id_rsa
+UserKnownHostsFile ${HOME}/.ssh/known_hosts
+EOF
+    ) &&
+    chmod 0600 .ssh/config &&
+    echo "${ORIGIN_ID_RSA}" > .ssh/origin.id_rsa &&
+    chmod 0600 .ssh/origin.id_rsa &&
+    echo "${ORIGIN_KNOWN_HOSTS}" > .ssh/known_hosts &&
+    chmod 0644 .ssh/known_hosts &&
+    echo "WTF 1" &&
+    pass init $(gpg-key-id) &&
+    echo "WTF 2" &&
+    pass git init &&
+    echo "WTF 3" &&
+    pass git config user.name "${COMMITTER_NAME}" &&
+    echo "WTF 4" &&
+    pass git config user.email "${COMMITTER_EMAIL}" &&
+    echo "WTF 5" &&
+    ls -alh &&
+    ln --symbolic /home/user/bin/pre-commit .password-store/.git/hooks &&
+    cat .ssh/config &&
+    echo "WTF 6" &&
+    pass git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
+    echo "WTF 7" &&
+    export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/config" &&
     pass git fetch origin master &&
-    pass git checkout origin/master &&
+    pass git checkout master &&
     bash
