@@ -209,6 +209,10 @@ EOF
     fi &&
     export GIT_SSH_COMMAND="ssh -F ${SSH_DIR}/config" &&
     WORK_DIR=${PROJECT_DIR}/work &&
+    (cat > ${PROJECT_DIR}/.emacs <<EOF
+(autoload 'magit-status "magit" nil t)
+EOF
+    ) &&
     mkdir ${WORK_DIR} &&
     cd ${WORK_DIR} &&
     git init &&
@@ -230,6 +234,7 @@ EOF
 	    git checkout upstream/${UPSTREAM_BRANCH} &&
 	    git checkout -b scratch/$(uuidgen)
     fi &&
+    export HOME=${PROJECT_DIR} &&
     emacs . &&
     rm -rf ${PROJECT_DIR} &&
     true
