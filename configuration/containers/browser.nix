@@ -1,7 +1,5 @@
 # vim: set softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent syntax=nix nocompatible :
-# Containers
-
-{ config, pkgs, ... }:
+# Containe{ config, pkgs, ... }:
 
 { containers.browser =
   let hostAddr =  "192.168.100.10";
@@ -59,13 +57,13 @@
 
       users.mutableUsers = false;
 
-      users.extraUsers.kr2 =
-      { name = "kr2";
+      users.extraUsers.user =
+      { name = "user";
         group = "users";
         uid = 1000;
         createHome = true;
         home = "/tmp";
-        password = "...."; # TODO: set password
+        password = "motherfucker"; # TODO: set password
         shell = "/run/current-system/sw/bin/bash";
         openssh.authorizedKeys.keyFiles = [ "/home/kr2/.ssh/id_rsa.pub" "/home/kr2/.ssh/id_rsa_pen.pub" ];
       };
