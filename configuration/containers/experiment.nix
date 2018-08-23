@@ -2,7 +2,7 @@
 # Containe
 { config, pkgs, ... }:
 
-{ containers.browser =
+{ containers.experiment =
   let hostAddr =  "192.168.200.10";
   in
   { privateNetwork = true;
