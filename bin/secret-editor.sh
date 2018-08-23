@@ -132,7 +132,7 @@ EOF
     chmod 0644 .ssh/known_hosts &&
     pass init $(gpg-key-id) &&
     pass git init &&
-    ln --symbolic /home/user/bin/post-commit ${HOME}/.password-store/.git/hooks &&
+    ln --symbolic /home/user/bin/post-commit .password-store/.git/hooks &&
     pass git config user.name "${COMMITTER_NAME}" &&
     pass git config user.email "${COMMITTER_EMAIL}" &&
     pass git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
