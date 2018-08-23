@@ -39,7 +39,7 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
-    cp configuration/. /mnt/etc/nixos &&
+    cp -r configuration/. /mnt/etc/nixos &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
