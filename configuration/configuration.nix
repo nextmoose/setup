@@ -3,6 +3,7 @@
   imports = [
     ./hardware-configuration.nix
     ./containers/browser.nix
+    ./containers/experiment.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
