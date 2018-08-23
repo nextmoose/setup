@@ -39,7 +39,7 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
-    ssh-keygen -f /id_rsa &&
+    ssh-keygen -f /id_rsa -P "" &&
     cp -r configuration/. /mnt/etc/nixos &&
     cp /id_rsa.pub /mnt &&
     ROOT_PASSWORD=$(uuidgen) &&
