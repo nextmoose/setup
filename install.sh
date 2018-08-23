@@ -39,9 +39,9 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
-    ssh-keygen -f /id_rsa -P "" &&
+    ssh-keygen -f /tmp/id_rsa -P "" &&
+    ssh-keygen -y -f /tmp/id_rsa > /mnt/etc/nixos/id_rsa.pub &&
     cp -r configuration/. /mnt/etc/nixos &&
-    cp /id_rsa.pub /mnt &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
@@ -92,7 +92,7 @@ EOF
     mkdir /mnt/home/user/.ssh &&
     chmod 0700 /mnt/home/user/.ssh &&
     chown 1000:100 /mnt/home/user/.ssh &&
-    cp /id_rsa /mnt/home/user/.ssh/id_rsa &&
+    cp /tmp/id_rsa /mnt/home/user/.ssh/id_rsa &&
     chmod 0600 /mnt/home/user/.ssh/id_rsa &&
     chown 1000:100 /mnt/home/user/.ssh/id_rsa &&
     echo user:${USER_PASSWORD} | chpasswd --root /mnt &&

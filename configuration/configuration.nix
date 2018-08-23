@@ -2,7 +2,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./containers/experiment.nix
     ./containers/browser.nix
   ];
 

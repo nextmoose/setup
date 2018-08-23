@@ -1,5 +1,6 @@
 # vim: set softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent syntax=nix nocompatible :
-# Containe{ config, pkgs, ... }:
+# Containe
+{ config, pkgs, ... }:
 
 { containers.browser =
   let hostAddr =  "192.168.100.10";
@@ -12,30 +13,9 @@
     { boot.tmpOnTmpfs = true;
 
       environment.systemPackages = with pkgs;
-      [ firefoxWrapper
+      [
         chromium
-        alsaLib
-        pulseaudio
       ];
-
-      nixpkgs.config =
-        let
-          plugins = 
-          { enableAdobeFlash = true;
-            enablePepperFlash = true;
-            enablePepperPDF = true;
-            enableGoogleTalkPlugin = true;
-            # jre = true;
-          };
-        in
-        { # firefox = plugins;
-          chromium = plugins;
-          allowUnfree = true;
-        };
-
-      hardware.pulseaudio.enable = true;
-      hardware.bumblebee.enable = true;
-      environment.variables.PULSE_SERVER = "tcp:" + hostAddr;
 
       networking.nameservers = [ hostAddr ];
 
@@ -60,12 +40,12 @@
       users.extraUsers.user =
       { name = "user";
         group = "users";
+	extraGroups = [ "wheel" ];
         uid = 1000;
         createHome = true;
         home = "/tmp";
-        password = "motherfucker"; # TODO: set password
         shell = "/run/current-system/sw/bin/bash";
-        openssh.authorizedKeys.keyFiles = [ "/home/kr2/.ssh/id_rsa.pub" "/home/kr2/.ssh/id_rsa_pen.pub" ];
+        openssh.authorizedKeys.keyFiles = [ "/etc/nixos/id_rsa.pub" ];
       };
     };
   };
