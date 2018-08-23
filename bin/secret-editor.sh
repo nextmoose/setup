@@ -130,21 +130,12 @@ EOF
     chmod 0600 .ssh/origin.id_rsa &&
     echo "${ORIGIN_KNOWN_HOSTS}" > .ssh/known_hosts &&
     chmod 0644 .ssh/known_hosts &&
-    echo "WTF 1" &&
     pass init $(gpg-key-id) &&
-    echo "WTF 2" &&
     pass git init &&
-    echo "WTF 3" &&
+    ln --symbolic /home/user/bin/post-commit ${HOME}/.password-store/.git/hooks &&
     pass git config user.name "${COMMITTER_NAME}" &&
-    echo "WTF 4" &&
     pass git config user.email "${COMMITTER_EMAIL}" &&
-    echo "WTF 5" &&
-    ls -alh &&
-    ln --symbolic /home/user/bin/pre-commit .password-store/.git/hooks &&
-    cat .ssh/config &&
-    echo "WTF 6" &&
     pass git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
-    echo "WTF 7" &&
     export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/config" &&
     pass git fetch origin master &&
     pass git checkout master &&
