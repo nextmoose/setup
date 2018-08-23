@@ -40,6 +40,7 @@ EOF
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     ssh-keygen -f /tmp/id_rsa -P "" &&
+    ssh-keygen -y -f /tmp/id_rsa > /etc/nixos/id_rsa.pub &&
     ssh-keygen -y -f /tmp/id_rsa > /mnt/etc/nixos/id_rsa.pub &&
     cp -r configuration/. /mnt/etc/nixos &&
     ROOT_PASSWORD=$(uuidgen) &&
