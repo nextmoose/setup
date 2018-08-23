@@ -20,20 +20,13 @@
   time.timeZone = "US/Eastern";
 
   environment.systemPackages = with pkgs; [
-    wget
-    vim
-    emacs
     chromium
     git
     pass
     gnupg
-    gnucash
-    deja-dup
-    bashmount
     bash-completion
     nix-bash-completions
-    lvm2
-    paperwork
+    (import /path/to/emacs.nix { inherit pkgs; })
   ];
 
   sound.enable = true;
