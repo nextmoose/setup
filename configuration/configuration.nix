@@ -25,7 +25,7 @@
     gnupg
     bash-completion
     nix-bash-completions
-    (import /path/to/emacs.nix { inherit pkgs; })
+    (import ./custom/emacs.nix { inherit pkgs; })
   ];
 
   sound.enable = true;
