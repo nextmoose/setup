@@ -6,8 +6,12 @@
   let hostAddr =  "192.168.200.10";
   in
   {
-    bindMounts = [
-    ];
+    bindMounts = {
+      "/verification" = {
+        hostPath = "/";
+	isReadOnly = true;
+      };
+    };
 
 
     privateNetwork = true;
