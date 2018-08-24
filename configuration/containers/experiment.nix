@@ -46,6 +46,7 @@
 	home = "/home/user";
         shell = "/run/current-system/sw/bin/bash";
         openssh.authorizedKeys.keyFiles = [ "/etc/nixos/id_rsa.pub" ];
+	hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl.";
       };
     };
   };
