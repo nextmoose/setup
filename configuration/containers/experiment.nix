@@ -14,8 +14,9 @@
 
       environment.systemPackages = with pkgs;
       [
-        chromium
       ];
+
+      programs.chromium.enable;
 
       networking.nameservers = [ hostAddr ];
 
@@ -37,6 +38,7 @@
 
       users.mutableUsers = false;
 
+      
       users.extraUsers.user =
       { name = "user";
         group = "users";
