@@ -14,7 +14,7 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
 	    for CONTAINER in $(sudo nixos-container ls)
 	    do
 		sudo nixos-container start ${CONTAINER}
-	    done &&
+	    done
     } &&
     trap cleanup EXIT &&
     TEST_BRANCH=scratch/$(uuidgen) &&
