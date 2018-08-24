@@ -5,7 +5,12 @@
 { containers.experiment =
   let hostAddr =  "192.168.200.10";
   in
-  { privateNetwork = true;
+  {
+    bindMounts = [
+    ];
+
+
+    privateNetwork = true;
     hostAddress = hostAddr;
     localAddress = "192.168.200.11";
     config =
