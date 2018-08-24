@@ -43,6 +43,7 @@
 	extraGroups = [ "wheel" ];
         uid = 1000;
         createHome = true;
+	home = "/home/user";
         shell = "/run/current-system/sw/bin/bash";
         openssh.authorizedKeys.keyFiles = [ "/etc/nixos/id_rsa.pub" ];
       };
