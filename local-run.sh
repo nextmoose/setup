@@ -6,12 +6,12 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
 	    sudo rm -rf /etc/nixos/custom &&
 	    sudo rm -rf /etc/nixos/containers &&
 	    sudo cp -r configuration/. /etc/nixos &&
-	    for CONTAINER in $(sudo nixos-container ls)
+	    for CONTAINER in $(sudo nixos-container list)
 	    do
 		sudo nixos-container stop ${CONTAINER}
 	    done &&
 	    sudo nixos-rebuild switch &&
-	    for CONTAINER in $(sudo nixos-container ls)
+	    for CONTAINER in $(sudo nixos-container list)
 	    do
 		sudo nixos-container start ${CONTAINER}
 	    done
@@ -23,12 +23,12 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     sudo rm -rf /etc/nixos/custom &&
     sudo rm -rf /etc/nixos/containers &&
     sudo cp -r configuration/. /etc/nixos &&
-    for CONTAINER in $(sudo nixos-container ls)
+    for CONTAINER in $(sudo nixos-container list)
     do
 	sudo nixos-container stop ${CONTAINER}
     done &&
     sudo nixos-rebuild switch &&
-    for CONTAINER in $(sudo nixos-container ls)
+    for CONTAINER in $(sudo nixos-container list)
     do
 	sudo nixos-container start ${CONTAINER}
     done &&
