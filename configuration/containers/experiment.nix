@@ -24,6 +24,8 @@
 	];
       };
 
+      nixpkgs.config.chromium.homepageLocation = "https://stackoverflow.com";
+
       networking.nameservers = [ hostAddr ];
 
       services =
