@@ -10,7 +10,11 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
 	    do
 		sudo nixos-container stop ${CONTAINER}
 	    done &&
-	    sudo nixos-rebuild switch
+	    sudo nixos-rebuild switch &&
+	    for CONTAINER in $(sudo nixos-container ls)
+	    do
+		sudo nixos-container start ${CONTAINER}
+	    done &&
     } &&
     trap cleanup EXIT &&
     TEST_BRANCH=scratch/$(uuidgen) &&
@@ -24,6 +28,10 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
 	sudo nixos-container stop ${CONTAINER}
     done &&
     sudo nixos-rebuild switch &&
+    for CONTAINER in $(sudo nixos-container ls)
+    do
+	sudo nixos-container start ${CONTAINER}
+    done &&
     read -p "IS IT OK? " ISITOK &&
     if [ "Y" == "${ISITOK}" ]
     then
