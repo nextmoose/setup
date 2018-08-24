@@ -28,22 +28,6 @@
 
       networking.nameservers = [ hostAddr ];
 
-      services =
-      { openssh =
-        { enable = true;
-          forwardX11 = true;
-        };
-
-        avahi =
-        { enable = true;
-          browseDomains = [];
-          wideArea = false;
-          nssmdns = true;
-        };
-      };
-
-      programs.ssh.setXAuthLocation = true;
-
       users.mutableUsers = false;
 
       users.extraUsers.user =
