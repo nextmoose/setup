@@ -11,6 +11,22 @@
         hostPath = "/tmp/.X11-unix";
 	isReadOnly = true;
       };
+      "/run/user/1000/pulse" = {
+        hostPath = "/run/user/1000/pulse";
+	isReadOnly = true;
+      };
+      "/etc/machine-id" = {
+        hostPath = "/etc/machine-id";
+	isReadOnly = true;
+      };
+      "/var/run/dbus/system_bus_socket" = {
+        hostPath = "/var/run/dbus/system_bus_socket";
+	isReadOnly = true;
+      };
+      "/home/user/.config/pulse" = {
+        hostPath = "/home/user/.config/pulse";
+	isReadOnly = true;
+      };
     };
 
 
