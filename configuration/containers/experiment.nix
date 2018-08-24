@@ -14,6 +14,7 @@
 
       environment.systemPackages = with pkgs;
       [
+        chromium
       ];
 
       networking.nameservers = [ hostAddr ];
