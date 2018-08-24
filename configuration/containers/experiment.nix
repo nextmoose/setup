@@ -3,6 +3,12 @@
 { config, pkgs, ... }:
 
 { containers.experiment =
+  bindMounts = {
+    "/host" = {
+      hostPath = "/home/user";
+      isReadOnly = true;
+    };
+  };
   let hostAddr =  "192.168.200.10";
   in
   { privateNetwork = true;
