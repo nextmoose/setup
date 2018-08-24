@@ -23,7 +23,10 @@
 
       environment.systemPackages = with pkgs;
       [
-        pkgs.chromium
+        chromium
+	firefox
+	emacs
+	gnucash
       ];
 
       networking.nameservers = [ hostAddr ];
