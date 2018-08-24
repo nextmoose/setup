@@ -5,7 +5,7 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
 	git checkout ${CURRENT_BRANCH} &&
 	    sudo rm -rf /etc/nixos/custom &&
 	    sudo rm -rf /etc/nixos/containers &&
-	    sudo cp configuration/. /etc/nixos &&
+	    sudo cp -r configuration/. /etc/nixos &&
 	    sudo nixos-rebuild switch
     } &&
     trap cleanup EXIT &&
