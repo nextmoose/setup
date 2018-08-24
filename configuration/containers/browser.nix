@@ -14,7 +14,7 @@
 
       environment.systemPackages = with pkgs;
       [
-        chromium
+        (import ../custom/browser.nix { inherit pkgs; })
       ];
 
       networking.nameservers = [ hostAddr ];
