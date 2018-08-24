@@ -22,6 +22,7 @@
 	extensions = [
 	  "naepdomgkenhinolocfifgehidddafch"
 	];
+	homepageLocation = "https://www.stackoverflow.com";
       };
 
       networking.nameservers = [ hostAddr ];
