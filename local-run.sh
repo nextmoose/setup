@@ -39,4 +39,8 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
 	    git checkout ${CURRENT_BRANCH} &&
 	    git rebase ${TEST_BRANCH} &&
 	    git commit -am "after test local rebuild" --allow-empty
+    elif [ "M" == "${ISITOK}" ]
+    then
+	git commit -am "IT IS NOT OK YET" --allow-empty &&
+	    echo ${TEST_BRANCH}
     fi
