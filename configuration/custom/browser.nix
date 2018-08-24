@@ -6,12 +6,14 @@ without interfering with the host distribution.
 
 To build the project, type the following from the current directory:
 
-$ nix-build emacs.nix
+$ nix-build chromium.nix
 
 To run the newly compiled executable:
 
-$ ./result/bin/emacs
+$ ./result/bin/chromium
 */
+with import { 
+
 { pkgs ? import <nixpkgs> {} }:
 
 pkgs.chromium.override{

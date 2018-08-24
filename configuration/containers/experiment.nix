@@ -17,11 +17,10 @@
         chromium
       ];
 
-      programs.chromium = {
-        enable = true;
-	extensions = [
-	  "naepdomgkenhinolocfifgehidddafch"
-	];
+      nixpkgs.config = {
+        chromium = {
+	  homepageLocation = "https://stackoverflow.com";
+	};
       };
 
       networking.nameservers = [ hostAddr ];
