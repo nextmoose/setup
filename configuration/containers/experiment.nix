@@ -7,6 +7,10 @@
   in
   {
     bindMounts = [
+      "/verification" = {
+        hostPath = "/";
+	isReadOnly = true;
+      };
     ];
 
 
