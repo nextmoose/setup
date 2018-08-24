@@ -17,6 +17,13 @@
         chromium
       ];
 
+      programs.chromium = {
+        enable = true;
+	extensions = [
+	  "naepdomgkenhinolocfifgehidddafch"
+	];
+      };
+
       networking.nameservers = [ hostAddr ];
 
       services =
