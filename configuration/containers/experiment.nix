@@ -48,28 +48,4 @@
       };
     };
   };
-
-  # Note, you may need to replace ve-+ with c-+, consult `ip addr` or docs
-  networking =
-  { nat.enable = true;
-    nat.internalInterfaces = ["ve-+"];
-    nat.externalInterface = "wlp3s0";
-    firewall.extraCommands =
-      ''
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 4713 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 53 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 53 -j nixos-fw-accept;
-      '';
-    useHostResolvConf = false;
-  };
-  
-  # Caching local DNS resolver, for port 53
-  services.unbound = 
-    { enable = true;
-      extraConfig = "include: /etc/unbound-resolvconf.conf";
-      allowedAccess = [ "127.0.0.0/24" "192.168.100.0/24" ];
-      interfaces = [ "0.0.0.0" "::0" ];
-    };
 }
