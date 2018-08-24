@@ -8,6 +8,6 @@ secret-editor \
     --origin-organization desertedscorpion \
     --origin-repository passwordstore \
     --origin-id-rsa origin.id_rsa \
-    --origin-known-hosts origin.id_hosts \
+    --origin-known-hosts origin.known_hosts \
     --committer-name "Emory Merryman" \
     --committer-email "emory.merryman@gmail.com"
