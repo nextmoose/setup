@@ -14,15 +14,8 @@
 
       environment.systemPackages = with pkgs;
       [
-        chromium
+        pkgs.chromium
       ];
-
-      programs.chromium = {
-        enable = true;
-	extensions = [
-	  "naepdomgkenhinolocfifgehidddafch"
-	];
-      };
 
       networking.nameservers = [ hostAddr ];
 
