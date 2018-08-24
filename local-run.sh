@@ -8,6 +8,7 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
 	    sudo cp configuration/. /etc/nixos &&
 	    sudo nixos-rebuild switch
     } &&
+    trap cleanup EXIT &&
     TEST_BRANCH=scratch/$(uuidgen) &&
     git checkout -b ${TEST_BRANCH} &&
     git commit -am "before test local rebuild" --allow-empty &&
