@@ -8,6 +8,16 @@
   { privateNetwork = true;
     hostAddress = hostAddr;
     localAddress = "192.168.100.11";
+    bindMounts = {
+      "/home/user/host" = {
+        hostPath = "/";
+	isReadOnly = true;
+      };
+      "/tmp/.X11-unix" = {
+        hostPath = "/tmp/.X11-unix";
+	isReadOnly = true;
+      };
+    };
     config =
     { config, pkgs, ... }:
     { boot.tmpOnTmpfs = true;
