@@ -43,5 +43,10 @@
     extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
+  config.environment.shells = [
+    pkgs.bash
+    pkgs.emacs
+  ];
+
   system.stateVersion = "18.03";
 }
