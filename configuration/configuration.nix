@@ -43,5 +43,9 @@
     extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
+  environment.shellInit = ''
+  date >> /tmp/log.txt
+  '';
+
   system.stateVersion = "18.03";
 }
