@@ -53,15 +53,15 @@
   # Note, you may need to replace ve-+ with c-+, consult `ip addr` or docs
   networking =
   { nat.enable = true;
-    nat.internalInterfaces = ["ve-+"];
+    nat.internalInterfaces = ["c-+"];
     nat.externalInterface = "wlp3s0";
     firewall.extraCommands =
       ''
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 4713 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 53 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 53 -j nixos-fw-accept;
+      ip46tables -A nixos-fw -i c-+ -p tcp --dport 4713 -j nixos-fw-accept;
+      ip46tables -A nixos-fw -i c-+ -p tcp --dport 631 -j nixos-fw-accept;
+      ip46tables -A nixos-fw -i c-+ -p udp --dport 631 -j nixos-fw-accept;
+      ip46tables -A nixos-fw -i c-+ -p udp --dport 53 -j nixos-fw-accept;
+      ip46tables -A nixos-fw -i c-+ -p tcp --dport 53 -j nixos-fw-accept;
       '';
     useHostResolvConf = false;
   };
