@@ -70,7 +70,7 @@
   services.unbound = 
     { enable = true;
       extraConfig = "include: /etc/unbound-resolvconf.conf";
-      allowedAccess = [ "127.0.0.0/24" "192.168.100.0/24" ];
+      allowedAccess = [ "127.0.0.0/24" "192.168.100.0/24" "192.168.200.0/24" ];
       interfaces = [ "0.0.0.0" "::0" ];
     };
 }
