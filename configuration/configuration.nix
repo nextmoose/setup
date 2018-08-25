@@ -43,5 +43,9 @@
     extraGroups = [ "wheel" "networkmanager" "docker" ];
   };
 
+  (import ./services/mine.nix).enable = true;
+
   system.stateVersion = "18.03";
+
+
 }
