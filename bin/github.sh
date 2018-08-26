@@ -159,7 +159,7 @@ done &&
     chmod 0600 ${SSH_DIR}/config &&
     touch ${SSH_DIR}/known_hosts &&
     chmod 0600 ${SSH_DIR}/known_hosts &&
-    if [ ! -z "${UPSTREAM_HOST}" ] && [ "${UPSTREAM_PORT}" ] && [ "${UPSTREAM_USER}" ] && [ ! -z "${UPSTREAM_ID_RSA}" ]
+    if [ ! -z "${UPSTREAM_HOST}" ] && [ ! -z "${UPSTREAM_PORT}" ] && [ ! -z "${UPSTREAM_USER}" ] && [ ! -z "${UPSTREAM_ID_RSA}" ]
     then
 	echo "${UPSTREAM_ID_RSA}" > ${SSH_DIR}/upstream.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/upstream.id_rsa &&
@@ -175,7 +175,7 @@ EOF
 	    ) &&
 	    echo "${UPSTREAM_KNOWN_HOSTS}" >> ${SSH_DIR}/known_hosts
     fi &&
-    if [ ! -z "${ORIGIN_HOST}" ] && [ "${ORIGIN_PORT}" ] && [ "${ORIGIN_USER}" ] && [ ! -z "${ORIGIN_ID_RSA}" ]
+    if [ ! -z "${ORIGIN_HOST}" ] && [ ! -z "${ORIGIN_PORT}" ] && [ ! -z "${ORIGIN_USER}" ] && [ ! -z "${ORIGIN_ID_RSA}" ]
     then
 	echo "${ORIGIN_ID_RSA}" > ${SSH_DIR}/origin.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/origin.id_rsa &&
@@ -191,7 +191,7 @@ EOF
 	    ) &&
 	    echo "${UPSTREAM_KNOWN_HOSTS}" >> ${SSH_DIR}/known_hosts
     fi &&
-    if [ ! -z "${REPORT_HOST}" ] && [ "${REPORT_PORT}" ] && [ "${REPORT_USER}" ] && [ ! -z "${REPORT_ID_RSA}" ]
+    if [ ! -z "${REPORT_HOST}" ] && [ ! -z "${REPORT_PORT}" ] && [ ! -z "${REPORT_USER}" ] && [ ! -z "${REPORT_ID_RSA}" ]
     then
 	echo "${REPORT_ID_RSA}" > ${SSH_DIR}/report.id_rsa &&
 	    chmod 0700 ${SSH_DIR}/report.id_rsa &&
