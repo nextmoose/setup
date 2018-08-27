@@ -14,6 +14,7 @@ github \
     --origin-user git \
     --origin-organization nextmoose \
     --origin-repository nixpkgs \
+    --origin-branch master \
     --origin-id-rsa origin.id_rsa \
     --origin-known-hosts origin.known_hosts \
     --committer-name "Emory Merryman" \
