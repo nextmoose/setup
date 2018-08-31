@@ -1,6 +1,6 @@
 # vim: set softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent syntax=nix nocompatible :
 # Containe
-{ config, pkgs, stdenv, ... }:
+{ config, pkgs, ... }:
 
 { containers.experiment =
   let hostAddr =  "192.168.200.10";
