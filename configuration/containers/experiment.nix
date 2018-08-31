@@ -53,9 +53,14 @@
 
       users.mutableUsers = false;
 
+      users.groups.user = {
+        name = "user";
+	gid = 1000;
+      };
+
       users.extraUsers.user =
       { name = "user";
-        group = "users";
+        group = "user";
 	extraGroups = [ "wheel" ];
         uid = 1000;
         createHome = true;
