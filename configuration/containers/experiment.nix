@@ -31,6 +31,7 @@
 	firefox
 	gnucash
 	(import ../custom/emacs.nix { inherit pkgs; })
+	(import ../custom/custom.nix { inherit pkgs; })
       ];
 
       networking.nameservers = [ hostAddr ];
