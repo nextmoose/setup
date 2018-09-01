@@ -1,4 +1,3 @@
-{stdenv}:
-stdenv.mkDerivation {
-  src=./src;
+{pkgs}:
+  pkgs.writeShellScriptBin "helloWorld" "echo Hello World"
 }
