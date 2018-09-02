@@ -1,4 +1,5 @@
-{stdenv}:
+{ stdenv ? import <nixpkgs> {} }:
 stdenv.mkDerivation {
-  src=./src;
+  name = "hello-2.1.1";
+  src = ./src;
 }
