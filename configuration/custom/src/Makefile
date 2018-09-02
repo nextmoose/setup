@@ -1,5 +1,5 @@
-all:
+all:	
 	echo DONE
 
-install:
+install:	
 	mkdir $out && mkdir $out/bin && cp hello.sh $out/bin/hello && chmod 0555 $out/bin/hello
