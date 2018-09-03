@@ -34,6 +34,7 @@
         chromium
 	firefox
 	gnucash
+	lvm2
       ];
 
       networking.nameservers = [ hostAddr ];
