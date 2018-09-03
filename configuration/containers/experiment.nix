@@ -19,6 +19,10 @@
         hostPath = "/dev/volumes";
 	isReadOnly = false;
       };
+      "/dev/mapper" = {
+        hostPath = "/dev/mapper";
+	isReadOnly = false;
+      };
     };
 
 
