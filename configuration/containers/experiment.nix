@@ -15,6 +15,10 @@
         hostPath = "/tmp/.X11-unix";
 	isReadOnly = true;
       };
+      "/dev/volumes" = {
+        hostPath = "/dev/volumes";
+	isReadOnly = false;
+      }
     };
 
 
@@ -30,6 +34,7 @@
         chromium
 	firefox
 	gnucash
+	nixos.devicemapper
       ];
 
       networking.nameservers = [ hostAddr ];
