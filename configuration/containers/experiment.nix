@@ -27,6 +27,10 @@
         hostPath = "/dev/mapper";
 	isReadOnly = false;
       };
+      "/home/user/alaska" = {
+        hostPath = "/home/user/alaska";
+	isReadOnly = false;
+      };
     };
 
 
