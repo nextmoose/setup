@@ -15,6 +15,10 @@
         hostPath = "/tmp/.X11-unix";
 	isReadOnly = true;
       };
+      "/dev/sda4" = {
+        hostPath = "/dev/sda4";
+	isReadOnly = false;
+      };
       "/dev/volumes" = {
         hostPath = "/dev/volumes";
 	isReadOnly = false;
@@ -23,6 +27,7 @@
         hostPath = "/dev/mapper";
 	isReadOnly = false;
       };
+      "/dev/volumes/
     };
 
 
