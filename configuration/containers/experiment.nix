@@ -31,6 +31,10 @@
         hostPath = "/home/user/alaska";
 	isReadOnly = false;
       };
+      "/home/user/california" = {
+        hostPath = "/home/user/california";
+	isReadOnly = false;
+      };
     };
 
 
