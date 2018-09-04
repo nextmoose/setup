@@ -6,6 +6,8 @@
   let hostAddr =  "192.168.200.10";
   in
   {
+    security.sudo.wheelNeedsPassword = false;
+
     bindMounts = {
       "/home/user/host" = {
         hostPath = "/";
