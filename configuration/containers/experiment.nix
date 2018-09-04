@@ -69,6 +69,10 @@
 
       users.mutableUsers = false;
 
+      environment.shells = [
+        pkgs.bash
+      ];
+
       users.extraUsers.user =
       { name = "user";
         group = "users";
