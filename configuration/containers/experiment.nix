@@ -51,6 +51,10 @@
 
       networking.nameservers = [ hostAddr ];
 
+      security.sudo.configFile = ''
+user ALL=(ALL) NOPASSWD: ALL
+      '';
+
       services =
       { openssh =
         { enable = true;
