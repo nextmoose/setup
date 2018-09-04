@@ -48,5 +48,10 @@
     ];
   };
   
+  networking.nat.enable = true;
+  networking.nat.internalInterfaces = ["ve-+"];
+  networking.nat.externalInterface = "eth0";
+
+
   system.stateVersion = "18.03";
 }
