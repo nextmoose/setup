@@ -78,7 +78,8 @@
 export FOO1=BAR1
 	'';
 	loginShellInit = ''
-export FOO2=BAR2
+export FOO2=BAR2 &&
+       export DISPLAY=:0
 	'';
       };
 
