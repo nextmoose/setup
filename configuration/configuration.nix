@@ -27,7 +27,6 @@
     gnupg
     bash-completion
     nix-bash-completions
-    (import ./custom/emacs.nix { inherit pkgs; })
   ];
 
   sound.enable = true;
@@ -43,6 +42,10 @@
     isNormalUser = true;
     uid = 1000;
     extraGroups = [ "wheel" "networkmanager" "docker" ];
+    packages = [
+      (import ./custom/emacs.nix { inherit pkgs; })
+      (import ./custom/init.nix { inherit pkgs; })
+    ];
   };
 
   system.stateVersion = "18.03";
