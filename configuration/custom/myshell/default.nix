@@ -3,6 +3,7 @@
 with import <nixpkgs> {};
 
 stdenv.mkDerivation {
+  name = "myshell";
   src = ./src;
   installPhase = ''
   mkdir $out &&
