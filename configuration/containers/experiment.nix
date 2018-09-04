@@ -74,7 +74,6 @@
       ];
 
       programs.bash = {
-        enable = true;
 	shellInit = ''
 export FOO1=BAR1
 	'';
