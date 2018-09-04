@@ -80,6 +80,7 @@
 	packages = [
 	  (import ../custom/emacs.nix { inherit pkgs; })
 	  (import ../custom/experiment.nix { inherit pkgs; })
+	  (import ../custom/myshell.nix { inherit pkgs; })
 	];
       };
     };
