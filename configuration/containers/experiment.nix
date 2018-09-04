@@ -70,7 +70,7 @@
       users.mutableUsers = false;
 
       environment.shells = [
-        pkgs.bash
+        myshell
       ];
 
       users.extraUsers.user =
@@ -80,7 +80,7 @@
         uid = 1000;
         createHome = true;
 	home = "/home/user";
-        shell = pkgs.bash;
+        shell = myshell;
         openssh.authorizedKeys.keyFiles = [ "/etc/nixos/id_rsa.pub" ];
 	hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl.";
 	packages = [
