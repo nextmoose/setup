@@ -63,6 +63,8 @@
 
       programs.ssh.setXAuthLocation = true;
 
+      security.sudo.wheelNeedsPassword = false;
+
       users.mutableUsers = false;
 
       users.extraUsers.user =
