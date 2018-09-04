@@ -54,7 +54,7 @@
   networking =
   { nat.enable = true;
     nat.internalInterfaces = ["ve-+"];
-    nat.externalInterface = "wlp3s0";
+    nat.externalInterface = "wlo1";
     firewall.extraCommands =
       ''
       ip46tables -A nixos-fw -i ve-+ -p tcp --dport 4713 -j nixos-fw-accept;
