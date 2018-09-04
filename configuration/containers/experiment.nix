@@ -73,6 +73,16 @@
         pkgs.bash
       ];
 
+      programs.bash = {
+        enable = true;
+	shellInit = ''
+export FOO1=BAR1
+	'';
+	loginShellInit = ''
+export FOO2=BAR2
+	'';
+      };
+
       users.extraUsers.user =
       { name = "user";
         group = "users";
