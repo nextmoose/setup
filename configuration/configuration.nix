@@ -36,7 +36,9 @@
   services.xserver.enable = true;
   services.xserver.windowManager.i3.enable = true;
   services.xserver.libinput.enable = true;
-
+  
+  security.sudo.wheelNeedsPassword = false;
+  
   users.extraUsers.user = {
     isNormalUser = true;
     uid = 1000;
