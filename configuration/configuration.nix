@@ -3,8 +3,11 @@
   imports = [
     ./hardware-configuration.nix
     ./containers/browser.nix
-    ./containers/experiment.nix
   ];
+
+  containers = {
+    experiment = (import ./custom/experiment.nix);
+  };
 
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
