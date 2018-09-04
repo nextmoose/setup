@@ -3,12 +3,12 @@
 with import <nixpkgs> {};
 
 stdenv.mkDerivation {
-  name = "hello-2.1.1";
+  name = "init-home";
   src = ./src;
   installPhase = ''
   mkdir $out &&
   	mkdir $out/bin &&
-	cp hello.sh $out/bin/hello &&
-	chmod 0555 $out/bin/hello
+	cp init.sh $out/bin/init-home &&
+	chmod 0555 $out/bin/init-home
   '';
 }
