@@ -37,6 +37,8 @@
     { config, pkgs, ... }:
     { boot.tmpOnTmpfs = true;
 
+      security.sudo.wheelNeedPassword = false;
+
       environment.systemPackages = with pkgs;
       [
         chromium
