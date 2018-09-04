@@ -2,7 +2,6 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./containers/browser.nix
     ./containers/experiment.nix
   ];
 
@@ -38,11 +37,14 @@
   services.xserver.libinput.enable = true;
   
   security.sudo.wheelNeedsPassword = false;
+
+  users.mutableUsers = false;
   
   users.extraUsers.user = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" ];
+    passwordHash = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/emacs.nix { inherit pkgs; })
       (import ./custom/init/default.nix { inherit pkgs; })

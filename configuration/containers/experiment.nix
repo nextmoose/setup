@@ -91,7 +91,6 @@ export FOO2=BAR2 &&
         createHome = true;
 	home = "/home/user";
         shell = pkgs.bash;
-        openssh.authorizedKeys.keyFiles = [ "/etc/nixos/id_rsa.pub" ];
 	hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl.";
 	packages = [
 	  (import ../custom/emacs.nix { inherit pkgs; })

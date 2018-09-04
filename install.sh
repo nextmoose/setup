@@ -1,8 +1,7 @@
 #!/bin/sh
 
-read -p "User Password:  " -s USER_PASSWORD &&
-    read -p "Verify User Password:  " -s VERIFY_USER_PASSWORD &&
-    [ "${USER_PASSWORD}" = "${VERIFY_USER_PASSWORD}" ] &&
+nix-env -i mkpasswd &&
+    USER_PASSWORD_HASH=$(mkpassword -m sha-512) &&
     sh ../private/wifi.sh &&
     (cat <<EOF
 n
@@ -39,10 +38,8 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
-    ssh-keygen -f /tmp/id_rsa -P "" &&
-    ssh-keygen -y -f /tmp/id_rsa > /etc/nixos/id_rsa.pub &&
-    ssh-keygen -y -f /tmp/id_rsa > /mnt/etc/nixos/id_rsa.pub &&
-    cp -r configuration/. /mnt/etc/nixos &&
+    sed -e "s#\${PASSWORD_HASH}#${PASSWORD_HASH}#" -e "w/mnt/etc/nixos/configuration.nix" configuration/configuration.nix &&
+    cp -r configuration/containers configuration/custom /mnt/etc/nixos/ &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
@@ -51,9 +48,7 @@ EOF
     ) | nixos-install &&
     PRIVATE_VOLUME=24fd963r &&
     lvcreate --size 1G --name ${PRIVATE_VOLUME} volumes &&
-    # dd if=/dev/zero of=/dev/volumes/${PRIVATE_VOLUME} blocks=1k
-    # wipefs -a /dev/volumes/${PRIVATE_VOLUME} &&
-    yes | mkfs.ext4 /dev/volumes/${PRIVATE_VOLUME} &&
+    mkfs.ext4 /dev/volumes/${PRIVATE_VOLUME} &&
     DIR=$(mktemp -d) &&
     mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
     cat ../private/wifi.sh > ${DIR}/wifi.sh &&
@@ -90,12 +85,5 @@ EOF
     done &&
     chown 1000:100 /mnt/home/user/bin &&
     echo init >> /mnt/home/user/.bashrc &&
-    mkdir /mnt/home/user/.ssh &&
-    chmod 0700 /mnt/home/user/.ssh &&
-    chown 1000:100 /mnt/home/user/.ssh &&
-    cp /tmp/id_rsa /mnt/home/user/.ssh/id_rsa &&
-    chmod 0600 /mnt/home/user/.ssh/id_rsa &&
-    chown 1000:100 /mnt/home/user/.ssh/id_rsa &&
-    echo user:${USER_PASSWORD} | chpasswd --root /mnt &&
     shutdown -h now &&
     true
