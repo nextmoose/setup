@@ -70,8 +70,9 @@
       users.mutableUsers = false;
 
       environment.shells = [
-        pkgs.bash
+        myshell
       ];
+      programs.bash.enable = false;
 
       users.extraUsers.user =
       { name = "user";
