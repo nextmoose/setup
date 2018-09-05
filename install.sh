@@ -1,8 +1,8 @@
 #!/bin/sh
 
-nix-env -i mkpasswd &&
-    USER_PASSWORD_HASH=$(mkpassword -m sha-512) &&
-    sh ../private/wifi.sh &&
+sh ../private/wifi.sh &&
+    nix-env -i mkpasswd &&
+    USER_PASSWORD_HASH=$(mkpasswd -m sha-512) &&
     (cat <<EOF
 n
 

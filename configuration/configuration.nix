@@ -44,7 +44,7 @@
     isNormalUser = true;
     uid = 1000;
     extraGroups = [ "wheel" "networkmanager" ];
-    passwordHash = "${PASSWORD_HASH}";
+    hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/emacs.nix { inherit pkgs; })
       (import ./custom/init/default.nix { inherit pkgs; })
