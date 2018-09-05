@@ -35,4 +35,5 @@ done &&
     for FILE in $(ls -1 ${HOME}/completion)
     do
 	source ${HOME}/completion/${FILE}
-    done
+    done &&
+    xhost +local:
