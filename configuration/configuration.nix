@@ -84,6 +84,7 @@
     extraGroups = [ "wheel" "networkmanager" ];
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
+      pkgs.xorg.xhost
       (import ./custom/emacs.nix { inherit pkgs; })
       (import ./custom/init/default.nix { inherit pkgs; })
     ];
