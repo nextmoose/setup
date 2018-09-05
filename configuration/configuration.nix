@@ -59,12 +59,6 @@
   time.timeZone = "US/Eastern";
 
   environment.systemPackages = with pkgs; [
-    chromium
-    git
-    pass
-    gnupg
-    bash-completion
-    nix-bash-completions
   ];
 
   sound.enable = true;
@@ -77,6 +71,13 @@
   security.sudo.wheelNeedsPassword = false;
 
   users.mutableUsers = false;
+
+  
+  programs.bash = {
+    shellInit = ''
+       init-home
+    '';
+  };
   
   users.extraUsers.user = {
     isNormalUser = true;
@@ -84,6 +85,13 @@
     extraGroups = [ "wheel" "networkmanager" ];
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
+      pkgs.chromium
+      pkgs.git
+      pkgs.pass
+      pkgs.gnupg
+      pkgs.bash-completion
+      pkgs.nix-bash-completions
+      pkgs.xhost
       (import ./custom/emacs.nix { inherit pkgs; })
       (import ./custom/init/default.nix { inherit pkgs; })
     ];

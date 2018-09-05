@@ -84,6 +84,5 @@ EOF
 	    chown 1000:100 /mnt/home/user/completion/${FILE%.*}
     done &&
     chown 1000:100 /mnt/home/user/bin &&
-    echo init >> /mnt/home/user/.bashrc &&
     shutdown -h now &&
     true
