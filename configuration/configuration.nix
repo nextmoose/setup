@@ -59,6 +59,7 @@
   time.timeZone = "US/Eastern";
 
   environment.systemPackages = with pkgs; [
+    xhost
     chromium
     git
     pass
