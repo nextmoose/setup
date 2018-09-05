@@ -5,8 +5,7 @@
 { containers.experiment =
   let
     hostAddr =  "192.168.200.10";
-    myshell = (import ../custom/myshell/default.nix { inherit pkgs; });
-  in
+   in
   {
     bindMounts = {
       "/home/user/host" = {
@@ -95,7 +94,6 @@ export FOO2=BAR2 &&
 	packages = [
 	  (import ../custom/emacs.nix { inherit pkgs; })
 	  (import ../custom/experiment.nix { inherit pkgs; })
-	  myshell
 	];
       };
     };
