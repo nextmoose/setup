@@ -65,6 +65,7 @@
     gnupg
     bash-completion
     nix-bash-completions
+    xhost
   ];
 
   sound.enable = true;
