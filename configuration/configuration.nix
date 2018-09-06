@@ -46,7 +46,6 @@
     extraGroups = [ "wheel" "networkmanager" ];
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
-      (import ./custom/emacs.nix { inherit pkgs; })
       (import ./custom/init/default.nix { inherit pkgs; })
     ];
   };
