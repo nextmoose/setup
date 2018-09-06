@@ -1,4 +1,3 @@
-{ config, pkgs, ... }:
 {
   let
     foo = "bar";
