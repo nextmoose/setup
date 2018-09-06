@@ -1,103 +1,41 @@
-# vim: set softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent syntax=nix nocompatible :
-# Containe
 { config, pkgs, ... }:
-
-{ containers.experiment =
+{
   let
-    hostAddr =  "192.168.200.10";
-    myshell = (import ../custom/myshell/default.nix { inherit pkgs; });
-  in
-  {
-    bindMounts = {
-      "/home/user/host" = {
-        hostPath = "/";
-	isReadOnly = true;
-      };
-      "/tmp/.X11-unix" = {
-        hostPath = "/tmp/.X11-unix";
-	isReadOnly = true;
-      };
-      "/dev/sda4" = {
-        hostPath = "/dev/sda4";
-	isReadOnly = false;
-      };
-      "/dev/volumes" = {
-        hostPath = "/dev/volumes";
-	isReadOnly = false;
-      };
-      "/dev/mapper" = {
-        hostPath = "/dev/mapper";
-	isReadOnly = false;
-      };
-    };
-
-
-    privateNetwork = true;
-    hostAddress = hostAddr;
-    localAddress = "192.168.200.11";
-    config =
-    { config, pkgs, ... }:
-    { boot.tmpOnTmpfs = true;
-
-      environment.systemPackages = with pkgs;
-      [
-        chromium
-	firefox
-	gnucash
-	lvm2
-      ];
-
-      networking.nameservers = [ hostAddr ];
-
-      services =
-      { openssh =
-        { enable = true;
-          forwardX11 = true;
+    foo = "bar";
+    in  
+    {
+      bindMounts = {
+        "/home/user/host" = {
+          hostPath = "/";
+	  isReadOnly = true;
         };
-
-        avahi =
-        { enable = true;
-          browseDomains = [];
-          wideArea = false;
-          nssmdns = true;
+        "/tmp/.X11-unix" = {
+          hostPath = "/tmp/.X11-unix";
+  	  isReadOnly = true;
         };
       };
-
-      programs.ssh.setXAuthLocation = true;
-
-      security.sudo.wheelNeedsPassword = false;
-
-      users.mutableUsers = false;
-
-      environment.shells = [
-        pkgs.bash
-      ];
-
-      programs.bash = {
-	shellInit = ''
-export FOO1=BAR1
-	'';
-	loginShellInit = ''
-export FOO2=BAR2 &&
-       export DISPLAY=:0
-	'';
-      };
-
-      users.extraUsers.user =
-      { name = "user";
-        group = "users";
-	extraGroups = [ "wheel" ];
-        uid = 1000;
-        createHome = true;
-	home = "/home/user";
-        shell = pkgs.bash;
-	hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl.";
-	packages = [
-	  (import ../custom/emacs.nix { inherit pkgs; })
-	  (import ../custom/experiment.nix { inherit pkgs; })
-	  myshell
-	];
+      config = { config, pkgs, ... }:
+      {
+        security.sudo.wheelNeedsPassword = false;
+        users.mutableUsers = false;
+        programs.bash = {
+          shellInit = ''
+            export DISPLAY=:0
+          '';
+        };
+        users.extraUsers.user = {
+          name = "user" ;
+ 	  group = "user" ;
+	  extraGroups = [ "wheel" ] ;
+	  home = "/home/user" ;
+	  shell = pkgs.bash ;
+	  hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
+	  packages = [
+	    pkgs.firefox
+	    pkgs.emacs
+	    pkgs.mkpasswd
+	  ];
+        };
       };
     };
-  };
 }
