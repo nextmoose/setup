@@ -9,13 +9,14 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
 	    sudo cp -r configuration/custom /etc/nixos &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
-		sudo nixos-container stop ${CONTAINER}
+        	sudo nixos-container stop ${CONTAINER}
 	    done &&
 	    sudo nixos-rebuild switch &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
 		sudo nixos-container start ${CONTAINER}
-	    done
+	    done &&
+	    true
     } &&
     trap cleanup EXIT &&
     TEST_BRANCH=scratch/$(uuidgen) &&
