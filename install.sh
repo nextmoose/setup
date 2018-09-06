@@ -2,7 +2,6 @@
 
 sh ../private/wifi.sh &&
     nix-env -i mkpasswd &&
-    USER_PASSWORD_HASH=$(mkpasswd -m sha-512) &&
     (cat <<EOF
 n
 
@@ -38,8 +37,7 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
-    sed -e "s#\${PASSWORD_HASH}#${PASSWORD_HASH}#" -e "w/mnt/etc/nixos/configuration.nix" configuration/configuration.nix &&
-    cp -r configuration/containers.nix configuration/containers configuration/custom /mnt/etc/nixos/ &&
+    sh ./run.sh --source configuration --destination /mnt/etc/nixos --password $(uuidgen) &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}

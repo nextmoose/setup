@@ -38,6 +38,12 @@
   
   security.sudo.wheelNeedsPassword = false;
 
+  programs.bash = {
+    loginShellInit = ''
+      xhost +local:
+    '';
+  };
+
   users.mutableUsers = false;
   
   users.extraUsers.user = {
