@@ -1,5 +1,9 @@
 { config, pkgs, ... }:
 {
+  experiment = {
+  let
+    foo = "bar";
+  in
   {
     bindMounts = {
       "/home/user/host" = {
@@ -34,5 +38,6 @@
 	];
       };
     };
+  };
   };
 }
