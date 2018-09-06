@@ -2,20 +2,29 @@
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
+	echo AA1 &&
 	git checkout ${CURRENT_BRANCH} &&
+	echo AA2 &&
 	    sudo sh ./run.sh --source configuration --destination /etc/nixos &&
+	echo AA4 &&
 	    sudo cp configuration/containers.nix /etc/nixos &&
+	echo AA5 &&
 	    sudo cp -r configuration/containers /etc/nixos &&
+	echo AA6 &&
 	    sudo cp -r configuration/custom /etc/nixos &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
 		sudo nixos-container stop ${CONTAINER}
 	    done &&
+	echo AA7 &&
 	    sudo nixos-rebuild switch &&
+	echo AA8 &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
 		sudo nixos-container start ${CONTAINER}
-	    done
+	    done &&
+	    echo AA9 &&
+	    true
     } &&
     trap cleanup EXIT &&
     TEST_BRANCH=scratch/$(uuidgen) &&
