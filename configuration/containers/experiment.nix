@@ -1,5 +1,8 @@
 { config, pkgs, ... }:
 {
+  let
+    foo = "bar";
+  in
   {
     bindMounts = {
       "/home/user/host" = {
