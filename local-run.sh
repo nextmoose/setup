@@ -3,7 +3,7 @@
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
 	git checkout ${CURRENT_BRANCH} &&
-	    sudo sh ./run.sh --source configuration --destination /etc/nixos --password password &&
+	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password password &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
         	sudo nixos-container stop ${CONTAINER}
@@ -19,7 +19,7 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     TEST_BRANCH=scratch/$(uuidgen) &&
     git checkout -b ${TEST_BRANCH} &&
     git commit -am "before test local rebuild" --allow-empty &&
-    sudo sh ./run.sh --source configuration --destination /etc/nixos --password password &&
+    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password password &&
     for CONTAINER in $(sudo nixos-container list)
     do
 	sudo nixos-container stop ${CONTAINER}

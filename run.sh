@@ -11,9 +11,7 @@ do
 	    export DESTINATION="${2}" &&
 		shift 2
 	    ;;
-	--user-
-	
-	password)
+	--user-password)
 		 export HASHED_USER_PASSWORD=$(uuidgen | mkpasswd --stdin -m sha-512) &&
 		     shift 2
 		 ;;
