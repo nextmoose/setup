@@ -26,6 +26,7 @@ done &&
 	    sudo rm -rf /etc/nixos/custom &&
 	    sudo rm -rf /etc/nixos/containers &&
 	    sudo sed -e "s#\${PASSWORD_HASH}#${PASSWORD_HASH}#" -e "w/etc/nixos/configuration.nix" configuration/configuration.nix &&
+	    sudo cp configuration/containers.nix /etc/nixos &&
 	    sudo cp -r configuration/containers /etc/nixos &&
 	    sudo cp -r configuration/custom /etc/nixos &&
 	    for CONTAINER in $(sudo nixos-container list)
@@ -45,6 +46,7 @@ done &&
     sudo rm -rf /etc/nixos/custom &&
     sudo rm -rf /etc/nixos/containers &&
     sudo sed -e "s#\${PASSWORD_HASH}#${PASSWORD_HASH}#" -e "w/etc/nixos/configuration.nix" configuration/configuration.nix &&
+    sudo cp -r configuration/containers /etc/nixos &&
     sudo cp -r configuration/containers /etc/nixos &&
     sudo cp -r configuration/custom /etc/nixos &&
     for CONTAINER in $(sudo nixos-container list)

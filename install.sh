@@ -39,7 +39,7 @@ EOF
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     sed -e "s#\${PASSWORD_HASH}#${PASSWORD_HASH}#" -e "w/mnt/etc/nixos/configuration.nix" configuration/configuration.nix &&
-    cp -r configuration/containers configuration/custom /mnt/etc/nixos/ &&
+    cp -r configuration/containers.nix configuration/containers configuration/custom /mnt/etc/nixos/ &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
