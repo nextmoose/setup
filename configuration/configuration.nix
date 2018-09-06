@@ -47,6 +47,7 @@
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/init/default.nix { inherit pkgs; })
+      xhost
     ];
   };
   
