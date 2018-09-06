@@ -39,7 +39,11 @@
   security.sudo.wheelNeedsPassword = false;
 
   programs.bash = {
+    shellInit = ''
+      date >> /tmp/shellInit.log.txt
+    '';
     loginShellInit = ''
+      date >> /tmp/loginShellInit.log.txt &&
       xhost +local:
     '';
   };
