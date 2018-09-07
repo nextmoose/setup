@@ -10,6 +10,21 @@ in
   };
   config = { config, pkgs, ... }:
   {
+
+      nixpkgs.config =
+        let
+          plugins = 
+          {
+	    enableGoogleTalkPlugin = true;
+            # jre = true;
+          };
+        in
+        { # firefox = plugins;
+          chromium = plugins;
+          allowUnfree = true;
+        };
+
+
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;
     programs.bash = {
