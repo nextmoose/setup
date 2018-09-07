@@ -1,6 +1,27 @@
 #!/bin/sh
 
-sh ../private/wifi.sh &&
+while [ ${#} -gt 0 ]
+do
+    case ${1} in
+	--user-password)
+	    export USER_PASSWORD="${2}" &&
+		shift 2
+	    ;;
+	*)
+	    echo Unsupported Option &&
+		echo ${1} &&
+		echo ${@} &&
+		echo ${0} &&
+		exit 64
+	    ;;
+    esac &&
+done &&
+    if [ -z "${USER_PASSWORD}" ]
+    then
+	echo Unspecified USER_PASSWORD &&
+	    exit 65
+    fi &&
+    sh ../private/wifi.sh &&
     nix-env -i mkpasswd &&
     (cat <<EOF
 n
@@ -37,7 +58,7 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
-    sh ./run.sh --source configuration --destination /mnt/etc/nixos --user-password "${@}" &&
+    sh ./run.sh --source configuration --destination /mnt/etc/nixos --user-password "${USER_PASSWORD}" &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
