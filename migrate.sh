@@ -11,5 +11,5 @@ mkdir configuration/custom/migration &&
     done &&
     ls -1 configuration/custom/migration | while read FILE
     do
-	echo "(import ./custom/migratin/${FILE}/default.nix { inherit pkgs; })"
+	echo "(import ./custom/migration/${FILE}/default.nix { inherit pkgs; })"
     done
