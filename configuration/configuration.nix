@@ -70,6 +70,7 @@
       (import ./custom/migration/secret-editor/default.nix { inherit pkgs; })
       pkgs.emacs
       pkgs.mkpasswd
+      pkgs.bash-completion
 ];
   };
   
