@@ -68,6 +68,8 @@
       (import ./custom/migration/pre-push/default.nix { inherit pkgs; })
       (import ./custom/migration/regrind/default.nix { inherit pkgs; })
       (import ./custom/migration/secret-editor/default.nix { inherit pkgs; })
+      pkgs.emacs
+      pkgs.mkpasswd
 ];
   };
   
