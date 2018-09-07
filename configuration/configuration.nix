@@ -57,6 +57,13 @@
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/init/default.nix { inherit pkgs; })
+      (import ./custom/gpg-key-id/default.nix { inherit pkgs; })
+      (import ./custom/emacs-development-environment/default.nix { inherit pkgs; })
+      (import ./custom/github/default.nix { inherit pkgs; })
+      (import ./custom/mysecret-editor/default.nix { inherit pkgs; })
+      (import ./custom/secret-editor/default.nix { inherit pkgs; })
+      (import ./custom/post-commit/default.nix { inherit pkgs; })
+      (import ./custom/pre-push/default.nix { inherit pkgs; })
     ];
   };
   
