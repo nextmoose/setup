@@ -3,7 +3,7 @@
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
 	git checkout ${CURRENT_BRANCH} &&
-	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password password &&
+	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${@}" &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
         	sudo nixos-container stop ${CONTAINER}
