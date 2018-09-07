@@ -17,10 +17,10 @@ privateNetwork = true;
       hostPath = "/run/user/1000/pulse";
       isReadOnly = false;
     };
-#    "/etc/machine-id" = {
-#      hostPath = "/etc/machine-id";
-#      isReadOnly = false;
-#    };
+    "/etc/machine-id" = {
+      hostPath = "/etc/machine-id";
+      isReadOnly = false;
+    };
 #    "/var/run/dbus/system_bus_socket" = {
 #      hostPath = "/var/run/bus/system_bus_socket";
 #      isReadOnly = false;    				     
