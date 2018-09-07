@@ -32,10 +32,16 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     read -p "IS IT OK? " ISITOK &&
     if [ "Y" == "${ISITOK}" ]
     then
-	git rebase ${CURRENT_BRANCH} &&
+	echo AAA 1 &&
+	    git rebase ${CURRENT_BRANCH} &&
+	    echo AAA 2 &&
 	    git checkout ${CURRENT_BRANCH} &&
+	    echo AAA 3 &&
 	    git rebase ${TEST_BRANCH} &&
-	    git commit -am "after test local rebuild" --allow-empty
+	    echo AAA 4 &&
+	    git commit -am "after test local rebuild" --allow-empty &&
+	    echo AAA 5 &&
+	    true
     elif [ "M" == "${ISITOK}" ]
     then
 	git commit -am "IT IS NOT OK YET" --allow-empty &&
