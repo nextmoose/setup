@@ -1,7 +1,13 @@
 let
   foo = "bar";
+  hostAddr =  "192.168.100.10";
 in
 {
+
+privateNetwork = true;
+    hostAddress = hostAddr;
+    localAddress = "192.168.100.11";
+
   bindMounts = {
     "/tmp/.X11-unix" = {
       hostPath = "/tmp/.X11-unix";
@@ -25,7 +31,7 @@ in
         };
       hardware.pulseaudio.enable = true;
       hardware.bumblebee.enable = true;
-      environment.variables.PULSE_SERVER = "tcp:10.1.10.53";
+      environment.variables.PULSE_SERVER = "tcp:"+hostAddr;
       
 
     security.sudo.wheelNeedsPassword = false;
