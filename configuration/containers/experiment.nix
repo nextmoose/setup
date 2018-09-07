@@ -30,6 +30,20 @@ in
 	pkgs.mkpasswd
 	pkgs.chromium
       ];
+      nixpkgs.config =
+        let
+          plugins = 
+          { enableAdobeFlash = true;
+            enablePepperFlash = true;
+            enablePepperPDF = true;
+            enableGoogleTalkPlugin = true;
+            # jre = true;
+          };
+        in
+        { # firefox = plugins;
+          chromium = plugins;
+          allowUnfree = true;
+        };
     };
   };
 }
