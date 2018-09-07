@@ -40,6 +40,10 @@
 
   programs.bash = {
     shellInit = ''
+      for FILE in $(ls -1 \${HOME}/completions)
+      do
+        source \${HOME}/completions/${FILE}
+      done &&
       date >> /tmp/shellInit.log.txt
     '';
     loginShellInit = ''
