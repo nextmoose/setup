@@ -12,7 +12,7 @@ do
 		shift 2
 	    ;;
 	--user-password)
-		 export HASHED_USER_PASSWORD=$(uuidgen | mkpasswd --stdin -m sha-512) &&
+		 export HASHED_USER_PASSWORD=$(echo ${2} | mkpasswd --stdin -m sha-512) &&
 		     shift 2
 		 ;;
 	*)
