@@ -7,8 +7,9 @@ stdenv.mkDerivation {
   src = ./src;
   installPhase = ''
   mkdir $out &&
-  	mkdir $out/bin &&
-	cp my-completions.sh $out/bin/my-completions &&
-	chmod 0555 $out/bin/my-completions
+  	mkdir $out/completions &&
+	cp completions/*.sh $out/completions &&
+	mkdir $out/bin &&
+	sh generator.sh $out
   '';
 }
