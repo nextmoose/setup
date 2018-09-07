@@ -4,6 +4,8 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
 	echo DDD 1 &&
 	    git checkout ${CURRENT_BRANCH} &&
+	    echo DDD 2 &&
+	    echo sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${@}" &&
 	    echo DDD 3 &&
 	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${@}" &&
 	    echo DDD 4 &&
