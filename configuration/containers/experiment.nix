@@ -28,6 +28,7 @@ in
 	pkgs.firefox
 	pkgs.emacs
 	pkgs.mkpasswd
+	pkgs.chromium
       ];
     };
   };
