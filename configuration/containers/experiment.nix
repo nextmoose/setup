@@ -3,10 +3,6 @@ let
 in
 {
   bindMounts = {
-    "/home/user/host" = {
-      hostPath = "/";
-      isReadOnly = true;
-    };
     "/tmp/.X11-unix" = {
       hostPath = "/tmp/.X11-unix";
       isReadOnly = true;
@@ -23,7 +19,7 @@ in
     };
     users.extraUsers.user = {
       name = "user" ;
-      group = "user" ;
+      group = "users" ;
       extraGroups = [ "wheel" ] ;
       home = "/home/user" ;
       shell = pkgs.bash ;
