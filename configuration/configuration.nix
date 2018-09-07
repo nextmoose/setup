@@ -11,6 +11,8 @@
   networking.hostName = "duke";
   networking.networkmanager.enable=true;
   networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
+  networking.nat.enable = true;
+  networking.useHostResolve = true;
 
   i18n = {
     consoleFont = "Lat2-Terminus16";
