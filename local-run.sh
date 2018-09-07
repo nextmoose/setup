@@ -46,4 +46,6 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     then
 	git commit -am "IT IS NOT OK YET" --allow-empty &&
 	    echo ${TEST_BRANCH}
-    fi
+    fi &&
+    echo BBB 10 &&
+    true
