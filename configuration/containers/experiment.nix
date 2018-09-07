@@ -23,7 +23,10 @@ in
           chromium = plugins;
           allowUnfree = true;
         };
-
+      hardware.pulseaudio.enable = true;
+      hardware.bumblebee.enable = true;
+      environment.variables.PULSE_SERVER = "tcp:" + hostAddr;
+      
 
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;
