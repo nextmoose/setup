@@ -81,6 +81,5 @@ EOF
 	    chmod 0400 /mnt/home/user/completion/${FILE%.*} &&
 	    chown 1000:100 /mnt/home/user/completion/${FILE%.*}
     done &&
-    chown 1000:100 /mnt/home/user/bin &&
     shutdown -h now &&
     true
