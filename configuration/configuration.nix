@@ -40,6 +40,7 @@
 
   programs.bash = {
     shellInit = ''
+      my-completions &&
       date >> /tmp/shellInit.log.txt
     '';
     loginShellInit = ''
@@ -68,6 +69,7 @@
       (import ./custom/migration/pre-push/default.nix { inherit pkgs; })
       (import ./custom/migration/regrind/default.nix { inherit pkgs; })
       (import ./custom/migration/secret-editor/default.nix { inherit pkgs; })
+      (import ./custom/my-completions/default.nix { inherit pkgs; })
       pkgs.emacs
       pkgs.mkpasswd
       pkgs.bash-completion
