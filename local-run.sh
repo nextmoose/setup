@@ -18,25 +18,17 @@ do
 done &&
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
-	echo DDD 1 &&
-	    git checkout ${CURRENT_BRANCH} &&
-	    echo DDD 2 &&
-	    echo sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${@}" &&
-	    echo DDD 3 &&
+	git checkout ${CURRENT_BRANCH} &&
 	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${USER_PASSWORD}" &&
-	    echo DDD 4 &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
         	sudo nixos-container stop ${CONTAINER}
 	    done &&
-	    echo DDD 5 &&
 	    sudo nixos-rebuild switch &&
-	    echo DDD 6 &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
 		sudo nixos-container start ${CONTAINER}
 	    done &&
-	    echo DDD 7 &&
 	    true
     } &&
     trap cleanup EXIT &&
