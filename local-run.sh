@@ -21,6 +21,11 @@ done &&
 	echo Unspecified USER_PASSWORD &&
 	    exit 65
     fi &&
+    if [ ! -z "$(git ls-files --other --exclude-standard --directory --exclude .c9)" ]
+    then
+	echo There are untracked files &&
+	    exit 66
+    fi &&
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
 	git checkout ${CURRENT_BRANCH} &&
