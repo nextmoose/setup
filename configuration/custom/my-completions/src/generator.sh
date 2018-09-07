@@ -1,7 +1,7 @@
 #!/bin/sh
 
 (cat > ${1}/bin/my-completions <<EOF
-#!/bin/sh
+#!/bin/bash
 
 EOF
 ) &&
