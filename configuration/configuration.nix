@@ -71,6 +71,7 @@
       pkgs.emacs
       pkgs.mkpasswd
       pkgs.bash-completion
+      pkgs.nix-bash-completions
 ];
   };
   
