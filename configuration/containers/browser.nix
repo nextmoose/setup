@@ -1,8 +1,3 @@
-# vim: set softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent syntax=nix nocompatible :
-# Containe
-{ config, pkgs, ... }:
-
-{ containers.browser =
   let hostAddr =  "192.168.100.10";
   in
   { privateNetwork = true;
@@ -73,4 +68,3 @@
       allowedAccess = [ "127.0.0.0/24" "192.168.100.0/24" ];
       interfaces = [ "0.0.0.0" "::0" ];
     };
-}

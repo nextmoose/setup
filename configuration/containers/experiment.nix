@@ -1,12 +1,12 @@
 let
   foo = "bar";
-  hostAddr =  "192.168.100.10";
+  hostAddr =  "192.168.200.10";
 in
 {
 
 privateNetwork = true;
     hostAddress = hostAddr;
-    localAddress = "192.168.100.11";
+    localAddress = "192.168.200.11";
 
   bindMounts = {
     "/tmp/.X11-unix" = {
