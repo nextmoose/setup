@@ -13,6 +13,22 @@ privateNetwork = true;
       hostPath = "/tmp/.X11-unix";
       isReadOnly = true;
     };
+    "/run/user/1000/pulse" = {
+      hostPath = "/run/user/1000/pulse";
+      isReadOnly = false;
+    };
+#    "/etc/machine-id" = {
+#      hostPath = "/etc/machine-id";
+#      isReadOnly = false;
+#    };
+#    "/var/run/dbus/system_bus_socket" = {
+#      hostPath = "/var/run/bus/system_bus_socket";
+#      isReadOnly = false;    				     
+#    };
+#    "/var/lib/dbus" = {
+#      hostPath = "/var/lib/dbus";
+#      isReadOnly = false;
+#    };
   };
   config = { config, pkgs, ... }:
   {
