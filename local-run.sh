@@ -1,13 +1,29 @@
 #!/bin/sh
 
-CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
+while [ ${#} -gt 0 ]
+do
+    case ${1} in
+	--user-password)
+	    export USER_PASSWORD="${2}" &&
+		shift 2
+	;;
+	*)
+	    echo Unsupported Option &&
+		echo ${1} &&
+		echo ${@} &&
+		echo ${0} &&
+		exit 64
+	    ;;
+    esac
+done &&
+    CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
 	echo DDD 1 &&
 	    git checkout ${CURRENT_BRANCH} &&
 	    echo DDD 2 &&
 	    echo sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${@}" &&
 	    echo DDD 3 &&
-	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${@}" &&
+	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${USER_PASSWORD}" &&
 	    echo DDD 4 &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
@@ -27,7 +43,7 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     TEST_BRANCH=scratch/$(uuidgen) &&
     git checkout -b ${TEST_BRANCH} &&
     git commit -am "before test local rebuild" --allow-empty &&
-    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password password &&
+    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${USER_PASSWORD}" &&
     for CONTAINER in $(sudo nixos-container list)
     do
 	sudo nixos-container stop ${CONTAINER}
