@@ -10,6 +10,23 @@ in
   };
   config = { config, pkgs, ... }:
   {
+
+      nixpkgs.config =
+        let
+          plugins = 
+          { enableAdobeFlash = true;
+            enablePepperFlash = true;
+            enablePepperPDF = true;
+            enableGoogleTalkPlugin = true;
+            # jre = true;
+          };
+        in
+        { # firefox = plugins;
+          chromium = plugins;
+          allowUnfree = true;
+        };
+
+
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;
     programs.bash = {
