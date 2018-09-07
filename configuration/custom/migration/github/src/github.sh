@@ -219,7 +219,7 @@ EOF
     git config user.name "${COMMITTER_NAME}" &&
     git config user.email "${COMMITER_EMAIL}" &&
     git config --global user.signingkey $(gpg-key-id) &&
-    ln --symbolic ${HOME}/bin/post-commit ${HOME}/bin/pre-push .git/hooks &&
+    ln --symbolic $(which post-commit) $(which ${HOME}/bin/pre-push) .git/hooks &&
     git remote add upstream upstream:${UPSTREAM_ORGANIZATION}/${UPSTREAM_REPOSITORY}.git &&
     git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
     git remote add report report:${REPORT_ORGANIZATION}/${REPORT_REPOSITORY}.git &&
