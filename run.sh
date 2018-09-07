@@ -12,9 +12,9 @@ do
 		shift 2
 	    ;;
 	--user-password)
-		 export HASHED_USER_PASSWORD="$(echo ${2} | mkpasswd --stdin -m sha-512)" &&
-		     shift 2
-		 ;;
+	    export HASHED_USER_PASSWORD="$(echo ${2} | mkpasswd --stdin -m sha-512)" &&
+		shift 2
+	    ;;
 	*)
 	    echo Unknown Option &&
 		echo ${1} &&
@@ -32,6 +32,9 @@ done &&
     then
 	echo Unspecified DESTINATION &&
 	    exit 66
+    elif [ -z "${HASHED_USER_PASSWORD}" ]
+	 echo Unspecified USER_PASSWORD &&
+	     exit 67
     fi &&
     rm -rf ${DESTINATION}/configuration.nix ${DESTINATION}/containers.nix ${DESTINATION}/containers ${DESTINATION}/custom &&
     sed -e "s#\${PASSWORD_HASH}#${HASHED_USER_PASSWORD}#" -e "w${DESTINATION}/configuration.nix" ${SOURCE}/configuration.nix &&

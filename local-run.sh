@@ -16,6 +16,11 @@ do
 	    ;;
     esac
 done &&
+    if [ -z "${USER_PASSWORD}" ]
+    then
+	echo Unspecified USER_PASSWORD &&
+	    exit 65
+    fi &&
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
 	git checkout ${CURRENT_BRANCH} &&
