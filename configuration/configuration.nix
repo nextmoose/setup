@@ -57,6 +57,17 @@
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/init/default.nix { inherit pkgs; })
+      (import ./custom/migratin/emacs-development-environment/default.nix { inherit pkgs; })
+      (import ./custom/migratin/emacs-nixpkgs/default.nix { inherit pkgs; })
+      (import ./custom/migratin/example/default.nix { inherit pkgs; })
+      (import ./custom/migratin/github/default.nix { inherit pkgs; })
+      (import ./custom/migratin/gpg-key-id/default.nix { inherit pkgs; })
+      (import ./custom/migratin/init/default.nix { inherit pkgs; })
+      (import ./custom/migratin/mysecret-editor/default.nix { inherit pkgs; })
+      (import ./custom/migratin/post-commit/default.nix { inherit pkgs; })
+      (import ./custom/migratin/pre-push/default.nix { inherit pkgs; })
+      (import ./custom/migratin/regrind/default.nix { inherit pkgs; })
+      (import ./custom/migratin/secret-editor/default.nix { inherit pkgs; })
     ];
   };
   
