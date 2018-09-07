@@ -36,5 +36,4 @@ done &&
     rm -rf ${DESTINATION}/configuration.nix ${DESTINATION}/containers.nix ${DESTINATION}/containers ${DESTINATION}/custom &&
     sed -e "s#\${PASSWORD_HASH}#${HASHED_USER_PASSWORD}#" -e "w${DESTINATION}/configuration.nix" ${SOURCE}/configuration.nix &&
     cp -r ${SOURCE}/containers.nix ${SOURCE}/containers ${SOURCE}/custom ${DESTINATION} &&
-    echo CCC 100 &&
     true

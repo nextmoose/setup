@@ -2,17 +2,23 @@
 
 CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
-	git checkout ${CURRENT_BRANCH} &&
+	echo DDD 1 &&
+	    git checkout ${CURRENT_BRANCH} &&
+	    echo DDD 3 &&
 	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${@}" &&
+	    echo DDD 4 &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
         	sudo nixos-container stop ${CONTAINER}
 	    done &&
+	    echo DDD 5 &&
 	    sudo nixos-rebuild switch &&
+	    echo DDD 6 &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
 		sudo nixos-container start ${CONTAINER}
 	    done &&
+	    echo DDD 7 &&
 	    true
     } &&
     trap cleanup EXIT &&
@@ -32,20 +38,14 @@ CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     read -p "IS IT OK? " ISITOK &&
     if [ "Y" == "${ISITOK}" ]
     then
-	echo AAA 1 &&
-	    git rebase ${CURRENT_BRANCH} &&
-	    echo AAA 2 &&
+	git rebase ${CURRENT_BRANCH} &&
 	    git checkout ${CURRENT_BRANCH} &&
-	    echo AAA 3 &&
 	    git rebase ${TEST_BRANCH} &&
-	    echo AAA 4 &&
 	    git commit -am "after test local rebuild" --allow-empty &&
-	    echo AAA 5 &&
 	    true
     elif [ "M" == "${ISITOK}" ]
     then
 	git commit -am "IT IS NOT OK YET" --allow-empty &&
 	    echo ${TEST_BRANCH}
     fi &&
-    echo BBB 10 &&
     true
