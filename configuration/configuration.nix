@@ -57,7 +57,18 @@
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/init/default.nix { inherit pkgs; })
-    ];
+      (import ./custom/migration/emacs-development-environment/default.nix { inherit pkgs; })
+      (import ./custom/migration/emacs-nixpkgs/default.nix { inherit pkgs; })
+      (import ./custom/migration/example/default.nix { inherit pkgs; })
+      (import ./custom/migration/github/default.nix { inherit pkgs; })
+      (import ./custom/migration/gpg-key-id/default.nix { inherit pkgs; })
+      (import ./custom/migration/init/default.nix { inherit pkgs; })
+      (import ./custom/migration/mysecret-editor/default.nix { inherit pkgs; })
+      (import ./custom/migration/post-commit/default.nix { inherit pkgs; })
+      (import ./custom/migration/pre-push/default.nix { inherit pkgs; })
+      (import ./custom/migration/regrind/default.nix { inherit pkgs; })
+      (import ./custom/migration/secret-editor/default.nix { inherit pkgs; })
+];
   };
   
   system.stateVersion = "18.03";
