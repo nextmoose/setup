@@ -83,6 +83,7 @@
       pkgs.bash-completion
       pkgs.nix-bash-completions
       pkgs.xorg.xhost
+      pkgs.browserpass
 ];
   };
   
