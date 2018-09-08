@@ -22,6 +22,7 @@
 
   environment.systemPackages = with pkgs; [
     chromium
+    firefox
     git
     pass
     gnupg
