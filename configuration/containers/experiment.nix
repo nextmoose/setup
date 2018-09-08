@@ -35,7 +35,7 @@ in
             # jre = true;
           };
         in
-        { # firefox = plugins;
+        { firefox = plugins;
           chromium = plugins;
           allowUnfree = true;
         };
@@ -50,6 +50,15 @@ in
         export DISPLAY=:0
       '';
     };
+    programs.chromium = {
+      enable = true;
+      extensions = [
+        "naepdomgkenhinolocfifgehidddafch"
+      ];
+    };
+    programs.browserpass = {
+      enable = true;
+    };
     users.extraUsers.user = {
       name = "user" ;
       group = "users" ;
@@ -58,10 +67,11 @@ in
       shell = pkgs.bash ;
       hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
       packages = [
-	pkgs.firefox
+	pkgs.firefoxWrapper
 	pkgs.emacs
 	pkgs.mkpasswd
 	pkgs.chromium
+	pkgs.browserpass
       ];
     };
   };
