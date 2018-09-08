@@ -53,7 +53,7 @@
   programs.chromium = {
     enable = true;
     extensions = [
-      "oblajhnjmknenodebpekmkliopipoolo"
+      "naepdomgkenhinolocfifgehidddafch"
     ];
   };
 
