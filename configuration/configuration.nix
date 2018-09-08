@@ -49,6 +49,11 @@
     '';
   };
 
+  programs.chromium.enable = false;
+#  programs.chromium.extension = [
+#    "oblajhnjmknenodebpekmkliopipoolo"
+#  ];
+
   users.mutableUsers = false;
   
   users.extraUsers.user = {
