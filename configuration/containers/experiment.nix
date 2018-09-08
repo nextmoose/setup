@@ -72,6 +72,9 @@ in
 	pkgs.mkpasswd
 	pkgs.chromium
 	pkgs.browserpass
+	pkgs.pass
+	pkgs.git
+	pkgs.gnupg
       ];
     };
   };
