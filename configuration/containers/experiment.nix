@@ -26,7 +26,7 @@ in
   };
   config = { config, pkgs, ... }:
   {
-
+      services.xserver.vaapiDrivers = [ pkgs.vaapiIntel ];
       nixpkgs.config =
         let
           plugins = 
