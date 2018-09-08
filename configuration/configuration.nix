@@ -48,6 +48,14 @@
       xhost +local:
     '';
   };
+  
+
+  programs.chromium = {
+    enable = true;
+    extension = [
+      "oblajhnjmknenodebpekmkliopipoolo"
+    ];
+  };
 
   users.mutableUsers = false;
   
