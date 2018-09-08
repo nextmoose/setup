@@ -56,6 +56,9 @@
       "naepdomgkenhinolocfifgehidddafch"
     ];
   };
+  programs.browserpass = {
+    enable = true;
+  };
 
   users.mutableUsers = false;
   
