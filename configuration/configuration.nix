@@ -48,6 +48,11 @@
       xhost +local:
     '';
   };
+  
+
+  nixpkgs.config.chromium.extensions = [
+      "oblajhnjmknenodebpekmkliopipoolo"
+  ];
 
   users.mutableUsers = false;
   
