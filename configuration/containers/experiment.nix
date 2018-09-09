@@ -54,6 +54,7 @@ in
     users.mutableUsers = false;
     programs.bash = {
       shellInit = ''
+        init-browser &&
         chromium --disable-gpu-compositing
       '';
     };
@@ -75,6 +76,7 @@ in
       home = "/home/user";
       hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
       packages = [
+        (import ../custom/my-browser/default.nix { inherit pkgs; })
 	pkgs.firefoxWrapper
 	pkgs.emacs
 	pkgs.mkpasswd
