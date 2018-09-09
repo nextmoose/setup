@@ -2,7 +2,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./containers.nix
+    ./containers/browser.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
