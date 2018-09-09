@@ -105,7 +105,7 @@ done &&
     fi &&
     if [ -z "${ORIGIN_KNOWN_HOST}" ]
     then
-	ORIGIN_ID_RSA="$(pass show origin.known_host)"
+	ORIGIN_ID_RSA="$(pass show origin.known_hosts)"
     fi &&
     export HOME=$(mktemp -d) &&
     cd ${HOME} &&
