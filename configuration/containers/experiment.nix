@@ -43,12 +43,13 @@ in
       hardware.pulseaudio.enable = true;
       hardware.bumblebee.enable = true;
 
+      environment.variables.DISPLAY=":0";
+
 
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;
     programs.bash = {
       shellInit = ''
-        export DISPLAY=:0
       '';
     };
     programs.chromium = {
