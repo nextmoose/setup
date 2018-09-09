@@ -70,6 +70,7 @@
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/init/default.nix { inherit pkgs; })
+      (import ./custom/my-browser/default.nix { inherit pkgs; })
       (import ./custom/migration/emacs-development-environment/default.nix { inherit pkgs; })
       (import ./custom/migration/emacs-nixpkgs/default.nix { inherit pkgs; })
       (import ./custom/migration/example/default.nix { inherit pkgs; })
