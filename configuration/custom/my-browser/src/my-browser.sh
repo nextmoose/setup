@@ -44,7 +44,7 @@ do
 		shift 2
 	    ;;
 	--origin-known-hosts)
-	    export ORIGIN_KNOWN_HOST="$(pass show ${2})" &&
+	    export ORIGIN_KNOWN_HOSTS="$(pass show ${2})" &&
 		shift 2
 	    ;;
 	--committer-name)
@@ -103,9 +103,17 @@ done &&
     then
 	ORIGIN_ID_RSA="$(pass show origin.id_rsa)"
     fi &&
-    if [ -z "${ORIGIN_KNOWN_HOST}" ]
+    if [ -z "${ORIGIN_KNOWN_HOSTS}" ]
     then
-	ORIGIN_ID_RSA="$(pass show origin.known_hosts)"
+	ORIGIN_KNOWN_HOSTS="$(pass show origin.known_hosts)"
+    fi &&
+    if [ -z "${COMMITTER_NAME}" ]
+    then
+	COMMITTER_NAME="Emory Merryman"
+    fi &&
+    if [ -z "${COMMITTER_EMAIL}" ]
+    then
+	COMMITTER_EMAIL="emory.merryman@gmail.com"
     fi &&
     export HOME=$(mktemp -d) &&
     cd ${HOME} &&
