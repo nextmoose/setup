@@ -49,6 +49,7 @@ in
     programs.bash = {
       shellInit = ''
         export DISPLAY=:0
+	chromium --disable-gpu-compositing
       '';
     };
     programs.chromium = {
