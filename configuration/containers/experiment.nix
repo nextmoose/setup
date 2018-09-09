@@ -16,6 +16,10 @@ in
       hostPath = "/etc/machine-id";
       isReadOnly = false;
     };
+    "/secrets" = {
+      hostPath = "/secrets";
+      isReadOnly = true;
+    };
 #    "/var/run/dbus/system_bus_socket" = {
 #      hostPath = "/var/run/bus/system_bus_socket";
 #      isReadOnly = false;    				     

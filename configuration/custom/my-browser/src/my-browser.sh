@@ -77,19 +77,19 @@ done &&
     fi &&
     if [ -z "${GPG_SECRET_KEY}" ]
     then
-	GPG_SECRET_KEY="$(pass show gpg.secret.key)"
+	GPG_SECRET_KEY="$(cat /secrets/gpg.secret.key)"
     fi &&
     if [ -z "${GPG_OWNER_TRUST}" ]
     then
-	GPG_OWNER_TRUST="$(pass show gpg.owner.trust)"
+	GPG_OWNER_TRUST="$(cat /secrets/gpg.owner.trust)"
     fi &&
     if [ -z "${GPG2_SECRET_KEY}" ]
     then
-	GPG2_SECRET_KEY="$(pass show gpg2.secret.key)"
+	GPG2_SECRET_KEY="$(cat /secrets/gpg2.secret.key)"
     fi &&
     if [ -z "${GPG2_OWNER_TRUST}" ]
     then
-	GPG2_OWNER_TRUST="$(pass show gpg2.owner.trust)"
+	GPG2_OWNER_TRUST="$(cat /secrets/gpg2.owner.trust)"
     fi &&
     if [ -z "${ORIGIN_ORGANIZATION}" ]
     then
@@ -101,11 +101,11 @@ done &&
     fi &&
     if [ -z "${ORIGIN_ID_RSA}" ]
     then
-	ORIGIN_ID_RSA="$(pass show origin.id_rsa)"
+	ORIGIN_ID_RSA="$(cat /secrets/origin.id_rsa)"
     fi &&
     if [ -z "${ORIGIN_KNOWN_HOSTS}" ]
     then
-	ORIGIN_KNOWN_HOSTS="$(pass show origin.known_hosts)"
+	ORIGIN_KNOWN_HOSTS="$(cat /secrets/origin.known_hosts)"
     fi &&
     if [ -z "${COMMITTER_NAME}" ]
     then
@@ -115,7 +115,6 @@ done &&
     then
 	COMMITTER_EMAIL="emory.merryman@gmail.com"
     fi &&
-    export HOME=$(mktemp -d) &&
     cd ${HOME} &&
     TMP=$(mktemp -d ${HOME}/XXXXXXXX) &&
     echo "${GPG_SECRET_KEY}" > ${TMP}/gpg.secret.key &&
