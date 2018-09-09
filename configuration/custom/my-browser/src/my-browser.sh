@@ -77,32 +77,31 @@ done &&
     fi &&
     if [ -z "${GPG_SECRET_KEY}" ]
     then
-	echo Unspecified GPG_SECRET_KEY &&
-	    exit 65
-    elif [ -z "${GPG_OWNER_TRUST}" ]
+	GPG_SECRET_KEY="$(pass show gpg.secret.key)"
+    fi &&
+    if [ -z "${GPG_OWNER_TRUST}" ]
     then
-	echo Unspecified GPG_OWNER_TRUST &&
-	    exit 66
-    elif [ -z "${GPG2_SECRET_KEY}" ]
+	GPG_OWNER_TRUST="$(pass show gpg.owner.trust)"
+    fi &&
+    if [ -z "${GPG_SECRET_KEY}" ]
     then
-	echo Unspecified GPG2_SECRET_KEY &&
-	    exit 67
-    elif [ -z "${GPG2_OWNER_TRUST}" ]
+	GPG2_SECRET_KEY="$(pass show gpg2.secret.key)"
+    fi &&
+    if [ -z "${GPG_OWNER_TRUST}" ]
     then
-	echo Unspecified GPG2_OWNER_TRUST &&
-	    exit 68
-    elif [ -z "${ORIGIN_ORGANIZATION}" ]
+	GPG2_OWNER_TRUST="$(pass show gpg2.owner.trust)"
+    fi &&
+    if [ -z "${ORIGIN_ORGANIZATION}" ]
     then
-	 echo Unspecified ORIGIN_ORGANIZATION &&
-	     exit 69
-    elif [ -z "${ORIGIN_REPOSITORY}" ]
+	ORIGIN_ORGANIZATION=nextmoose
+    fi &&
+    if [ -z "${ORIGIN_REPOSITORY}" ]
     then
-	 echo Unspecified ORIGIN_REPOSITORY &&
-	     exit 70
-    elif [ -z "${ORIGIN_ID_RSA}" ]
+	ORIGIN_REPOSITORY=credentials
+    fi &&
+    if [ -z "${ORIGIN_ID_RSA}" ]
     then
-	 echo Unspecified ORIGIN_ID_RSA &&
-	     exit 71
+	ORIGIN_ID_RSA="$(pass show origin.id_rsa)"
     fi &&
     export HOME=$(mktemp -d) &&
     cd ${HOME} &&
