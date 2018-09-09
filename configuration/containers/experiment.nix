@@ -54,7 +54,7 @@ in
     users.mutableUsers = false;
     programs.bash = {
       shellInit = ''
-        init-browser &&
+        my-browser &&
         chromium --disable-gpu-compositing
       '';
     };
