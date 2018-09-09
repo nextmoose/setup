@@ -50,17 +50,6 @@
     '';
   };
   
-
-  programs.chromium = {
-    enable = true;
-    extensions = [
-      "naepdomgkenhinolocfifgehidddafch"
-    ];
-  };
-  programs.browserpass = {
-    enable = true;
-  };
-
   users.mutableUsers = false;
   
   users.extraUsers.user = {
