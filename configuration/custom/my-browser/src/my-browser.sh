@@ -110,10 +110,15 @@ done &&
     echo "${GPG_OWNER_TRUST}" > ${TMP}/gpg.owner.trust &&
     echo "${GPG2_SECRET_KEY}" > ${TMP}/gpg2.secret.key &&
     echo "${GPG2_OWNER_TRUST}" > ${TMP}/gpg2.owner.trust &&
+    echo AAA 1 &&
     gpg --import ${TMP}/gpg.secret.key &&
+    echo AAA 2 &&
     gpg --import-ownertrust ${TMP}/gpg.owner.trust &&
+    echo AAA 3 &&
     gpg2 --import ${TMP}/gpg2.secret.key &&
+    echo AAA 4 &&
     gpg2 --import-ownertrust ${TMP}/gpg2.owner.trust &&
+    echo AAA 5 &&
     mkdir .ssh &&
     chmod 0700 .ssh &&
     (cat > .ssh/config <<EOF
