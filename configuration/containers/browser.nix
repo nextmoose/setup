@@ -45,7 +45,7 @@
         createHome = true;
 	home = "/home/user";
         shell = "/run/current-system/sw/bin/bash";
-        openssh.authorizedKeys.keyFiles = [ "/etc/nixos/id_rsa.pub" ];
+        openssh.authorizedKeys.keyFiles = [ "/home/user/.ssh/id_rsa.pub" ];
       };
     };
   };
