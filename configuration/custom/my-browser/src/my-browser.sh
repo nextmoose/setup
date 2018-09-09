@@ -83,7 +83,7 @@ done &&
     then
 	GPG_OWNER_TRUST="$(pass show gpg.owner.trust)"
     fi &&
-    if [ -z "${GPG_SECRET_KEY}" ]
+    if [ -z "${GPG2_SECRET_KEY}" ]
     then
 	GPG2_SECRET_KEY="$(pass show gpg2.secret.key)"
     fi &&
