@@ -44,7 +44,7 @@ do
 		shift 2
 	    ;;
 	--origin-known-hosts)
-	    export ORIGIN_KNOWN_HOSTS="$(pass show ${2})" &&
+	    export ORIGIN_KNOWN_HOST="$(pass show ${2})" &&
 		shift 2
 	    ;;
 	--committer-name)
@@ -102,6 +102,10 @@ done &&
     if [ -z "${ORIGIN_ID_RSA}" ]
     then
 	ORIGIN_ID_RSA="$(pass show origin.id_rsa)"
+    fi &&
+    if [ -z "${ORIGIN_KNOWN_HOST}" ]
+    then
+	ORIGIN_ID_RSA="$(pass show origin.known_host)"
     fi &&
     export HOME=$(mktemp -d) &&
     cd ${HOME} &&
