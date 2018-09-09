@@ -107,6 +107,14 @@ done &&
     then
 	ORIGIN_KNOWN_HOSTS="$(pass show origin.known_hosts)"
     fi &&
+    if [ -z "${COMMITTER_NAME}" ]
+    then
+	COMMITTER_NAME="Emory Merryman"
+    fi &&
+    if [ -z "${COMMITTER_EMAIL}" ]
+    then
+	COMMITTER_EMAIL="emory.merryman@gmail.com"
+    fi &&
     export HOME=$(mktemp -d) &&
     cd ${HOME} &&
     TMP=$(mktemp -d ${HOME}/XXXXXXXX) &&
