@@ -1,3 +1,4 @@
+# use chromium --disable-gpu-compositing
 let
   foo = "bar";
 in
