@@ -77,6 +77,7 @@ in
       hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
       packages = [
         (import ../custom/my-browser/default.nix { inherit pkgs; })
+        (import ../custom/migration/gpg-key-id/default.nix { inherit pkgs; })
 	pkgs.firefoxWrapper
 	pkgs.emacs
 	pkgs.mkpasswd
