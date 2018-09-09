@@ -1,7 +1,13 @@
 let
   foo = "bar";
+  let hostAddr =  "192.168.100.10";
 in
 {
+    privateNetwork = true;
+    hostAddress = hostAddr;
+    localAddress = "192.168.100.11";
+
+
   bindMounts = {
     "/tmp/.X11-unix" = {
       hostPath = "/tmp/.X11-unix";
@@ -41,6 +47,23 @@ in
         };
       hardware.pulseaudio.enable = true;
       hardware.bumblebee.enable = true;
+      environment.variables.PULSE_SERVER = "tcp:" + hostAddr;
+
+      services =
+      { openssh =
+        { enable = true;
+          forwardX11 = true;
+        };
+
+        avahi =
+        { enable = true;
+          browseDomains = [];
+          wideArea = false;
+          nssmdns = true;
+        };
+      };
+
+      programs.ssh.setXAuthLocation = true;
 
 
     security.sudo.wheelNeedsPassword = false;
@@ -65,6 +88,7 @@ in
       extraGroups = [ "wheel" ] ;
       home = "/home/user" ;
       shell = pkgs.bash ;
+      openssh.authorizedKeys.keyFiles = [ "/home/user/.ssh/id_rsa.pub" ];
       hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
       packages = [
 	pkgs.firefoxWrapper
