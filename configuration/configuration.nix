@@ -92,5 +92,34 @@
 ];
   };
   
+  users.extraUsers.browser = {
+    isNormalUser = true;
+    uid = 1001;
+    extraGroups = [ "wheel" "networkmanager" ];
+    hashedPassword = "${PASSWORD_HASH}";
+    packages = [
+      (import ./custom/init/default.nix { inherit pkgs; })
+      (import ./custom/my-browser/default.nix { inherit pkgs; })
+      (import ./custom/migration/emacs-development-environment/default.nix { inherit pkgs; })
+      (import ./custom/migration/emacs-nixpkgs/default.nix { inherit pkgs; })
+      (import ./custom/migration/example/default.nix { inherit pkgs; })
+      (import ./custom/migration/github/default.nix { inherit pkgs; })
+      (import ./custom/migration/gpg-key-id/default.nix { inherit pkgs; })
+      (import ./custom/migration/init/default.nix { inherit pkgs; })
+      (import ./custom/migration/mysecret-editor/default.nix { inherit pkgs; })
+      (import ./custom/migration/post-commit/default.nix { inherit pkgs; })
+      (import ./custom/migration/pre-push/default.nix { inherit pkgs; })
+      (import ./custom/migration/regrind/default.nix { inherit pkgs; })
+      (import ./custom/migration/secret-editor/default.nix { inherit pkgs; })
+      (import ./custom/my-completions/default.nix { inherit pkgs; })
+      pkgs.emacs
+      pkgs.mkpasswd
+      pkgs.bash-completion
+      pkgs.nix-bash-completions
+      pkgs.xorg.xhost
+      pkgs.browserpass
+];
+  };
+  
   system.stateVersion = "18.03";
 }
