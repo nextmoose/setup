@@ -65,6 +65,8 @@ in
       group = "users" ;
       extraGroups = [ "wheel" ] ;
       shell = pkgs.bash ;
+      createHome = true ;
+      home = "/home/user";
       hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
       packages = [
 	pkgs.firefoxWrapper
