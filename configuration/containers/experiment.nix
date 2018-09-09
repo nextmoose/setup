@@ -64,7 +64,6 @@ in
       name = "user" ;
       group = "users" ;
       extraGroups = [ "wheel" ] ;
-      home = "/home/user" ;
       shell = pkgs.bash ;
       hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
       packages = [
