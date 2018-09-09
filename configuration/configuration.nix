@@ -2,7 +2,7 @@
 {
   imports = [
     ./hardware-configuration.nix
-    ./containers.nix
+    ./containers/browser-2.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
@@ -13,7 +13,7 @@
   networking.networkmanager.unmanaged = [ "interface-name:ve-*" ];
 
   i18n = {
-    consoleFont = "Lat2-Terminus16";
+    consoleFont = "Lat2-Terminus16"; 
     consoleKeyMap = "us";
     defaultLocale = "en_US.UTF-8";
   };
