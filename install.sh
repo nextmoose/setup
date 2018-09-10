@@ -47,18 +47,29 @@ done &&
     fi &&
     clear &&
     read -p "VERIFY USER PASSWORD: " -s USER_PASSWORD2 &&
-    if [ "${USER_PASSWORD}" != "${USER_PASSWORD2}" ]
+    if [ "${USER_PASSWORD}" == "${USER_PASSWORD2}" ]
     then
+	echo VERIFIED USER PASSWORD &&
+    else
 	echo Unverified USER_PASSWORD &&
 	    exit 69
     fi &&
     read -p "VERIFY GPG PASSPHRASE: " -s GPG_PASSPHRASE2 &&
-    if [ "${GPG_PASSPHRASE}" != "${GPG_PASSPHRASE2}" ]
+    if [ "${GPG_PASSPHRASE}" == "${GPG_PASSPHRASE2}" ]
     then
+	echo VERIFIED GPG PASSPHRASE
+    else
 	echo Unverified GPG_PASSPHRASE &&
 	    exit 70
     fi &&
+    clear &&
     sh ../private/wifi.sh &&
+    nix-env --install git &&
+    nix-env --install gnupg &&
+    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --import ../private/gpg.secret.key &&
+    gpg --import-ownertrust ../private/gpg.owner.trust &&
+    echo ${GPG_PASSPHRASE} | gpg2 --batch --passphrase-fd 0 --import ../private/gpg2.secret.key &&
+    gpg2 --import-ownertrust ../private/gpg2.owner.trust &&
     nix-env -i mkpasswd &&
     (cat <<EOF
 n
@@ -105,22 +116,16 @@ EOF
     nixos-generate-config --root /mnt &&
     sh ./run.sh --source configuration --destination /mnt/etc/nixos --user-password "${USER_PASSWORD}" &&
     ROOT_PASSWORD=$(uuidgen) &&
-    nix-env --install git &&
-    nix-env --install gnupg &&
-    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --import ../private/gpg.secret.key &&
-    gpg --import-ownertrust ../private/gpg.owner.trust &&
-    echo ${GPG_PASSPHRASE} | gpg2 --passphrase-fd 0 --import ../private/gpg2.secret.key &&
-    gpg2 --import-ownertrust ../private/gpg2.owner.trust &&
     SECRETS=$(mktemp -d) &&
     git -C ${SECRETS} init &&
     git -C ${SECRETS} remote add origin https://github.com/${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
     git -C ${SECRETS} fetch origin master &&
     git -C ${SECRETS} checkout origin/master &&
     echo ${ROOT_PASSWORD} > /mnt/secrets/root.password &&
-    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --output /mnt/secrets/gpg.secret.key --decrypt gpg.secret.key.gpg &&
-    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --output /mnt/secrets/gpg.owner.trust --decrypt gpg.owner.trust.gpg &&
-    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --output /mnt/secrets/gpg2.secret.key --decrypt gpg2.secret.key.gpg &&
-    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --output /mnt/secrets/gpg2.owner.trust gpg2.owner.trust.gpg &&
+    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg.secret.key --decrypt ${SECRETS}/gpg.secret.key.gpg &&
+    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg.owner.trust --decrypt ${SECRETS}/gpg.owner.trust.gpg &&
+    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg2.secret.key --decrypt ${SECRETS}/gpg2.secret.key.gpg &&
+    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg2.owner.trust --decrypt ${SECRETS}/gpg2.owner.trust.gpg &&
     chown -R 1000:100 /mnt/secrets &&
     (cat <<EOF
 ${ROOT_PASSWORD}
