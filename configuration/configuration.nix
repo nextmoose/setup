@@ -28,7 +28,8 @@
           plugins = 
 	  {
  	    enableAdobeFlash = true;
-            enableGoogleTalkPlugin = true;
+	    enablePepperFlash = true;
+	    enableGoogleTalkPlugin = true;
             # jre = true;
           };
         in
