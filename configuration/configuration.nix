@@ -33,7 +33,7 @@
             jre = true;
           };
         in
-        { # firefox = plugins;
+        { firefox = plugins;
           chromium = plugins;
           allowUnfree = true;
         };
