@@ -28,6 +28,7 @@
           plugins = 
 	  {
  	    enableAdobeFlash = true;
+	    enablePepperFlash = true;
 	    enablePepperPDF = true;
 	    enableGoogleTalkPlugin = true;
             jre = true;
