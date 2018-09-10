@@ -38,6 +38,7 @@
           allowUnfree = true;
         };
 
+  virtualization.docker.enable = true;
 
   environment.systemPackages = with pkgs; [
     chromium
@@ -85,7 +86,7 @@
   users.extraUsers.user = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "networkmanager" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" ];
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/init/default.nix { inherit pkgs; })
