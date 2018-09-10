@@ -23,6 +23,22 @@
 
   time.timeZone = "US/Eastern";
 
+nixpkgs.config = {
+
+    allowUnfree = true;
+
+    firefox = {
+     enableGoogleTalkPlugin = true;
+     enableAdobeFlash = true;
+    };
+
+    chromium = {
+     enablePepperFlash = true; # Chromium removed support for Mozilla (NPAPI) plugins so Adobe Flash no longer works 
+     enablePepperPDF = true;
+    };
+
+  };
+
   environment.systemPackages = with pkgs; [
     chromium
     firefox
