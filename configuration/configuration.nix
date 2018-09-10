@@ -23,6 +23,21 @@
 
   time.timeZone = "US/Eastern";
 
+  nixpkgs.config =
+        let
+          plugins = 
+	  {
+ 	    enableAdobeFlash = true;
+            enableGoogleTalkPlugin = true;
+            # jre = true;
+          };
+        in
+        { # firefox = plugins;
+          chromium = plugins;
+          allowUnfree = true;
+        };
+
+
   environment.systemPackages = with pkgs; [
     chromium
     firefox
