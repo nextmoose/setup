@@ -30,7 +30,7 @@
  	    enableAdobeFlash = true;
 	    enablePepperPDF = true;
 	    enableGoogleTalkPlugin = true;
-            # jre = true;
+            jre = true;
           };
         in
         { # firefox = plugins;
