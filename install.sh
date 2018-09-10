@@ -4,7 +4,15 @@ while [ ${#} -gt 0 ]
 do
     case ${1} in
 	--user-password)
-	    export USER_PASSWORD="${2}" &&
+	    USER_PASSWORD="${2}" &&
+		shift 2
+	    ;;
+	--origin-organization)
+	    ORIGIN_ORGANIZATION="${2}" &&
+		shift 2
+	    ;;
+	--origin-repository)
+	    ORIGIN_REPOSITORY="${2}" &&
 		shift 2
 	    ;;
 	*)
@@ -20,6 +28,14 @@ done &&
     then
 	echo Unspecified USER_PASSWORD &&
 	    exit 65
+    elif [ -z "${ORIGIN_ORGANIZATION}" ]
+    then
+	echo Unspecified ORIGIN_ORGANIZATION &&
+	    exit 66
+    elif [ -z "${ORIGIN_REPOSITORY}" ]
+    then
+	echo Unspecified ORIGIN_REPOSITORY &&
+	    exit 67
     fi &&
     sh ../private/wifi.sh &&
     nix-env -i mkpasswd &&
@@ -42,6 +58,11 @@ n
 n
 
 
++1G
+
+n
+
+
 
 8E00
 w
@@ -51,56 +72,41 @@ EOF
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
     echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
-    pvcreate --force /dev/sda4 &&
-    vgcreate volumes /dev/sda4 &&
+    echo y | mkfs.ext4 -L SECRETS /dev/sda4 &&
+    pvcreate --force /dev/sda5 &&
+    vgcreate volumes /dev/sda5 &&
     mount /dev/sda3 /mnt &&
     mkdir /mnt/boot &&
+    mkdir /mnt/secrets &&
+    mount /dev/sda4 /mnt/secrets &&
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     sh ./run.sh --source configuration --destination /mnt/etc/nixos --user-password "${USER_PASSWORD}" &&
     ROOT_PASSWORD=$(uuidgen) &&
+    nix-env --install git &&
+    nix-env --install pass &&
+    nix-env --install gnupg &&
+    gpg --import ../private/gpg.secret.key &&
+    gpg --import-ownertrust ../private/gpg.owner.trust &&
+    gpg2 --import ../private/gpg2.secret.key &&
+    gpg2 --import-ownertrust ../private/gpg2.owner.trust &&
+    pass init $(gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":") &&
+    pass git init &&
+    pass git remote add origin https://github.com/${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
+    pass git fetch origin master &&
+    echo ${ROOT_PASSWORD} > /mnt/secrets/root.password &&
+    pass gpg.secret.key > /mnt/secrets/gpg.secret.key &&
+    pass gpg.owner.trust > /mnt/secrets/gpg.owner.trust &&
+    pass gpg2.secret.key > /mnt/secrets/gpg2.secret.key &&
+    pass gpg2.owner.trust > /mnt/secrets/gpg2.owner.trust &&
+    chown -R 1000:100 /mnt/secrets &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
-    PRIVATE_VOLUME=24fd963r &&
-    lvcreate --size 1G --name ${PRIVATE_VOLUME} volumes &&
-    mkfs.ext4 /dev/volumes/${PRIVATE_VOLUME} &&
-    DIR=$(mktemp -d) &&
-    mount /dev/volumes/${PRIVATE_VOLUME} ${DIR} &&
-    cat ../private/wifi.sh > ${DIR}/wifi.sh &&
-    chmod 0500 ${DIR}/wifi.sh &&
-    chown 1000:100 ${DIR}/wifi.sh &&
-    cat ../private/gpg.secret.key > ${DIR}/gpg.secret.key &&
-    chmod 0500 ${DIR}/gpg.secret.key &&
-    chown 1000:100 ${DIR}/gpg.secret.key &&
-    cat ../private/gpg.owner.trust > ${DIR}/gpg.owner.trust &&
-    chmod 0500 ${DIR}/gpg.owner.trust &&
-    chown 1000:100 ${DIR}/gpg.owner.trust &&
-    cat ../private/gpg2.secret.key > ${DIR}/gpg2.secret.key &&
-    chmod 0500 ${DIR}/gpg2.secret.key &&
-    chown 1000:100 ${DIR}/gpg2.secret.key &&
-    cat ../private/gpg2.owner.trust > ${DIR}/gpg2.owner.trust &&
-    chmod 0500 ${DIR}/gpg2.owner.trust &&
-    chown 1000:100 ${DIR}/gpg2.owner.trust &&
-    touch /mnt/home/user/.${PRIVATE_VOLUME} &&
-    chown 1000:100 /mnt/home/user/.${PRIVATE_VOLUME} &&
-    mkdir /mnt/home/user/bin &&
-    ls -1 bin | while read FILE
-    do
-	cat bin/${FILE} > /mnt/home/user/bin/${FILE%.*} &&
-	    chmod 0500 /mnt/home/user/bin/${FILE%.*} &&
-	    chown 1000:100 /mnt/home/user/bin/${FILE%.*}
-    done &&
-    chown 1000:100 /mnt/home/user/bin &&
-    mkdir /mnt/home/user/completion &&
-    ls -1 completion | while read FILE
-    do
-	cat completion/${FILE} > /mnt/home/user/completion/${FILE%.*} &&
-	    chmod 0400 /mnt/home/user/completion/${FILE%.*} &&
-	    chown 1000:100 /mnt/home/user/completion/${FILE%.*}
-    done &&
+    touch /mnt/home/user/.flag &&
+    chown 1000:100 /mnt/home/user/.flag &&
     shutdown -h now &&
     true
