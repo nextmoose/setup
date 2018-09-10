@@ -15,6 +15,10 @@ do
 	    ORIGIN_REPOSITORY="${2}" &&
 		shift 2
 	    ;;
+	--gpg-passphrase)
+	    GPG_PASSPHRASE="${2}" &&
+		shift 2
+	    ;;
 	*)
 	    echo Unsupported Option &&
 		echo ${1} &&
@@ -22,7 +26,7 @@ do
 		echo ${0} &&
 		exit 64
 	    ;;
-    esac &&
+    esac
 done &&
     if [ -z "${USER_PASSWORD}" ]
     then
@@ -36,6 +40,23 @@ done &&
     then
 	echo Unspecified ORIGIN_REPOSITORY &&
 	    exit 67
+    elif [ -z "${GPG_PASSPHRASE}" ]
+    then
+	 echo Unspecified GPG_PASSPHRASE &&
+	     exit 68
+    fi &&
+    clear &&
+    read -p "VERIFY USER PASSWORD: " -s USER_PASSWORD2 &&
+    if [ "${USER_PASSWORD}" != "${USER_PASSWORD2}" ]
+    then
+	echo Unverified USER_PASSWORD &&
+	    exit 69
+    fi &&
+    read -p "VERIFY GPG PASSPHRASE: " -s GPG_PASSPHRASE2 &&
+    if [ "${GPG_PASSPHRASE}" != "${GPG_PASSPHRASE2}" ]
+    then
+	echo Unverified GPG_PASSPHRASE &&
+	    exit 70
     fi &&
     sh ../private/wifi.sh &&
     nix-env -i mkpasswd &&
@@ -85,21 +106,21 @@ EOF
     sh ./run.sh --source configuration --destination /mnt/etc/nixos --user-password "${USER_PASSWORD}" &&
     ROOT_PASSWORD=$(uuidgen) &&
     nix-env --install git &&
-    nix-env --install pass &&
     nix-env --install gnupg &&
-    gpg --import ../private/gpg.secret.key &&
+    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --import ../private/gpg.secret.key &&
     gpg --import-ownertrust ../private/gpg.owner.trust &&
-    gpg2 --import ../private/gpg2.secret.key &&
+    echo ${GPG_PASSPHRASE} | gpg2 --passphrase-fd 0 --import ../private/gpg2.secret.key &&
     gpg2 --import-ownertrust ../private/gpg2.owner.trust &&
-    pass init $(gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":") &&
-    pass git init &&
-    pass git remote add origin https://github.com/${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
-    pass git fetch origin master &&
+    SECRETS=$(mktemp -d) &&
+    git -C ${SECRETS} init &&
+    git -C ${SECRETS} remote add origin https://github.com/${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
+    git -C ${SECRETS} fetch origin master &&
+    git -C ${SECRETS} checkout origin/master &&
     echo ${ROOT_PASSWORD} > /mnt/secrets/root.password &&
-    pass gpg.secret.key > /mnt/secrets/gpg.secret.key &&
-    pass gpg.owner.trust > /mnt/secrets/gpg.owner.trust &&
-    pass gpg2.secret.key > /mnt/secrets/gpg2.secret.key &&
-    pass gpg2.owner.trust > /mnt/secrets/gpg2.owner.trust &&
+    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --output /mnt/secrets/gpg.secret.key --decrypt gpg.secret.key.gpg &&
+    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --output /mnt/secrets/gpg.owner.trust --decrypt gpg.owner.trust.gpg &&
+    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --output /mnt/secrets/gpg2.secret.key --decrypt gpg2.secret.key.gpg &&
+    echo ${GPG_PASSPHRASE} | gpg --passphrase-fd 0 --output /mnt/secrets/gpg2.owner.trust gpg2.owner.trust.gpg &&
     chown -R 1000:100 /mnt/secrets &&
     (cat <<EOF
 ${ROOT_PASSWORD}
