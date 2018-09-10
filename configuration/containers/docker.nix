@@ -3,12 +3,12 @@ let
   foo = "bar";
 in
 {
-  bindMounts = {
-    "/var/run/docker.sock" = {
-      hostPath = "/var/run/docker.sock";
-      isReadOnly = true;
-    };
-  };
+#  bindMounts = {
+#    "/var/run/docker.sock" = {
+#      hostPath = "/var/run/docker.sock";
+#      isReadOnly = true;
+#    };
+#  };
   config = { config, pkgs, ... }:
   {
     environment.variables.DISPLAY=":0";
