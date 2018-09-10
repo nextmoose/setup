@@ -41,7 +41,7 @@
 
   environment.systemPackages = with pkgs; [
     chromium
-    firefox
+    firefoxWrapper
     git
     pass
     gnupg
