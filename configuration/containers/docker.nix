@@ -4,7 +4,7 @@ let
 in
 {
   bindMounts = {
-    "/home/user/docker.sock" = {
+    "/var/run/docker.sock" = {
       hostPath = "/var/run/docker.sock";
       isReadOnly = true;
     };
