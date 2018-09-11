@@ -3,6 +3,7 @@
   imports = [
     ./hardware-configuration.nix
     ./containers.nix
+    ./images/shopsafe.nix
   ];
 
   boot.loader.systemd-boot.enable = true;
