@@ -5,9 +5,12 @@ with import <nixpkgs> {};
 stdenv.mkDerivation {
   name = "shopsafe";
   src = ./src;
-  buildInputs = [ "docker" ];
+  buildInputs = [ pkgs.docker ];
   installPhase = ''
+    echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA && 
+    ls -lah /var/run/. &&
     mkdir $out &&
-      docker image build .
+      echo hello world &&
+      docker image build --tag shopsafe .
   '';
 }
