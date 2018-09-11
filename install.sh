@@ -121,7 +121,9 @@ EOF
     git -C ${SECRETS} remote add origin https://github.com/${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
     git -C ${SECRETS} fetch origin master &&
     git -C ${SECRETS} checkout origin/master &&
+    cp ../private/wifi.sh /mnt/secrets &&
     echo ${ROOT_PASSWORD} > /mnt/secrets/root.password &&
+    echo ${USER_PASSWORD} > /mnt/secrets/user.password &&
     echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg.secret.key --decrypt ${SECRETS}/gpg.secret.key.gpg &&
     echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg.owner.trust --decrypt ${SECRETS}/gpg.owner.trust.gpg &&
     echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg2.secret.key --decrypt ${SECRETS}/gpg2.secret.key.gpg &&

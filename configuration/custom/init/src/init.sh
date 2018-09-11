@@ -13,7 +13,7 @@ do
 done &&
     if [ -f ${HOME}/.flag ]
     then
-	    sh ${DIR}/wifi.sh &&
+	    sh /secrets/wifi.sh &&
 	    gpg --import /secrets/gpg.secret.key &&
 	    gpg --import-ownertrust /secrets/gpg.owner.trust &&
 	    gpg2 --import /secrets/gpg2.secret.key &&
