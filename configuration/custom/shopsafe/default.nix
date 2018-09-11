@@ -1,13 +1,12 @@
 { pkgs ? import <nixpkgs> {} }:
 
 with import <nixpkgs> {};
-
-stdenv.mkDerivation {
+let
+  image = dockerTools.pullImage {
+    imageName = "ubuntu";
+    finalImageTag = "16.04";
+  };
+in dockerTools.buildImage {
   name = "shopsafe";
-  src = ./src;
-  buildInputs = [ "docker" ];
-  installPhase = ''
-    mkdir $out &&
-      docker image build .
-  '';
-}
+  fromImage = image;
+};
