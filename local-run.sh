@@ -1,21 +1,22 @@
 #!/bin/sh
 
-while [ ${#} -gt 0 ]
-do
-    case ${1} in
-	--user-password)
-	    export USER_PASSWORD="${2}" &&
-		shift 2
-	;;
-	*)
-	    echo Unsupported Option &&
-		echo ${1} &&
-		echo ${@} &&
-		echo ${0} &&
-		exit 64
-	    ;;
-    esac
-done &&
+DELTA=FAILED &&
+    while [ ${#} -gt 0 ]
+    do
+	case ${1} in
+	    --user-password)
+		export USER_PASSWORD="${2}" &&
+		    shift 2
+		;;
+	    *)
+		echo Unsupported Option &&
+		    echo ${1} &&
+		    echo ${@} &&
+		    echo ${0} &&
+		    exit 64
+		;;
+	esac
+    done &&
     if [ -z "${USER_PASSWORD}" ]
     then
 	echo Unspecified USER_PASSWORD &&
@@ -39,6 +40,7 @@ done &&
 	    do
 		sudo nixos-container start ${CONTAINER}
 	    done &&
+	    echo ${DELTA} &&
 	    true
     } &&
     trap cleanup EXIT &&
@@ -68,4 +70,5 @@ done &&
 	git commit -am "IT IS NOT OK YET" --allow-empty &&
 	    echo ${TEST_BRANCH}
     fi &&
+    export DELTA=PASSED
     true
