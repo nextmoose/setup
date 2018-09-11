@@ -11,13 +11,14 @@ in
   };
   config = { config, pkgs, ... }:
   {
+    virtualisation.docker.host.enable = true;
     environment.variables.DISPLAY=":0";
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;
     users.extraUsers.user = {
       name = "user" ;
       group = "users" ;
-      extraGroups = [ "wheel" ] ;
+      extraGroups = [ "wheel" "docker" ] ;
       shell = pkgs.bash ;
       createHome = true ;
       home = "/home/user";

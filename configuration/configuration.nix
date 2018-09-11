@@ -38,8 +38,6 @@
           allowUnfree = true;
         };
 
-  virtualisation.docker.enable = true;
-
   environment.systemPackages = with pkgs; [
     chromium
     firefoxWrapper
@@ -86,7 +84,7 @@
   users.extraUsers.user = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" ];
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/init/default.nix { inherit pkgs; })
