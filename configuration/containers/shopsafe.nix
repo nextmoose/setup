@@ -12,6 +12,11 @@ in
   config = { config, pkgs, ... }:
   {
     environment.variables.DISPLAY=":0";
+    programs.bash = {
+      shellInit = ''
+        shopsafe
+      '';
+    };
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;
     users.extraUsers.user = {

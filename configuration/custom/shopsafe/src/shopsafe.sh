@@ -2,16 +2,19 @@
 
 IIDFILE=$(mktemp) &&
     rm -f ${IIDFILE} &&
-    docker image build --iidfile ${IIDFILE} . &&
+    docker image build --iidfile ${IIDFILE} out &&
     CIDFILE=$(mktemp) &&
     rm -f ${CIDFILE} &&
     docker \
 	container \
 	create \
 	--cidfile ${CIDFILE} \
+	--interactive \
+	--tty \
+	--rm \
 	--mount type=bind,source=/tmp/.X11-unix,destination=/tmp/.X11-unix,readonly=true \
 	--privileged \
 	--env DISPLAY=:0 \
 	$(cat ${IIDFILE}) &&
-    docker container start $(cat ${CIDFILE}) &&
+    docker container start --interactive $(cat ${CIDFILE}) &&
     rm -f ${IIDFILE} ${CIDFILE}
