@@ -1,8 +1,12 @@
 #!/bin/sh
 
 IIDFILE=$(mktemp) &&
-    rm -f ${IIDFILE} &&
-    sudo docker image build --iidfile ${IIDFILE} out &&
+    CIDFILE=$(mktemp) &&
+    cleanup() {
+	sudo rm -f ${IIDFILE} ${CIDFILE}
+    } &&
+    rm -f ${CIDFILE} ${IIDFILE} &&
+    sudo docker image build --iidfile ${IIDFILE} out/etc &&
     CIDFILE=$(mktemp) &&
     rm -f ${CIDFILE} &&
     sudo \

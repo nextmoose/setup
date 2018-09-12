@@ -10,7 +10,7 @@ RUN \
 	    apt-get update --assume-yes chromium-browser && \
 	    apt-get update --assume-yes && \
 	    apt-get clean && \
-	    adduser --disabled-password --gecos "" user &&
+	    adduser --disabled-password --gecos "" user && \
 	    apt-get update --assume-yes && \
 	    apt-get clean && \
 	    true
