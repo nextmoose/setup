@@ -4,10 +4,10 @@ let
 in
 {
   bindMounts = {
-    "/var/run/docker.sock" = {
-      hostPath = "/var/run/docker.sock";
-      isReadOnly = true;
-    };
+#    "/var/run/docker.sock" = {
+#      hostPath = "/var/run/docker.sock";
+#      isReadOnly = true;
+#    };
   };
   config = { config, pkgs, ... }:
   {
