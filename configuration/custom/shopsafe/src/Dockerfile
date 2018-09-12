@@ -16,4 +16,4 @@ RUN \
 	    true
 USER user
 ENTRYPOINT [ "chromium-browser" ]
-CMD []
+CMD [ "https://www.bankofamerica.com/" ]
