@@ -15,5 +15,5 @@ RUN \
 	    apt-get clean && \
 	    true
 USER user
-ENTRYPOINT [ "chromium" ]
+ENTRYPOINT [ "chromium-browser" ]
 CMD []
