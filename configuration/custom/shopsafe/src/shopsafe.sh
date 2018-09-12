@@ -21,5 +21,5 @@ IIDFILE=$(mktemp) &&
 	--privileged \
 	--env DISPLAY=:0 \
 	$(cat ${IIDFILE}) &&
-    docker container start --interactive $(cat ${CIDFILE}) &&
-    rm -f ${IIDFILE} ${CIDFILE}
+    sudo docker container start --interactive $(cat ${CIDFILE}) &&
+    true
