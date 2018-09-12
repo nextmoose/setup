@@ -7,7 +7,7 @@ RUN \
 	    apt-get update --assume-yes && \
 	    apt-get install --assume-yes pepperflashplugin-nonfree && \
 	    apt-get update --assume-yes && \
-	    apt-get update --assume-yes chromium-browser && \
+	    apt-get install --assume-yes chromium-browser && \
 	    apt-get update --assume-yes && \
 	    apt-get clean && \
 	    adduser --disabled-password --gecos "" user && \
