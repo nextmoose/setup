@@ -18,6 +18,7 @@ IIDFILE=$(mktemp) &&
 	--tty \
 	--rm \
 	--mount type=bind,source=/tmp/.X11-unix,destination=/tmp/.X11-unix,readonly=true \
+	--mount type=bind,source=out/volume,destination=/home \
 	--privileged \
 	--env DISPLAY=:0 \
 	$(cat ${IIDFILE}) &&
