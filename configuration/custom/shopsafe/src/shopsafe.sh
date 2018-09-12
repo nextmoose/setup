@@ -2,10 +2,11 @@
 
 IIDFILE=$(mktemp) &&
     rm -f ${IIDFILE} &&
-    docker image build --iidfile ${IIDFILE} out &&
+    sudo docker image build --iidfile ${IIDFILE} out &&
     CIDFILE=$(mktemp) &&
     rm -f ${CIDFILE} &&
-    docker \
+    sudo \
+	docker \
 	container \
 	create \
 	--cidfile ${CIDFILE} \
