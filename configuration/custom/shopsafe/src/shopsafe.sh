@@ -9,7 +9,7 @@ IIDFILE=$(mktemp) &&
 	container \
 	create \
 	--cidfile ${CIDFILE} \
-	--mount type=bind,source=/var/run/docker.sock,destination=/var/run/docker.sock,readonly=true \
+	--mount type=bind,source=/tmp/.X11-unix,destination=/tmp/.X11-unix,readonly=true \
 	--privileged \
 	--env DISPLAY=:0 \
 	$(cat ${IIDFILE}) &&
