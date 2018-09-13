@@ -124,10 +124,12 @@ EOF
     cp ../private/wifi.sh /mnt/secrets &&
     echo ${ROOT_PASSWORD} > /mnt/secrets/root.password &&
     echo ${USER_PASSWORD} > /mnt/secrets/user.password &&
-    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg.secret.key --decrypt ${SECRETS}/gpg.secret.key.gpg &&
-    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg.owner.trust --decrypt ${SECRETS}/gpg.owner.trust.gpg &&
-    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg2.secret.key --decrypt ${SECRETS}/gpg2.secret.key.gpg &&
-    echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output /mnt/secrets/gpg2.owner.trust --decrypt ${SECRETS}/gpg2.owner.trust.gpg &&
+    gpg --output /mnt/secrets/gpg.secret.key --decrypt ${SECRETS}/gpg.secret.key.gpg &&
+    gpg --output /mnt/secrets/gpg.owner.trust --decrypt ${SECRETS}/gpg.owner.trust.gpg &&
+    gpg --output /mnt/secrets/gpg2.secret.key --decrypt ${SECRETS}/gpg2.secret.key.gpg &&
+    gpg --output /mnt/secrets/gpg2.owner.trust --decrypt ${SECRETS}/gpg2.owner.trust.gpg &&
+    gpg --output /mnt/secrets/origin.id_rsa --decrypt ${SECRETS}/origin.id_rsa &&
+    gpg --output /mnt/secrets/origin.known_hosts --decrypt ${SECRETS}/origin.known_hosts &&
     chown -R 1000:100 /mnt/secrets &&
     (cat <<EOF
 ${ROOT_PASSWORD}
