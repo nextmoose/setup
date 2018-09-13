@@ -15,6 +15,10 @@ do
 	    export HASHED_USER_PASSWORD="$(echo ${2} | mkpasswd --stdin -m sha-512)" &&
 		shift 2
 	    ;;
+	--containers)
+	    export CONTAINERS="${2}" &&
+		shift 2
+	    ;;
 	*)
 	    echo Unknown Option &&
 		echo ${1} &&
@@ -39,5 +43,6 @@ done &&
     fi &&
     rm -rf ${DESTINATION}/configuration.nix ${DESTINATION}/containers.nix ${DESTINATION}/containers ${DESTINATION}/custom &&
     sed -e "s#\${PASSWORD_HASH}#${HASHED_USER_PASSWORD}#" -e "w${DESTINATION}/configuration.nix" ${SOURCE}/configuration.nix &&
-    cp -r ${SOURCE}/containers.nix ${SOURCE}/containers ${SOURCE}/custom ${DESTINATION} &&
+    containers --destination ${DESTINATION} --containers ${CONTAINERS} &&
+    cp -r ${SOURCE}/containers ${SOURCE}/custom ${DESTINATION} &&
     true
