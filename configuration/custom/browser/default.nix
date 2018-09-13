@@ -13,6 +13,7 @@ stdenv.mkDerivation {
         -e "s#pkgs.gnupg#${pkgs.gnupg}#" \
         -e "s#pkgs.pass#${pkgs.pass}#" \
         -e "s#pkgs.chromium#${pkgs.chromium}#" \
+	-e "s#pkgs.gpg-key-id#(import ./custom/migration/gpg-key-id/default.nix { inherit pkgs; })#" \
 	-e "w$out/bin/browser" \
 	browser.sh &&
       chmod 0555 $out/bin/browser
