@@ -10,6 +10,9 @@ stdenv.mkDerivation {
       mkdir $out/bin &&
       sed \
         -e "s#pkgs.git#${pkgs.git}#" \
+        -e "s#pkgs.gnupg#${pkgs.gnupg}#" \
+        -e "s#pkgs.pass#${pkgs.pass}#" \
+        -e "s#pkgs.chromium#${pkgs.chromium}#" \
 	-e "w$out/bin/browser" \
 	browser.sh &&
       chmod 0555 $out/bin/browser
