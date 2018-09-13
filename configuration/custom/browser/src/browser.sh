@@ -1,68 +1,69 @@
 #!/bin/sh
 
-while [ ${#} -gt 0 ]
-do
-    case ${1} in
-	--gpg-secret-key-file)
-	    export GPG_SECRET_KEY_FILE="${2}" &&
-		shift 2
-	    ;;
-	--gpg-owner-trust-file)
-	    export GPG_OWNER_TRUST_FILE="${2}" &&
-		shift 2
-	    ;;
-	--gpg2-secret-key-file)
-	    export GPG2_SECRET_KEY_FILE="${2}" &&
-		shift 2
-	    ;;
-	--gpg2-owner-trust-file)
-	    export GPG2_OWNER_TRUST_FILE="${2}" &&
-		shift 2
-	    ;;
-	--origin-host)
-	    export ORIGIN_HOST="${2}" &&
-		shift 2
-	    ;;
-	--origin-port)
-	    export ORIGIN_PORT="${2}" &&
-		shift 2
-	    ;;
-	--origin-user)
-	    export ORIGIN_USER="${2}" &&
-		shift 2
-	    ;;
-	--origin-organization)
-	    export ORIGIN_ORGANIZATION="${2}" &&
-		shift 2
-	    ;;
-	--origin-repository)
-	    export ORIGIN_REPOSITORY="${2}" &&
-		shift 2
-	    ;;
-	--origin-id-rsa-file)
-	    export ORIGIN_ID_RSA_FILE="${2}" &&
-		shift 2
-	    ;;
-	--origin-known-hosts)
-	    export ORIGIN_KNOWN_HOSTS_FILE="${2}" &&
-		shift 2
-	    ;;
-	--committer-name)
-	    export COMMITTER_NAME="${2}" &&
-		shift 2
-	    ;;
-	--committer-email)
-	    export COMMITTER_EMAIL="${2}" &&
-		shift 2
-	    ;;
-	*)
-	    echo Unknown Option &&
-		echo ${1} &&
-		echo ${@} &&
-		echo ${0} &&
-		exit 64
-    esac
-done &&
+export PATH=${PATH}:pkgs.git/bin/git &&
+    while [ ${#} -gt 0 ]
+    do
+	case ${1} in
+	    --gpg-secret-key-file)
+		export GPG_SECRET_KEY_FILE="${2}" &&
+		    shift 2
+		;;
+	    --gpg-owner-trust-file)
+		export GPG_OWNER_TRUST_FILE="${2}" &&
+		    shift 2
+		;;
+	    --gpg2-secret-key-file)
+		export GPG2_SECRET_KEY_FILE="${2}" &&
+		    shift 2
+		;;
+	    --gpg2-owner-trust-file)
+		export GPG2_OWNER_TRUST_FILE="${2}" &&
+		    shift 2
+		;;
+	    --origin-host)
+		export ORIGIN_HOST="${2}" &&
+		    shift 2
+		;;
+	    --origin-port)
+		export ORIGIN_PORT="${2}" &&
+		    shift 2
+		;;
+	    --origin-user)
+		export ORIGIN_USER="${2}" &&
+		    shift 2
+		;;
+	    --origin-organization)
+		export ORIGIN_ORGANIZATION="${2}" &&
+		    shift 2
+		;;
+	    --origin-repository)
+		export ORIGIN_REPOSITORY="${2}" &&
+		    shift 2
+		;;
+	    --origin-id-rsa-file)
+		export ORIGIN_ID_RSA_FILE="${2}" &&
+		    shift 2
+		;;
+	    --origin-known-hosts)
+		export ORIGIN_KNOWN_HOSTS_FILE="${2}" &&
+		    shift 2
+		;;
+	    --committer-name)
+		export COMMITTER_NAME="${2}" &&
+		    shift 2
+		;;
+	    --committer-email)
+		export COMMITTER_EMAIL="${2}" &&
+		    shift 2
+		;;
+	    *)
+		echo Unknown Option &&
+		    echo ${1} &&
+		    echo ${@} &&
+		    echo ${0} &&
+		    exit 64
+	esac
+    done &&
     if [ -z "${ORIGIN_HOST}" ]
     then
 	echo Unspecified ORIGIN_HOST &&
