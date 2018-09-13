@@ -15,11 +15,7 @@ DELTA=FAILED &&
     CURRENT_BRANCH=$(git rev-parse --abbrev-ref HEAD) &&
     cleanup() {
 	git checkout ${CURRENT_BRANCH} &&
-	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${USER_PASSWORD}" &&
-	    for CONTAINER in $(sudo nixos-container list)
-	    do
-        	sudo nixos-container stop ${CONTAINER}
-	    done &&
+	    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${USER_PASSWORD}" --containers true &&
 	    sudo nixos-rebuild switch &&
 	    for CONTAINER in $(sudo nixos-container list)
 	    do
@@ -32,11 +28,9 @@ DELTA=FAILED &&
     TEST_BRANCH=scratch/$(uuidgen) &&
     git checkout -b ${TEST_BRANCH} &&
     git commit -am "before test local rebuild" --allow-empty &&
-    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${USER_PASSWORD}" &&
-    for CONTAINER in $(sudo nixos-container list)
-    do
-	sudo nixos-container stop ${CONTAINER}
-    done &&
+    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${USER_PASSWORD}" --containers false &&
+    sudo nixos-rebuild switch &&
+    sudo sh ./run.sh --source configuration --destination /etc/nixos --user-password "${USER_PASSWORD}" --containers true &&
     sudo nixos-rebuild switch &&
     for CONTAINER in $(sudo nixos-container list)
     do
