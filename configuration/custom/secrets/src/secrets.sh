@@ -32,7 +32,7 @@ case ${1} in
 	sudo cat /secrets/report.known_hosts
 	;;
     *)
-	Unknown Secret &&
+	echo Unknown Secret &&
 	    echo ${1} &&
 	    echo ${0} &&
 	    echo ${@} &&
