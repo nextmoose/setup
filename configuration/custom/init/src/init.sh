@@ -13,11 +13,16 @@ do
 done &&
     if [ -f ${HOME}/.flag ]
     then
-	    sh /secrets/wifi.sh &&
-	    gpg --import /secrets/gpg.secret.key &&
-	    gpg --import-ownertrust /secrets/gpg.owner.trust &&
-	    gpg2 --import /secrets/gpg2.secret.key &&
-	    gpg2 --import-ownertrust /secrets/gpg2.owner.trust &&
+	sh /secrets/wifi.sh &&
+	    TEMP=$(mktemp -d) &&
+	    secrets gpg.secret.key > ${TEMP}/gpg.secrets.key &&
+	    secrets gpg.owner.trust > ${TEMP}/gpg.owner.trust &&
+	    secrets gpg2.secret.key > ${TEMP}/gpg2.secrets.key &&
+	    secrets gpg2.owner.trust > ${TEMP}/gpg2.owner.trust &&
+	    gpg --import ${TEMP}/gpg.secret.key &&
+	    gpg --import-ownertrust ${TEMP}/gpg.owner.trust &&
+	    gpg2 --import ${TEMP}/gpg2.secret.key &&
+	    gpg2 --import-ownertrust ${TEMP}/gpg2.owner.trust &&
 	    pass init $(gpg-key-id) &&
 	    pass git init &&
 	    pass git remote add origin https://github.com/nextmoose/secrets.git &&
