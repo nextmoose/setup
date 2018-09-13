@@ -1,6 +1,9 @@
 #!/bin/sh
 
-export PATH=${PATH}:pkgs.git/bin:pkgs.gnupg/bin:pkgs.pass/bin:pkgs.chromium/bin:pkgs.gpg-key-id/bin &&
+export PATH=${PATH}:pkgs.git/bin:pkgs.gnupg/bin:pkgs.pass/bin:pkgs.chromium/bin &&
+    gpg-key-id(){
+        gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":"
+    } &&
     while [ ${#} -gt 0 ]
     do
 	case ${1} in
