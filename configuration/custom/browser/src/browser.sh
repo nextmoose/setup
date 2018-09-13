@@ -121,7 +121,7 @@ export PATH=${PATH}:pkgs.git/bin:pkgs.gnupg/bin:pkgs.pass/bin:pkgs.chromium/bin 
     gpg --import-ownertrust ${GPG_OWNER_TRUST_FILE} &&
     gpg2 --import ${GPG2_SECRET_KEY_FILE} &&
     gpg2 --import-ownertrust ${GPG2_OWNER_TRUST_FILE} &&
-    if [ ! -d .ssh/config ]
+    if [ ! -d .ssh ]
     then
 	mkdir .ssh &&
 	    chmod 0700 .ssh &&
