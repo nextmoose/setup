@@ -1,33 +1,35 @@
 #!/bin/sh
 
-while [ ${#} -gt 0 ]
-do
-    case ${1} in
-	--user-password)
-	    USER_PASSWORD="${2}" &&
-		shift 2
-	    ;;
-	--origin-organization)
-	    ORIGIN_ORGANIZATION="${2}" &&
-		shift 2
-	    ;;
-	--origin-repository)
-	    ORIGIN_REPOSITORY="${2}" &&
-		shift 2
-	    ;;
-	--gpg-passphrase)
-	    GPG_PASSPHRASE="${2}" &&
-		shift 2
-	    ;;
-	*)
-	    echo Unsupported Option &&
-		echo ${1} &&
-		echo ${@} &&
-		echo ${0} &&
-		exit 64
-	    ;;
-    esac
-done &&
+DELTA=fail &&
+    while [ ${#} -gt 0 ]
+    do
+	case ${1} in
+	    --user-password)
+		USER_PASSWORD="${2}" &&
+		    shift 2
+		;;
+	    --origin-organization)
+		ORIGIN_ORGANIZATION="${2}" &&
+		    shift 2
+		;;
+	    --origin-repository)
+		ORIGIN_REPOSITORY="${2}" &&
+		    shift 2
+		;;
+	    --gpg-passphrase)
+		GPG_PASSPHRASE="${2}" &&
+		    shift 2
+		;;
+	    *)
+		echo Unsupported Option &&
+		    echo ${1} &&
+		    echo ${@} &&
+		    echo ${0} &&
+		    exit 64
+		;;
+	esac
+    done &&
+    clear &&
     if [ -z "${USER_PASSWORD}" ]
     then
 	echo Unspecified USER_PASSWORD &&
@@ -42,10 +44,9 @@ done &&
 	    exit 67
     elif [ -z "${GPG_PASSPHRASE}" ]
     then
-	 echo Unspecified GPG_PASSPHRASE &&
-	     exit 68
-    fi &&
-    clear &&
+	echo Unspecified GPG_PASSPHRASE &&
+	    exit 68
+    fi &&    
     read -p "VERIFY USER PASSWORD: " -s USER_PASSWORD2 &&
     if [ "${USER_PASSWORD}" == "${USER_PASSWORD2}" ]
     then
@@ -75,6 +76,7 @@ done &&
     gpg2 --import-ownertrust ../private/gpg2.owner.trust &&
     nix-env -i mkpasswd &&
     nix-env -i cryptsetup &&
+    sh ./cleanup.sh &&
     (cat <<EOF
 n
 
