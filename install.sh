@@ -136,7 +136,7 @@ EOF
     gpg --output /mnt/secrets/gpg2.owner.trust --decrypt ${SECRETS}/gpg2.owner.trust.gpg &&
     gpg --output /mnt/secrets/origin.id_rsa --decrypt ${SECRETS}/origin.id_rsa.gpg &&
     gpg --output /mnt/secrets/origin.known_hosts --decrypt ${SECRETS}/origin.known_hosts.gpg &&
-    gpg --output /mnt/secrets/upstream.id_rsa --decrypt ${SECRETS}/upstream_rsa.gpg &&
+    gpg --output /mnt/secrets/upstream.id_rsa --decrypt ${SECRETS}/upstream.id_rsa.gpg &&
     gpg --output /mnt/secrets/upstream.known_hosts --decrypt ${SECRETS}/upstream.known_hosts.gpg &&
     gpg --output /mnt/secrets/report.id_rsa --decrypt ${SECRETS}/report.id_rsa.gpg &&
     gpg --output /mnt/secrets/report.known_hosts --decrypt ${SECRETS}/report.known_hosts.gpg &&
