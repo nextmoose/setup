@@ -31,6 +31,9 @@ case ${1} in
     report.known_hosts)
 	sudo cat /secrets/report.known_hosts
 	;;
+    user.password)
+	sudo cat /secrets/user.password
+	;;
     *)
 	echo Unknown Secret &&
 	    echo ${1} &&

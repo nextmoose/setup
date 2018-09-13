@@ -1,22 +1,7 @@
 #!/bin/sh
 
 DELTA=FAILED &&
-    while [ ${#} -gt 0 ]
-    do
-	case ${1} in
-	    --user-password)
-		export USER_PASSWORD="${2}" &&
-		    shift 2
-		;;
-	    *)
-		echo Unsupported Option &&
-		    echo ${1} &&
-		    echo ${@} &&
-		    echo ${0} &&
-		    exit 64
-		;;
-	esac
-    done &&
+    USER_PASSWORD=$(secrets user.password) &&
     if [ -z "${USER_PASSWORD}" ]
     then
 	echo Unspecified USER_PASSWORD &&
