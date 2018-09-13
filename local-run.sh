@@ -1,27 +1,7 @@
 #!/bin/sh
 
 DELTA=FAILED &&
-    while [ ${#} -gt 0 ]
-    do
-	case ${1} in
-	    --user-password)
-		export USER_PASSWORD="${2}" &&
-		    shift 2
-		;;
-	    *)
-		echo Unsupported Option &&
-		    echo ${1} &&
-		    echo ${@} &&
-		    echo ${0} &&
-		    exit 64
-		;;
-	esac
-    done &&
-    if [ -z "${USER_PASSWORD}" ]
-    then
-	echo Unspecified USER_PASSWORD &&
-	    exit 65
-    fi &&
+    export USER_PASSWORD="$(cat /secrets/user.password)" &&
     if [ ! -z "$(git ls-files --other --exclude-standard --directory --exclude .c9)" ]
     then
 	echo There are untracked files &&
