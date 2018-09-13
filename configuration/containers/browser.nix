@@ -75,16 +75,7 @@ in
       home = "/home/user";
       hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
       packages = [
-        (import ../custom/my-browser/default.nix { inherit pkgs; })
-        (import ../custom/migration/gpg-key-id/default.nix { inherit pkgs; })
-	pkgs.firefoxWrapper
-	pkgs.emacs
-	pkgs.mkpasswd
-	pkgs.chromium
-	pkgs.browserpass
-	pkgs.pass
-	pkgs.git
-	pkgs.gnupg
+        (import ../custom/browser/default.nix { inherit pkgs; })
       ];
     };
   };
