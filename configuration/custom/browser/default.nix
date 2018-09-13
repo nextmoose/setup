@@ -10,7 +10,9 @@ stdenv.mkDerivation {
     pkgs.git
     pkgs.pass
     pkgs.gnupg
+    pkgs.browserpass
     (import ../post-commit/default.nix { inherit pkgs; })
+    (import ../gpg-key-id/default.nix { inherit pkgs; })
   ];
   installPhase = ''
     mkdir $out &&
