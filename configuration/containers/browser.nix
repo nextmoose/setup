@@ -1,76 +1,82 @@
-# vim: set softtabstop=2 tabstop=2 shiftwidth=2 expandtab autoindent syntax=nix nocompatible :
-# Containe
-{ config, pkgs, ... }:
-
-{ containers.browser =
-  let hostAddr =  "192.168.100.10";
-  in
-  { privateNetwork = true;
-    hostAddress = hostAddr;
-    localAddress = "192.168.100.11";
-    config =
-    { config, pkgs, ... }:
-    { boot.tmpOnTmpfs = true;
-
-      environment.systemPackages = with pkgs;
-      [
-        chromium
-      ];
-
-      networking.nameservers = [ hostAddr ];
-
-      services =
-      { openssh =
-        { enable = true;
-          forwardX11 = true;
-        };
-
-        avahi =
-        { enable = true;
-          browseDomains = [];
-          wideArea = false;
-          nssmdns = true;
-        };
-      };
-
-      programs.ssh.setXAuthLocation = true;
-
-      users.mutableUsers = false;
-
-      users.extraUsers.user =
-      { name = "user";
-        group = "users";
-	extraGroups = [ "wheel" ];
-        uid = 1000;
-        createHome = true;
-	home = "/home/user";
-        shell = "/run/current-system/sw/bin/bash";
-        openssh.authorizedKeys.keyFiles = [ "/etc/nixos/id_rsa.pub" ];
-      };
+let
+  foo = "bar";
+in
+{
+  bindMounts = {
+    "/tmp/.X11-unix" = {
+      hostPath = "/tmp/.X11-unix";
+      isReadOnly = true;
+    };
+    "/run/user/1000/pulse" = {
+      hostPath = "/run/user/1000/pulse";
+      isReadOnly = false;
+    };
+    "/etc/machine-id" = {
+      hostPath = "/etc/machine-id";
+      isReadOnly = false;
+    };
+    "/secrets" = {
+      hostPath = "/secrets";
+      isReadOnly = true;
     };
   };
+  config = { config, pkgs, ... }:
+  {
+      nixpkgs.config =
+        let
+          plugins = 
+          {
+	    enableGoogleTalkPlugin = true;
+            # jre = true;
+          };
+        in
+        { firefox = plugins;
+          chromium = plugins;
+          allowUnfree = true;
+        };
+      hardware.pulseaudio.enable = true;
+      hardware.bumblebee.enable = true;
 
-  # Note, you may need to replace ve-+ with c-+, consult `ip addr` or docs
-  networking =
-  { nat.enable = true;
-    nat.internalInterfaces = ["ve-+"];
-    nat.externalInterface = "wlo1";
-    firewall.extraCommands =
-      ''
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 4713 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 631 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p udp --dport 53 -j nixos-fw-accept;
-      ip46tables -A nixos-fw -i ve-+ -p tcp --dport 53 -j nixos-fw-accept;
+      environment.variables.DISPLAY=":0";
+
+
+    security.sudo.wheelNeedsPassword = false;
+    users.mutableUsers = false;
+    programs.bash = {
+      shellInit = ''
+        my-browser &&
+        chromium --disable-gpu
       '';
-    useHostResolvConf = false;
-  };
-  
-  # Caching local DNS resolver, for port 53
-  services.unbound = 
-    { enable = true;
-      extraConfig = "include: /etc/unbound-resolvconf.conf";
-      allowedAccess = [ "127.0.0.0/24" "192.168.100.0/24" ];
-      interfaces = [ "0.0.0.0" "::0" ];
     };
+    programs.chromium = {
+      enable = true;
+      extensions = [
+        "naepdomgkenhinolocfifgehidddafch"
+      ];
+    };
+    programs.browserpass = {
+      enable = true;
+    };
+    users.extraUsers.user = {
+      name = "user" ;
+      group = "users" ;
+      extraGroups = [ "wheel" ] ;
+      shell = pkgs.bash ;
+      createHome = true ;
+      home = "/home/user";
+      hashedPassword = "$6$MBLQmkIrZvB$2bTHy346qybhFBsefUkcFWUrpjJaggoPaHgLksxY5pkdY0k0/NpzIiJEGhLfrsT0F3351UEl2BjU.rNxPzmEl." ;
+      packages = [
+        (import ../custom/my-browser/default.nix { inherit pkgs; })
+        (import ../custom/migration/gpg-key-id/default.nix { inherit pkgs; })
+	pkgs.firefoxWrapper
+	pkgs.emacs
+	pkgs.mkpasswd
+	pkgs.chromium
+	pkgs.browserpass
+	pkgs.pass
+	pkgs.git
+	pkgs.gnupg
+      ];
+    };
+  };
 }
