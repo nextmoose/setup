@@ -122,7 +122,7 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
-    sh ./run.sh --source configuration --destination /mnt/etc/nixos --user-password "${USER_PASSWORD}" &&
+    sh ./run.sh --source configuration --destination /mnt/etc/nixos --user-password "${USER_PASSWORD}" --containers true &&
     ROOT_PASSWORD=$(uuidgen) &&
     SECRETS=$(mktemp -d) &&
     git -C ${SECRETS} init &&
