@@ -49,7 +49,7 @@ done &&
     read -p "VERIFY USER PASSWORD: " -s USER_PASSWORD2 &&
     if [ "${USER_PASSWORD}" == "${USER_PASSWORD2}" ]
     then
-	echo VERIFIED USER PASSWORD &&
+	echo VERIFIED USER PASSWORD
     else
 	echo Unverified USER_PASSWORD &&
 	    exit 69
@@ -62,7 +62,6 @@ done &&
 	echo Unverified GPG_PASSPHRASE &&
 	    exit 70
     fi &&
-    clear &&
     sh ../private/wifi.sh &&
     nix-env --install git &&
     nix-env --install gnupg &&
@@ -128,8 +127,8 @@ EOF
     gpg --output /mnt/secrets/gpg.owner.trust --decrypt ${SECRETS}/gpg.owner.trust.gpg &&
     gpg --output /mnt/secrets/gpg2.secret.key --decrypt ${SECRETS}/gpg2.secret.key.gpg &&
     gpg --output /mnt/secrets/gpg2.owner.trust --decrypt ${SECRETS}/gpg2.owner.trust.gpg &&
-    gpg --output /mnt/secrets/origin.id_rsa --decrypt ${SECRETS}/origin.id_rsa &&
-    gpg --output /mnt/secrets/origin.known_hosts --decrypt ${SECRETS}/origin.known_hosts &&
+    gpg --output /mnt/secrets/origin.id_rsa --decrypt ${SECRETS}/origin.id_rsa.gpg &&
+    gpg --output /mnt/secrets/origin.known_hosts --decrypt ${SECRETS}/origin.known_hosts.gpg &&
     chown -R 1000:100 /mnt/secrets &&
     (cat <<EOF
 ${ROOT_PASSWORD}
