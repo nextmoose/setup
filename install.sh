@@ -68,8 +68,13 @@ done &&
     echo ${GPG_PASSPHRASE} | gpg --batch --passphrase-fd 0 --import ../private/gpg.secret.key &&
     gpg --import-ownertrust ../private/gpg.owner.trust &&
     echo ${GPG_PASSPHRASE} | gpg2 --batch --passphrase-fd 0 --import ../private/gpg2.secret.key &&
+    TOKEN=$(mktemp) &&
+    date > ${TOKEN} &&
+    GPG_KEY_ID=$(gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":") &&
+    gpg --recipient ${GPG_KEY_ID} --encrypt --sign ${TOKEN} &&
     gpg2 --import-ownertrust ../private/gpg2.owner.trust &&
     nix-env -i mkpasswd &&
+    nix-env -i cryptsetup &&
     (cat <<EOF
 n
 
