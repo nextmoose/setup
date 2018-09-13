@@ -1,9 +1,6 @@
 #!/bin/sh
 
 export PATH=${PATH}:pkgs.git/bin:pkgs.gnupg/bin:pkgs.pass/bin:pkgs.chromium/bin &&
-    gpg-key-id(){
-        gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":"
-    } &&
     while [ ${#} -gt 0 ]
     do
 	case ${1} in
@@ -140,7 +137,8 @@ EOF
     chmod 0600 .ssh/origin.id_rsa &&
     cat "${ORIGIN_KNOWN_HOSTS_FILE}" > .ssh/known_hosts &&
     chmod 0644 .ssh/known_hosts &&
-    pass init $(gpg-key-id) &&
+    GPG_KEY_ID=$(gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":") &&
+    pass init ${GPG_KEY_ID} &&
     pass git init &&
     ln --symbolic $(which post-commit) .password-store/.git/hooks &&
     pass git config user.name "${COMMITTER_NAME}" &&
