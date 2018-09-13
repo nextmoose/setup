@@ -19,6 +19,7 @@ IIDFILE=$(mktemp) &&
 		--mount type=bind,source=/tmp/.X11-unix,destination=/tmp/.X11-unix,readonly=true \
 		--privileged \
 		--env DISPLAY=:0 \
+		--label uuid=${uuid} \
 		$(cat ${IIDFILE}) &&
 	    sudo docker container start $(cat ${CIDFILE}) &&
 	    true
