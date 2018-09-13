@@ -19,19 +19,23 @@ IIDFILE=$(mktemp) &&
 		--mount type=bind,source=/tmp/.X11-unix,destination=/tmp/.X11-unix,readonly=true \
 		--privileged \
 		--env DISPLAY=:0 \
-		--label uuid=${uuid} \
+		--label uuid=${UUID} \
 		$(cat ${IIDFILE}) &&
 	    sudo docker container start $(cat ${CIDFILE}) &&
 	    true
     else
 	STATUS="$(sudo docker container inspect --format "{{ .State.Status }}" ${CID})" &&
-	    if [ "${STATUS}" == "exited" ]
-	    then
-		sudo docker container restart ${CID}
-	    else
-		echo "CONTAINER ${CID} has unknown status ${STATUS}." &&
-		    exit 65
-	    fi &&
-	    true
+	    case ${STATUS} in
+		running)
+		    echo "$CONTAINER ${CID} is running."
+		    ;;
+		exited)
+		    sudo docker container restart ${CID}
+		    ;;
+		*)
+		    echo "CONTAINER ${CID} has unknown status ${STATUS}." &&
+			exit 65
+		    ;;
+	    esac
     fi &&
     true
