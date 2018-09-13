@@ -5,7 +5,13 @@ with import <nixpkgs> {};
 stdenv.mkDerivation {
   name = "browser";
   src = ./src;
-  buildInputs = [ pkgs.chromium ];
+  buildInputs = [
+    pkgs.chromium
+    pkgs.git
+    pkgs.pass
+    pkgs.gnupg
+    (import ../post-commit/default.nix { inherit pkgs; })
+  ];
   installPhase = ''
     mkdir $out &&
       mkdir $out/bin &&

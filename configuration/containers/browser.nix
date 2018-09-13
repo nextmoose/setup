@@ -37,17 +37,26 @@ in
       hardware.pulseaudio.enable = true;
       hardware.bumblebee.enable = true;
 
-      environment.variables.DISPLAY=":0";
+      environment.variables = {
+        DISPLAY=":0";
+	GPG_SECRET_KEY_FILE="/secrets/gpg.secret.key";
+	GPG_OWNER_TRUST_FILE="/secrets/gpg.owner.trust";
+	GPG2_SECRET_KEY_FILE="/secrets/gpg2.secret.key";
+	GPG2_OWNER_TRUST_FILE="/secrets/gpg2.owner.trust";
+	ORIGIN_HOST="github.com";
+	ORIGIN_PORT="22";
+	ORIGIN_USER="git";
+	ORIGIN_ORGANIZATION="nextmoose";
+	ORIGIN_REPOSITORY="credentials";
+	ORIGIN_ID_RSA_FILE="/secrets/origin.id_rsa";
+	ORIGIN_KNOWN_HOSTS_FILE="/secrets/origin.known_hosts";
+	COMMITTER_NAME="Emory Merryman";
+	COMMITTER_EMAIL="emory.merryman@gmail.com";
+      };
 
 
     security.sudo.wheelNeedsPassword = false;
     users.mutableUsers = false;
-    programs.bash = {
-      shellInit = ''
-        my-browser &&
-        chromium --disable-gpu
-      '';
-    };
     programs.chromium = {
       enable = true;
       extensions = [

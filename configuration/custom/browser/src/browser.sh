@@ -3,20 +3,20 @@
 while [ ${#} -gt 0 ]
 do
     case ${1} in
-	--gpg-secret-key)
-	    export GPG_SECRET_KEY="$(pass show ${2})" &&
+	--gpg-secret-key-file)
+	    export GPG_SECRET_KEY_FILE="${2}" &&
 		shift 2
 	    ;;
-	--gpg-owner-trust)
-	    export GPG_OWNER_TRUST="$(pass show ${2})" &&
+	--gpg-owner-trust-file)
+	    export GPG_OWNER_TRUST_FILE="${2}" &&
 		shift 2
 	    ;;
-	--gpg2-secret-key)
-	    export GPG2_SECRET_KEY="$(pass show ${2})" &&
+	--gpg2-secret-key-file)
+	    export GPG2_SECRET_KEY_FILE="${2}" &&
 		shift 2
 	    ;;
-	--gpg2-owner-trust)
-	    export GPG2_OWNER_TRUST="$(pass show ${2})" &&
+	--gpg2-owner-trust-file)
+	    export GPG2_OWNER_TRUST_FILE="${2}" &&
 		shift 2
 	    ;;
 	--origin-host)
@@ -39,12 +39,12 @@ do
 	    export ORIGIN_REPOSITORY="${2}" &&
 		shift 2
 	    ;;
-	--origin-id-rsa)
-	    export ORIGIN_ID_RSA="$(pass show ${2})" &&
+	--origin-id-rsa-file)
+	    export ORIGIN_ID_RSA_FILE="${2}" &&
 		shift 2
 	    ;;
 	--origin-known-hosts)
-	    export ORIGIN_KNOWN_HOSTS="$(pass show ${2})" &&
+	    export ORIGIN_KNOWN_HOSTS_FILE="${2}" &&
 		shift 2
 	    ;;
 	--committer-name)
@@ -65,66 +65,61 @@ do
 done &&
     if [ -z "${ORIGIN_HOST}" ]
     then
-	ORIGIN_HOST=github.com
-    fi &&
-    if [ -z "${ORIGIN_PORT}" ]
+	echo Unspecified ORIGIN_HOST &&
+	    exit 65
+    elif [ -z "${ORIGIN_PORT}" ]
     then
-	ORIGIN_PORT=22
-    fi &&
-    if [ -z "${ORIGIN_USER}" ]
+	echo Unspecified ORIGIN_PORT &&
+	    exit 66
+    elif [ -z "${ORIGIN_USER}" ]
     then
-	ORIGIN_USER=git
-    fi &&
-    if [ -z "${GPG_SECRET_KEY}" ]
+	echo Unspecified ORIGIN_USER &&
+	    exit 67
+    elif [ -z "${GPG_SECRET_KEY_FILE}" ]
     then
-	GPG_SECRET_KEY="$(cat /secrets/gpg.secret.key)"
-    fi &&
-    if [ -z "${GPG_OWNER_TRUST}" ]
+	echo Unspecified GPG_SECRET_KEY_FILE &&
+	    exit 68
+    elif [ -z "${GPG_OWNER_TRUST_FILE}" ]
     then
-	GPG_OWNER_TRUST="$(cat /secrets/gpg.owner.trust)"
-    fi &&
-    if [ -z "${GPG2_SECRET_KEY}" ]
+	echo Unspecified GPG_OWNER_TRUST_FILE &&
+	    exit 69
+    elif [ -z "${GPG2_SECRET_KEY_FILE}" ]
     then
-	GPG2_SECRET_KEY="$(cat /secrets/gpg2.secret.key)"
-    fi &&
-    if [ -z "${GPG2_OWNER_TRUST}" ]
+	echo Unspecified GPG2_SECRET_KEY_FILE &&
+	    exit 70
+    elif [ -z "${GPG2_OWNER_TRUST_FILE}" ]
     then
-	GPG2_OWNER_TRUST="$(cat /secrets/gpg2.owner.trust)"
-    fi &&
-    if [ -z "${ORIGIN_ORGANIZATION}" ]
+	echo Unspecified GPG2_OWNER_TRUST_FILE &&
+	    exit 71
+    elif [ -z "${ORIGIN_ORGANIZATION}" ]
     then
-	ORIGIN_ORGANIZATION=nextmoose
-    fi &&
-    if [ -z "${ORIGIN_REPOSITORY}" ]
+	echo Unspecified ORIGIN_ORGANIZATION &&
+	    exit 72
+    elif [ -z "${ORIGIN_REPOSITORY}" ]
     then
-	ORIGIN_REPOSITORY=credentials
-    fi &&
-    if [ -z "${ORIGIN_ID_RSA}" ]
+	echo Unspecified ORIGIN_REPOSITORY &&
+	    exit 73
+    elif [ -z "${ORIGIN_ID_RSA_FILE}" ]
     then
-	ORIGIN_ID_RSA="$(cat /secrets/origin.id_rsa)"
-    fi &&
-    if [ -z "${ORIGIN_KNOWN_HOSTS}" ]
+	echo Unspecified ORIGIN_ID_RSA_FILE &&
+	    exit 74
+    elif [ -z "${ORIGIN_KNOWN_HOSTS_FILE}" ]
     then
-	ORIGIN_KNOWN_HOSTS="$(cat /secrets/origin.known_hosts)"
-    fi &&
-    if [ -z "${COMMITTER_NAME}" ]
+	echo Unspecified ORIGIN_KNOWN_HOSTS_FILE &&
+	    exit 75
+    elif [ -z "${COMMITTER_NAME}" ]
     then
-	COMMITTER_NAME="Emory Merryman"
-    fi &&
-    if [ -z "${COMMITTER_EMAIL}" ]
+	echo Unspecified COMMITTER_NAME &&
+	    exit 76
+    elif [ -z "${COMMITTER_EMAIL}" ]
     then
-	COMMITTER_EMAIL="emory.merryman@gmail.com"
+	echo Unspecified COMMITTER_EMAIL &&
+	    exit 77
     fi &&
-    cd ${HOME} &&
-    TMP=$(mktemp -d ${HOME}/XXXXXXXX) &&
-    echo "${GPG_SECRET_KEY}" > ${TMP}/gpg.secret.key &&
-    echo "${GPG_OWNER_TRUST}" > ${TMP}/gpg.owner.trust &&
-    echo "${GPG2_SECRET_KEY}" > ${TMP}/gpg2.secret.key &&
-    echo "${GPG2_OWNER_TRUST}" > ${TMP}/gpg2.owner.trust &&
-    gpg --import ${TMP}/gpg.secret.key &&
-    gpg --import-ownertrust ${TMP}/gpg.owner.trust &&
-    gpg2 --import ${TMP}/gpg2.secret.key &&
-    gpg2 --import-ownertrust ${TMP}/gpg2.owner.trust &&
+    gpg --import ${GPG_SECRET_KEY_FILE} &&
+    gpg --import-ownertrust ${GPG_OWNER_TRUST_FILE} &&
+    gpg2 --import ${GPG2_SECRET_KEY_FILE} &&
+    gpg2 --import-ownertrust ${GPG2_OWNER_TRUST_FILE} &&
     mkdir .ssh &&
     chmod 0700 .ssh &&
     (cat > .ssh/config <<EOF
@@ -137,9 +132,9 @@ UserKnownHostsFile ${HOME}/.ssh/known_hosts
 EOF
     ) &&
     chmod 0600 .ssh/config &&
-    echo "${ORIGIN_ID_RSA}" > .ssh/origin.id_rsa &&
+    cat "${ORIGIN_ID_RSA_FILE}" > .ssh/origin.id_rsa &&
     chmod 0600 .ssh/origin.id_rsa &&
-    echo "${ORIGIN_KNOWN_HOSTS}" > .ssh/known_hosts &&
+    cat "${ORIGIN_KNOWN_HOSTS_FILE}" > .ssh/known_hosts &&
     chmod 0644 .ssh/known_hosts &&
     pass init $(gpg-key-id) &&
     pass git init &&
@@ -147,8 +142,7 @@ EOF
     pass git config user.name "${COMMITTER_NAME}" &&
     pass git config user.email "${COMMITTER_EMAIL}" &&
     pass git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
-    export GIT_SSH_COMMAND="ssh -F ${HOME}/.ssh/config" &&
     pass git fetch origin master &&
     pass git checkout master &&
-    chromium &&
+    chromium --disable-gpu &&
     true
