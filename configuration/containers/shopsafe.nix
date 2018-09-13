@@ -12,6 +12,7 @@ in
   config = { config, pkgs, ... }:
   {
     environment.variables.DISPLAY=":0";
+    environment.variables.UUID="f5c03f78-87ee-446f-8a5b-7984b5376e5c";
     programs.bash = {
       shellInit = ''
         shopsafe
