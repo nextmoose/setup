@@ -121,9 +121,11 @@ export PATH=${PATH}:pkgs.git/bin:pkgs.gnupg/bin:pkgs.pass/bin:pkgs.chromium/bin 
     gpg --import-ownertrust ${GPG_OWNER_TRUST_FILE} &&
     gpg2 --import ${GPG2_SECRET_KEY_FILE} &&
     gpg2 --import-ownertrust ${GPG2_OWNER_TRUST_FILE} &&
-    mkdir .ssh &&
-    chmod 0700 .ssh &&
-    (cat > .ssh/config <<EOF
+    if [ ! -d .ssh/config ]
+    then
+	mkdir .ssh &&
+	    chmod 0700 .ssh &&
+	    (cat > .ssh/config <<EOF
 Host origin
 HostName ${ORIGIN_HOST}
 Port ${ORIGIN_PORT}
@@ -131,19 +133,23 @@ User ${ORIGIN_USER}
 IdentityFile ${HOME}/.ssh/origin.id_rsa
 UserKnownHostsFile ${HOME}/.ssh/known_hosts
 EOF
-    ) &&
-    chmod 0600 .ssh/config &&
-    cat "${ORIGIN_ID_RSA_FILE}" > .ssh/origin.id_rsa &&
-    chmod 0600 .ssh/origin.id_rsa &&
-    cat "${ORIGIN_KNOWN_HOSTS_FILE}" > .ssh/known_hosts &&
-    chmod 0644 .ssh/known_hosts &&
+	    ) &&
+	    chmod 0600 .ssh/config &&
+	    cat "${ORIGIN_ID_RSA_FILE}" > .ssh/origin.id_rsa &&
+	    chmod 0600 .ssh/origin.id_rsa &&
+	    cat "${ORIGIN_KNOWN_HOSTS_FILE}" > .ssh/known_hosts &&
+	    chmod 0644 .ssh/known_hosts
+    fi &&
     GPG_KEY_ID=$(gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":") &&
     pass init ${GPG_KEY_ID} &&
-    pass git init &&
-    ln --symbolic $(which post-commit) .password-store/.git/hooks &&
-    pass git config user.name "${COMMITTER_NAME}" &&
-    pass git config user.email "${COMMITTER_EMAIL}" &&
-    pass git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
+    if [ ! -d .password-store/.git ]
+    then
+	pass git init &&
+	    ln --symbolic $(which post-commit) .password-store/.git/hooks &&
+	    pass git config user.name "${COMMITTER_NAME}" &&
+	    pass git config user.email "${COMMITTER_EMAIL}" &&
+	    pass git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git
+    fi &&
     pass git fetch origin master &&
     pass git checkout master &&
     chromium --disable-gpu &&
