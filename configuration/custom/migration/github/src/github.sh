@@ -1,120 +1,121 @@
 #!/bin/sh
 
-while [ ${#} -gt 0 ]
-do
-    case ${1} in
-	--upstream-host)
-	    UPSTREAM_HOST="${2}" &&
-		shift 2
-	;;
-	--upstream-port)
-	    UPSTREAM_PORT="${2}" &&
-		shift 2
-	    ;;
-	--upstream-organization)
-	    UPSTREAM_ORGANIZATION="${2}" &&
-		shift 2
-	    ;;
-	--upstream-repository)
-	    UPSTREAM_REPOSITORY="${2}" &&
-		shift 2
-	    ;;
-	--upstream-user)
-	    UPSTREAM_USER="${2}" &&
-		shift 2
-	    ;;
-	--upstream-branch)
-	    UPSTREAM_BRANCH="${2}" &&
-		shift 2
-	    ;;
-	--upstream-id-rsa)
-	    UPSTREAM_ID_RSA="$(pass show ${2})" &&
-		shift 2
-	    ;;
-	--upstream-known-hosts)
-	    UPSTREAM_KNOWN_HOSTS="$(pass show ${2})" &&
-		shift 2
-	    ;;
-	--origin-host)
-	    ORIGIN_HOST="${2}" &&
-		shift 2
-	;;
-	--origin-port)
-	    ORIGIN_PORT="${2}" &&
-		shift 2
-	    ;;
-	--origin-organization)
-	    ORIGIN_ORGANIZATION="${2}" &&
-		shift 2
-	    ;;
-	--origin-repository)
-	    ORIGIN_REPOSITORY="${2}" &&
-		shift 2
-	    ;;
-	--origin-user)
-	    ORIGIN_USER="${2}" &&
-		shift 2
-	    ;;
-	--origin-branch)
-	    ORIGIN_BRANCH="${2}" &&
-		shift 2
-	    ;;
-	--origin-id-rsa)
-	    ORIGIN_ID_RSA="$(pass show ${2})" &&
-	    	shift 2
-	    ;;
-	--origin-known-hosts)
-	    ORIGIN_KNOWN_HOSTS="$(pass show ${2})" &&
-		shift 2
-	    ;;
-	--report-host)
-	    REPORT_HOST="${2}" &&
-		shift 2
-	;;
-	--report-port)
-	    REPORT_PORT="${2}" &&
-		shift 2
-	    ;;
-	--report-organization)
-	    REPORT_ORGANIZATION="${2}" &&
-		shift 2
-	    ;;
-	--report-repository)
-	    REPORT_REPOSITORY="${2}" &&
-		shift 2
-	    ;;
-	--report-user)
-	    REPORT_USER="${2}" &&
-		shift 2
-	    ;;
-	--report-branch)
-	    REPORT_BRANCH="${2}" &&
-		shift 2
-	    ;;
-	--report-id-rsa)
-	    REPORT__ID_RSA="$(pass show ${2})" &&
-	    	shift 2
-	    ;;
-	--report-known-hosts)
-	    REPORT_KNOWN_HOSTS="$(pass show ${2})" &&
-		shift 2
-	    ;;
-	--committer-name)
-	    COMMITTER_NAME="${2}" &&
-		shift 2
-	    ;;
-	--committer-email)
-	    COMMITER_EMAIL="${2}" &&
-		shift 2
-	    ;;
-	*)
-	    echo Unsupported Option &&
-		echo ${1} &&
-		echo ${@} &&
-		echo ${0} &&
-		exit 64
-    esac
-done &&
+export PATH=${PATH}:pkgs.git/bin:pkgs.emacs/bin:pkgs.openssh/bin &&
+    while [ ${#} -gt 0 ]
+    do
+	case ${1} in
+	    --upstream-host)
+		UPSTREAM_HOST="${2}" &&
+		    shift 2
+		;;
+	    --upstream-port)
+		UPSTREAM_PORT="${2}" &&
+		    shift 2
+		;;
+	    --upstream-organization)
+		UPSTREAM_ORGANIZATION="${2}" &&
+		    shift 2
+		;;
+	    --upstream-repository)
+		UPSTREAM_REPOSITORY="${2}" &&
+		    shift 2
+		;;
+	    --upstream-user)
+		UPSTREAM_USER="${2}" &&
+		    shift 2
+		;;
+	    --upstream-branch)
+		UPSTREAM_BRANCH="${2}" &&
+		    shift 2
+		;;
+	    --upstream-id-rsa)
+		UPSTREAM_ID_RSA="$(pass show ${2})" &&
+		    shift 2
+		;;
+	    --upstream-known-hosts)
+		UPSTREAM_KNOWN_HOSTS="$(pass show ${2})" &&
+		    shift 2
+		;;
+	    --origin-host)
+		ORIGIN_HOST="${2}" &&
+		    shift 2
+		;;
+	    --origin-port)
+		ORIGIN_PORT="${2}" &&
+		    shift 2
+		;;
+	    --origin-organization)
+		ORIGIN_ORGANIZATION="${2}" &&
+		    shift 2
+		;;
+	    --origin-repository)
+		ORIGIN_REPOSITORY="${2}" &&
+		    shift 2
+		;;
+	    --origin-user)
+		ORIGIN_USER="${2}" &&
+		    shift 2
+		;;
+	    --origin-branch)
+		ORIGIN_BRANCH="${2}" &&
+		    shift 2
+		;;
+	    --origin-id-rsa)
+		ORIGIN_ID_RSA="$(pass show ${2})" &&
+	    	    shift 2
+		;;
+	    --origin-known-hosts)
+		ORIGIN_KNOWN_HOSTS="$(pass show ${2})" &&
+		    shift 2
+		;;
+	    --report-host)
+		REPORT_HOST="${2}" &&
+		    shift 2
+		;;
+	    --report-port)
+		REPORT_PORT="${2}" &&
+		    shift 2
+		;;
+	    --report-organization)
+		REPORT_ORGANIZATION="${2}" &&
+		    shift 2
+		;;
+	    --report-repository)
+		REPORT_REPOSITORY="${2}" &&
+		    shift 2
+		;;
+	    --report-user)
+		REPORT_USER="${2}" &&
+		    shift 2
+		;;
+	    --report-branch)
+		REPORT_BRANCH="${2}" &&
+		    shift 2
+		;;
+	    --report-id-rsa)
+		REPORT__ID_RSA="$(pass show ${2})" &&
+	    	    shift 2
+		;;
+	    --report-known-hosts)
+		REPORT_KNOWN_HOSTS="$(pass show ${2})" &&
+		    shift 2
+		;;
+	    --committer-name)
+		COMMITTER_NAME="${2}" &&
+		    shift 2
+		;;
+	    --committer-email)
+		COMMITER_EMAIL="${2}" &&
+		    shift 2
+		;;
+	    *)
+		echo Unsupported Option &&
+		    echo ${1} &&
+		    echo ${@} &&
+		    echo ${0} &&
+		    exit 64
+	esac
+    done &&
     if [ -z "${UPSTREAM_HOST}" ]
     then
 	UPSTREAM_HOST=github.com
@@ -223,7 +224,6 @@ EOF
     git remote add upstream upstream:${UPSTREAM_ORGANIZATION}/${UPSTREAM_REPOSITORY}.git &&
     git remote add origin origin:${ORIGIN_ORGANIZATION}/${ORIGIN_REPOSITORY}.git &&
     git remote add report report:${REPORT_ORGANIZATION}/${REPORT_REPOSITORY}.git &&
-    bash &&
     if [ ! -z "${ORIGIN_BRANCH}" ]
     then
 	git fetch origin ${ORIGIN_BRANCH} &&

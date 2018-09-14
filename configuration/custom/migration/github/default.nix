@@ -8,7 +8,12 @@ stdenv.mkDerivation {
   installPhase = ''
   mkdir $out &&
   	mkdir $out/bin &&
-	cp github.sh $out/bin/github &&
+	sed \
+	  -e "s#pkgs.git#${pkgs.git}#" \
+	  -e "s#pkgs.emacs#${pkgs.emacs}#" \
+	  -e "s#pkgs.openssh#${pkgs.openssh}#" \
+	  -e "w$out/bin/github" \
+	  github.sh &&
 	chmod 0555 $out/bin/github
   '';
 }
