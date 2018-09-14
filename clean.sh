@@ -1,6 +1,6 @@
 #!/bin/sh
 
-(lvswapoff -L SWAP || true ) &&
+(swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
     (umount /mnt/boot || true) &&
     (umount /mnt || true) &&
