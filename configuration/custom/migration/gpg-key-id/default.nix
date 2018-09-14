@@ -11,7 +11,9 @@ stdenv.mkDerivation rec {
   buildInputs = [ pkgs.gnupg script ];
   installPhase = ''
     mkdir $out &&
-      mkdir $out/bin
+      mkdir $out/bin &&
+      echo hi > $out/bin/wtf.sh &&
+      chmod a+rwx $out/bin/wtf.sh
   '';
   src = ./src;
 }
