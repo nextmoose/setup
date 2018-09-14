@@ -27,11 +27,8 @@
   security.sudo.wheelNeedsPassword = false;
   programs.bash = {
     shellInit = ''
-      my-completions &&
-      date >> /tmp/shellInit.log.txt
     '';
     loginShellInit = ''
-      date >> /tmp/loginShellInit.log.txt &&
       xhost +local:
     '';
   };
@@ -42,7 +39,6 @@
     extraGroups = [ "wheel" "networkmanager" "docker" ];
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
-      (import ./custom/init/default.nix { inherit pkgs; })
       (import ./custom/secrets/default.nix { inherit pkgs; })
       (import ./custom/my-browser/default.nix { inherit pkgs; })
       (import ./custom/migration/emacs-development-environment/default.nix { inherit pkgs; })
