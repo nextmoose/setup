@@ -8,12 +8,5 @@ let
 in
 stdenv.mkDerivation rec {
   name = "gpg-key-id";
-  buildInputs = [ pkgs.gnupg script ];
-  installPhase = ''
-    mkdir $out &&
-      mkdir $out/bin &&
-      echo hi > $out/bin/wtf.sh &&
-      chmod a+rwx $out/bin/wtf.sh
-  '';
-  src = ./src;
+  buildInputs = [ script ];
 }
