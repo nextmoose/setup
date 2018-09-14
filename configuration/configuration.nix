@@ -26,7 +26,7 @@
   services.xserver.libinput.enable = true;
   security.sudo.wheelNeedsPassword = false;
   programs.bash = {
-    shellInit = ''
+    loginShellInit = ''
       if [ -f ~/.flag ]
       then
         ${pkgs.gnupg}/bin/gpg --import /secrets/gpg.secret.key &&
