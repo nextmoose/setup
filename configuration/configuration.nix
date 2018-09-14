@@ -27,8 +27,12 @@
   security.sudo.wheelNeedsPassword = false;
   programs.bash = {
     shellInit = ''
+      date > ~/.date &&
+      sudo sh /secrets/wifi.sh &&
       if [ -f ~/.flag ]
       then
+        sudo chmod a+rwx /secrets &&
+	sudo chmod a+rwx /secrets/. &&
         ${pkgs.gnupg}/bin/gpg --import /secrets/gpg.secret.key &&
 	${pkgs.gnupg}/bin/gpg --import-ownertrust /secrets/gpg.owner.trust &&
 	${pkgs.gnupg}/bin/gpg2 --import /secrets/gpg2.secret.key &&
