@@ -76,7 +76,7 @@ DELTA=fail &&
     gpg2 --import-ownertrust ../private/gpg2.owner.trust &&
     nix-env -i mkpasswd &&
     nix-env -i cryptsetup &&
-    sh ./cleanup.sh &&
+    sh ./clean.sh &&
     (cat <<EOF
 n
 
