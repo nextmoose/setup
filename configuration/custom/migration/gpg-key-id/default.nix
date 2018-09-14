@@ -1,19 +1,3 @@
 { pkgs ? import <nixpkgs> {} }:
-
 with import <nixpkgs> {};
-let
-  script = pkgs.writeShellScriptBin "gpg-key-id" ''
-     ${pkgs.gnupg}/bin/gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":"
-  '';
-in
-stdenv.mkDerivation rec {
-  name = "gpg-key-id";
-  buildInputs = [ pkgs.gnupg script ];
-  installPhase = ''
-    mkdir $out &&
-      mkdir $out/bin &&
-      echo hi > $out/bin/wtf.sh &&
-      chmod a+rwx $out/bin/wtf.sh
-  '';
-  src = ./src;
-}
+pkgs.writeShellScriptBin "gpg-key-id" "${pkgs.gnupg}/bin/gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ':'"
