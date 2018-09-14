@@ -72,6 +72,7 @@
       pkgs.xorg.xhost
       pkgs.browserpass
       pkgs.pass
+      pkgs.writeShellScriptBin "gpg-key-id" "${pkgs.gnupg}/bin/gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ':'"
     ];
   };
   system.stateVersion = "18.03";
