@@ -34,6 +34,9 @@ case ${1} in
     user.password)
 	sudo cat /secrets/user.password
 	;;
+    root.password)
+	sudo cat /secrets/root.password
+	;;
     *)
 	echo Unknown Secret &&
 	    echo ${1} &&

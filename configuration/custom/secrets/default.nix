@@ -7,7 +7,6 @@ stdenv.mkDerivation {
   src = ./src;
   installPhase = ''
     mkdir $out &&
-      mkdir $out/etc &&
       mkdir $out/bin &&
       cp secrets.sh $out/bin/secrets &&
       chmod 0555 $out/bin/secrets
