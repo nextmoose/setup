@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export PATH=${PATH}:pkgs.git/bin:pkgs.emacs/bin:pkgs.openssh/bin &&
+export PATH=${PATH}:pkgs.git/bin:pkgs.emacs/bin:pkgs.openssh/bin:pkgs.id/bin &&
     while [ ${#} -gt 0 ]
     do
 	case ${1} in
