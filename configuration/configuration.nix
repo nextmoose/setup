@@ -27,12 +27,20 @@
   security.sudo.wheelNeedsPassword = false;
   programs.bash = {
     shellInit = ''
-      my-completions &&
-      date >> /tmp/shellInit.log.txt
-    '';
-    loginShellInit = ''
-      date >> /tmp/loginShellInit.log.txt &&
-      xhost +local:
+      if [ -f ~/.flag ]
+      then
+        ${pkgs.gnupg}/bin/gpg --import /secrets/gpg.secret.key &&
+	${pkgs.gnupg}/bin/gpg --import-ownertrust /secrets/gpg.owner.trust &&
+	${pkgs.gnupg}/bin/gpg2 --import /secrets/gpg2.secret.key &&
+	${pkgs.gnupg}/bin/gpg2 --import-ownertrust /secrets/gpg2.owner.trust &&
+	${pkgs.pass}/bin/pass init $(gpg-key-id) &&
+	${pkgs.pass}/bin/pass git init &&
+	${pkgs.pass}/bin/pass git remote add origin https://github.com/nextmoose/secrets.git &&
+	${pkgs.pass}/bin/pass git fetch origin master &&
+	${pkgs.pass}/bin/pass git checkout origin/master &&
+	rm -f ~/.flag
+      fi &&
+        ${pkgs.xorg.xhost}/bin/xhost +local:
     '';
   };
   users.mutableUsers = false;
