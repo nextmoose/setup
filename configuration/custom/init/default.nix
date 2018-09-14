@@ -1,7 +1,6 @@
 { pkgs ? import <nixpkgs> {} }:
 
 with import <nixpkgs> {};
-
 stdenv.mkDerivation {
   name = "init-home";
   src = ./src;
