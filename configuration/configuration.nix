@@ -63,6 +63,7 @@
       pkgs.nix-bash-completions
       pkgs.xorg.xhost
       pkgs.browserpass
+      pkgs.git
     ];
   };
   system.stateVersion = "18.03";
