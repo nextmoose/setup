@@ -3,10 +3,11 @@
 with import <nixpkgs> {};
 
 stdenv.mkDerivation {
-  name = "browser";
+  name = "secrets";
   src = ./src;
   installPhase = ''
     mkdir $out &&
+      mkdir $out/etc &&
       mkdir $out/bin &&
       cp secrets.sh $out/bin/secrets &&
       chmod 0555 $out/bin/secrets
