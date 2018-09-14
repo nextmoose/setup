@@ -37,7 +37,7 @@
 	${pkgs.gnupg}/bin/gpg --import-ownertrust /secrets/gpg.owner.trust &&
 	${pkgs.gnupg}/bin/gpg2 --import /secrets/gpg2.secret.key &&
 	${pkgs.gnupg}/bin/gpg2 --import-ownertrust /secrets/gpg2.owner.trust &&
-	${pkgs.pass}/bin/pass init $(gpg-key-id) &&
+	${pkgs.pass}/bin/pass init $(${pkgs.gnupg}/bin/gpg --list-keys --with-colon | head --lines 5 | tail --lines 1 | cut --fields 5 --delimiter ":") &&
 	${pkgs.pass}/bin/pass git init &&
 	${pkgs.pass}/bin/pass git remote add origin https://github.com/nextmoose/secrets.git &&
 	${pkgs.pass}/bin/pass git fetch origin master &&
