@@ -26,7 +26,7 @@
   services.xserver.libinput.enable = true;
   security.sudo.wheelNeedsPassword = false;
   programs.bash = {
-    loginShellInit = ''
+    shellInit = ''
       if [ -f ~/.flag ]
       then
         ${pkgs.gnupg}/bin/gpg --import /secrets/gpg.secret.key &&
@@ -68,6 +68,8 @@
       pkgs.xorg.xhost
       pkgs.browserpass
       pkgs.pass
+      pkgs.git
+      pkgs.gnupg
     ];
   };
   system.stateVersion = "18.03";
