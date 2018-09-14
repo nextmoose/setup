@@ -1,7 +1,5 @@
 { pkgs ? import <nixpkgs> {} }:
-
 with import <nixpkgs> {};
-
 stdenv.mkDerivation {
   name = "browser";
   src = ./src;
@@ -9,6 +7,7 @@ stdenv.mkDerivation {
     mkdir $out &&
       mkdir $out/bin &&
       sed \
+        -e "s#pkgs.nautilus#${pkgs.nautilus}#" \
         -e "s#pkgs.git#${pkgs.git}#" \
         -e "s#pkgs.gnupg#${pkgs.gnupg}#" \
         -e "s#pkgs.pass#${pkgs.pass}#" \
