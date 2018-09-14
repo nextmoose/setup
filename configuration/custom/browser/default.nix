@@ -7,7 +7,6 @@ stdenv.mkDerivation {
     mkdir $out &&
       mkdir $out/bin &&
       sed \
-        -e "s#pkgs.nautilus#${pkgs.gnome3.nautilus}#" \
         -e "s#pkgs.git#${pkgs.git}#" \
         -e "s#pkgs.gnupg#${pkgs.gnupg}#" \
         -e "s#pkgs.pass#${pkgs.pass}#" \

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-export PATH=${PATH}:pkgs.nautilus/bin:pkgs.git/bin:pkgs.gnupg/bin:pkgs.pass/bin:pkgs.chromium/bin &&
+export PATH=${PATH}:pkgs.git/bin:pkgs.gnupg/bin:pkgs.pass/bin:pkgs.chromium/bin &&
     while [ ${#} -gt 0 ]
     do
 	case ${1} in
