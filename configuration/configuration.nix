@@ -20,7 +20,7 @@
   time.timeZone = "US/Eastern";
   virtualisation.docker.enable = true;
   services.virtualbox.host = { enable = true; enableHardening = false; };
-  security.setuidPrograms = [ "VirtualBox" "VBoxManage" ];
+  security.wrappers = [ "VirtualBox" "VBoxManage" ];
   sound.enable = true;
   hardware.pulseaudio.enable = true;
   services.xserver.enable = true;
