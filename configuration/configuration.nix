@@ -19,6 +19,7 @@
   };
   time.timeZone = "US/Eastern";
   virtualisation.docker.enable = true;
+  virtualisation.virtualbox.enable = true;
   sound.enable = true;
   hardware.pulseaudio.enable = true;
   services.xserver.enable = true;
