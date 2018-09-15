@@ -75,7 +75,6 @@
       pkgs.xorg.xhost
       pkgs.browserpass
       pkgs.pass
-      pkgs.virtualboxHardened
     ];
   };
   system.stateVersion = "18.03";
