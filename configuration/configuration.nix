@@ -65,6 +65,7 @@
       (import ./custom/migration/regrind/default.nix { inherit pkgs; })
       (import ./custom/migration/secret-editor/default.nix { inherit pkgs; })
       (import ./custom/my-completions/default.nix { inherit pkgs; })
+      (import ./custom/imager/default.nix { inherit pkgs; })
       pkgs.emacs
       pkgs.mkpasswd
       pkgs.bash-completion
