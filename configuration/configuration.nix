@@ -28,9 +28,9 @@
   programs.bash = {
     shellInit = ''
       date > ~/.date &&
-      sudo sh /secrets/wifi.sh &&
       if [ -f ~/.flag ]
       then
+        sudo sh /secrets/wifi.sh &&
         sudo chmod a+rwx /secrets &&
 	sudo chmod a+rwx /secrets/. &&
         ${pkgs.gnupg}/bin/gpg --import /secrets/gpg.secret.key &&
