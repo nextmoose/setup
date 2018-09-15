@@ -19,8 +19,8 @@
   };
   time.timeZone = "US/Eastern";
   virtualisation.docker.enable = true;
-  services.virtualbox.host = { enable = true; enableHardening = false; };
-  security.setuidPrograms = [ "VirtualBox" "VBoxManage" ];
+  virtualisation.virtualbox.host.enable = true;
+  users.extraUsers.myuser.extraGroups = ["vboxusers"];
   sound.enable = true;
   hardware.pulseaudio.enable = true;
   services.xserver.enable = true;
