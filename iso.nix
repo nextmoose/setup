@@ -26,6 +26,5 @@
       prefixLength = 24;
     }];
     defaultGateway = "64.137.201.1";
-    nameServers = [ "8.8.8.8" ];
   };
 }
