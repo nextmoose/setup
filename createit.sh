@@ -4,6 +4,7 @@ cleanup(){
     VBoxManage list vms | cut --fields 2 --delimiter '"' | while read VM
     do
 	VBoxManage controlvm ${VM} poweroff soft &&
+	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM}
     done &&
 	sudo lvremove --force /dev/volumes/nixos &&
