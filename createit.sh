@@ -6,8 +6,7 @@ cleanup(){
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    VBoxManage unregistervm --delete ${VM}
     done &&
-	rm nixos.vmdk &&
-	sudo lvremove --force /dev/volume/nixos &&
+	sudo lvremove --force /dev/volumes/nixos &&
 	true
 } &&
     trap cleanup EXIT &&
@@ -42,6 +41,8 @@ cleanup(){
 	--type hdd \
 	--medium $(pwd)/nixos.vmdk &&
     VBoxManage startvm nixos &&
+    sleep 2m &&
+    ssh -i id_rsa -l root 64.137.201.46 hello &&
     echo SUCCESS &&
-    sleep 10m &&
+    sleep 5m &&
     true
