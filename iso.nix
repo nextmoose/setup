@@ -9,4 +9,5 @@
     # doesn't need to run "nix-channel --update" first.
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
+  environment.variables.FOO="bar";
 }
