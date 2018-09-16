@@ -53,7 +53,7 @@
   users.extraUsers.user = {
     isNormalUser = true;
     uid = 1000;
-    extraGroups = [ "wheel" "networkmanager" "docker" ];
+    extraGroups = [ "wheel" "networkmanager" "docker" "disk" ];
     hashedPassword = "${PASSWORD_HASH}";
     packages = [
       (import ./custom/secrets/default.nix { inherit pkgs; })
