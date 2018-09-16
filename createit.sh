@@ -1,11 +1,28 @@
 #!/bin/sh
 
-VBoxManage \
-    createvm \
-    --name nixos \
-    --groups /nixos \
-    --register &&
+cleanup(){
+    VBoxManage list vms | while read VM
+    do
+	VBoxManage controlvm ${VM} poweroff soft &&
+	    VBoxManage unregistervm --delete ${VM}
+    done &&
+	rm nixos.vmdk &&
+	sudo lvremove --force /dev/volume/nixos &&
+	true
+} &&
+    trap cleanup EXIT &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix &&
+    sudo lvcreate --name nixos --size 100GB volumes &&
+    VBoxManage \
+	internalcommands \
+	createrawvmdk -filename  \
+	$(pwd)/nixos.vmdk \
+	-rawdisk /dev/volumes/nixos &&
+    VBoxManage \
+	createvm \
+	--name nixos \
+	--groups /nixos \
+	--register &&
     VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
     VBoxManage \
 	storageattach \
@@ -16,9 +33,6 @@ VBoxManage \
 	--type dvddrive \
 	--medium $(pwd)/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
     VBoxManage storagectl nixos --name "IDE" --add IDE &&
-    sudo lvcreate --name nixos --size 100GB volumes &&
-    sudo VBoxManage internalcommands createrawvmdk -filename  $(pwd)/nixos.vmdk -rawdisk /dev/volumes/nixos &&
-    sudo chmod a+rwx nixos.vmdk &&
     VBoxManage \
 	storageattach \
 	nixos \
@@ -28,5 +42,6 @@ VBoxManage \
 	--type hdd \
 	--medium $(pwd)/nixos.vmdk &&
     VBoxManage startvm nixos &&
-    echo HELLO WORLD &&
+    echo SUCCESS &&
+    sleep 3m &&
     true
