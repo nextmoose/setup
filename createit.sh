@@ -16,6 +16,9 @@ VBoxManage \
 	--type dvddrive \
 	--medium $(pwd)/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
     VBoxManage storagectl nixos --name "IDE" --add IDE &&
+    sudo lvcreate --name nixos --size 100GB volumes &&
+    sudo VBoxManage internalcommands createrawvmdk -filename  $(pwd)/nixos.vmdk -rawdisk /dev/volumes/nixos &&
+    sudo chmod a+rwx nixos.vmdk &&
     VBoxManage \
 	storageattach \
 	nixos \
@@ -23,5 +26,5 @@ VBoxManage \
 	--port 0 \
 	--device 0 \
 	--type hdd \
-	--medium $(pwd)/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&    
+	--medium $(pwd)/nixos.vmdk &&    
     true
