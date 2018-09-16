@@ -1,7 +1,7 @@
 #!/bin/sh
 
 cleanup(){
-    VBoxManage list vms | while read VM
+    VBoxManage list vms | cut --fields 2 --delimiter '"' while read VM
     do
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    VBoxManage unregistervm --delete ${VM}
