@@ -43,5 +43,5 @@ cleanup(){
 	--medium $(pwd)/nixos.vmdk &&
     VBoxManage startvm nixos &&
     echo SUCCESS &&
-    sleep 3m &&
+    sleep 10m &&
     true
