@@ -76,6 +76,7 @@
       pkgs.browserpass
       pkgs.pass
       pkgs.vagrant
+      pkgs.packer
     ];
   };
   system.stateVersion = "18.03";
