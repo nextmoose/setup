@@ -26,5 +26,7 @@ VBoxManage \
 	--port 0 \
 	--device 0 \
 	--type hdd \
-	--medium $(pwd)/nixos.vmdk &&    
+	--medium $(pwd)/nixos.vmdk &&
+    VBoxManage startvm nixos &&
+    echo HELLO WORLD &&
     true
