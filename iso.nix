@@ -10,4 +10,9 @@
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
   environment.variables.FOO="bar";
+  environment.systemPackages = [
+    (pkgs.writeShellScriptBin "hello" ''
+      echo hello world
+    '')
+  ];
 }

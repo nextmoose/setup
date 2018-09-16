@@ -75,6 +75,7 @@
       pkgs.xorg.xhost
       pkgs.browserpass
       pkgs.pass
+      pkgs.vagrant
     ];
   };
   system.stateVersion = "18.03";
