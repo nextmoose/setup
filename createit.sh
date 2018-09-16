@@ -28,4 +28,5 @@ VBoxManage \
 	--type hdd \
 	--medium $(pwd)/nixos.vmdk &&
     VBoxManage startvm nixos &&
+    echo hello world &&
     true
