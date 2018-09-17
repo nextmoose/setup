@@ -1,6 +1,6 @@
 #!/bin/sh
 
-VM=$(uuidgen) &&
+VM=nixos-$((${RAND}*9000+1000)) &&
     SSH_KEY=$(mktemp) &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
