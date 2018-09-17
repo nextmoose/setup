@@ -58,10 +58,12 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     VBoxManage modifyvm "${VM}" --nic1 nat &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT=${PORT} &&
-    read -p "Waiting for startup ... " READ0 &&
     VBoxManage startvm ${VM} &&
     read -p "IS THE VERSION MACHINE READY?  " READ1 &&
     ssh-keyscan -p ${PORT} 127.0.0.1 > ${KNOWN_HOSTS} &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile ${KNOWN_HOSTS} 127.0.0.1 hello &&
+    while ! ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS} 127.0.0.1 hello
+    do
+	sleep 1s
+    done &&
     read -p "IS THE TESTING COMPLETE?  " READ1 &&
     true
