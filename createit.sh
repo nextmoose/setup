@@ -10,6 +10,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
+	    VBoxManage netnetwork remove ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
 	    rm -f ${SSH_KEY} ${ISONIX} &&
 	    true
@@ -22,6 +23,13 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	iso.nix &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
     sudo lvcreate --name ${VM} --size 100GB volumes &&
+    VBoxManage \
+	netnetwork \
+	add \
+	--network ${VM} \
+	--enable \
+	--dhcp off \
+	--port-forward-4 "guestssh,tcp,127.0.0.1,${PORT},127.0.0.1,22" &&
     VBoxManage \
 	internalcommands \
 	createrawvmdk -filename  \
@@ -50,10 +58,6 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--device 0 \
 	--type hdd \
 	--medium ${VMDK} &&
-    VBoxManage \
-	modifyvm \
-	${VM} \
-	--natpf1 "guestssh,tcp,127.0.0.1,${PORT},127.0.0.1,22" &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT=${PORT} &&
     read -p "Waiting for startup ... " READ0 &&
