@@ -19,7 +19,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	-e "s#ID_RSA.PUB#$(cat ${SSH_KEY}.pub)#" \
 	-e "w${ISONIX}" \
 	iso.nix &&
-    nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix &&
+    nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
     sudo lvcreate --name ${VM} --size 100GB volumes &&
     VBoxManage \
 	internalcommands \
@@ -49,7 +49,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--device 0 \
 	--type hdd \
 	--medium ${VMDK} &&
-    VBoxManage startvm nixos &&
+    VBoxManage startvm ${VM} &&
     read -p "IS THE VERSION MACHINE READY?  " READ1 &&
     ssh -i id_rsa -l root 64.137.201.46 hello &&
     read -p "IS THE TESTING COMPLETE?  " READ1 &&
