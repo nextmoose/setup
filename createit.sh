@@ -3,16 +3,22 @@
 VM=$(uuidgen) &&
     SSH_KEY=$(mktemp) &&
     VMDK=$(mktemp) &&
+    ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
+    rm -f ${SSH_KEY} ${VMDK} &&
     cleanup(){
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
-	    rm -f ${SSH_KEY} &&
+	    rm -f ${SSH_KEY} ${ISONIX} &&
 	    true
     } &&
     trap cleanup EXIT &&
     ssh-keygen -f ${SSH_KEY} -P "" -C "" &&
+    sed \
+	-e "s#ID_RSA.PUB#$(cat ${SSH_KEY}.pub)#" \
+	-e "w${ISONIX}" \
+	iso.nix &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix &&
     sudo lvcreate --name ${VM} --size 100GB volumes &&
     VBoxManage \

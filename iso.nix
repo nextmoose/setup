@@ -17,7 +17,7 @@
   ];
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSPWu9I329zI6FrHQzZPLOanblYG1yMpHVXvgH9jHuYYaUNYOWD+8BHaoHzfSbdAiIyWy9149/t1LaXSr+6Tx+rr+8AS4zUkY4ngnjsUicrhqamMsr0Yr6Jk8xrNMcjqxd/Nmk0yjdclgxZ7BBWDz9rncr2e3Fs8DiwxkWlcWM/qFMZs/E81PQXEv1/elh/fU0TaAAhYC7dIae532eRAsa4pAw+oIixg15fRc5isrOeB/5LaIAtjF5tcYD2hx0FpMGxklYxaiZdUhCbqdHJB+bVw1zeIs8/4t8P00TnMAC1a72oZJUW5sMCq0fkEzh2uZ4WeM6zX4pYOYzQ0SHt6Ol"
+    "ID_RSA.PUB"
   ];
   networking = {
     usePredictableInterfaceNames = false;
