@@ -42,8 +42,7 @@ cleanup(){
 	--type hdd \
 	--medium $(pwd)/nixos.vmdk &&
     VBoxManage startvm nixos &&
-    sleep 2m &&
+    read -p "IS THE VERSION MACHINE READY?  " READ1 &&
     ssh -i id_rsa -l root 64.137.201.46 hello &&
-    echo SUCCESS &&
-    sleep 5m &&
+    read -p "IS THE TESTING COMPLETE?  " READ1 &&
     true

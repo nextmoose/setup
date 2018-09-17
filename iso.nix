@@ -17,11 +17,11 @@
   ];
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users.users.root.openssh.authorizedKeys.keys = [
-    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQCuf5Cg+E6+TbnmJDtd2EvzRy1EnLj48lCFOShlGX67gSgPpOyYXVZCbHp0Tg1YRQjd8WWVjE0mxW1CNjIdjthruWR+17S6WyXEIDQTarL71QaxwgHMBtTnsVmd1brzj8FdhVeyjb1O1DaKy46XGO6f7xBiGr+FhdQ2lhVeDpBjh/Edx4drMks9wOv5df0+q3PFEB3Lbruv7M2xJLdfCkb0OPkIWaa3Ft+3nsoM6Mu8CVL/q7d8jKvcIIybmYueVqxt+78jGJFjWRyWSfbJhFlj5tsIvOpz0P0Fh7Rrw+uguxUoI/CHPT6RCH2lqnBd62mfn6kzsLStzU3v0QFEDRHx"
+    "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSPWu9I329zI6FrHQzZPLOanblYG1yMpHVXvgH9jHuYYaUNYOWD+8BHaoHzfSbdAiIyWy9149/t1LaXSr+6Tx+rr+8AS4zUkY4ngnjsUicrhqamMsr0Yr6Jk8xrNMcjqxd/Nmk0yjdclgxZ7BBWDz9rncr2e3Fs8DiwxkWlcWM/qFMZs/E81PQXEv1/elh/fU0TaAAhYC7dIae532eRAsa4pAw+oIixg15fRc5isrOeB/5LaIAtjF5tcYD2hx0FpMGxklYxaiZdUhCbqdHJB+bVw1zeIs8/4t8P00TnMAC1a72oZJUW5sMCq0fkEzh2uZ4WeM6zX4pYOYzQ0SHt6Ol"
   ];
   networking = {
     usePredictableInterfaceNames = false;
-    interfaces.eth0.ip4 = [{
+    interfaces.eth0.ipv4.addresses = [{
       address = "64.137.201.46";
       prefixLength = 24;
     }];
