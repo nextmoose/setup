@@ -36,14 +36,6 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--name ${VM} \
 	--groups /nixos \
 	--register &&
-    VBoxManage \
-	natnetwork \
-	add \
-	--netname ${VM} \
-	--network 10.0.0.0/8 \
-	--enable \
-	--dhcp off \
-	--port-forward-4 "ssh:tcp:[127.0.0.1]:${PORT}:[10.0.0.46]:22" &&
     VBoxManage storagectl ${VM} --name "SATA Controller" --add SATA &&
     VBoxManage \
 	storageattach \
@@ -62,7 +54,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--device 0 \
 	--type hdd \
 	--medium ${VMDK} &&
-    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT},10.0.0.46,22" &&
+    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT},,22" &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT=${PORT} &&
     read -p "Waiting for startup ... " READ0 &&

@@ -19,12 +19,4 @@
   users.users.root.openssh.authorizedKeys.keys = [
     "ID_RSA.PUB"
   ];
-  networking = {
-    usePredictableInterfaceNames = false;
-    interfaces.eth0.ipv4.addresses = [{
-      address = "10.0.0.46";
-      prefixLength = 24;
-    }];
-    defaultGateway = "10.0.0.1";
-  };
 }
