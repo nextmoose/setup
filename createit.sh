@@ -10,7 +10,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
-	    VBoxManage netnetwork remove ${VM} &&
+	    VBoxManage natnetwork remove ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
 	    rm -f ${SSH_KEY} ${ISONIX} &&
 	    true
@@ -24,7 +24,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
     sudo lvcreate --name ${VM} --size 100GB volumes &&
     VBoxManage \
-	netnetwork \
+	natnetwork \
 	add \
 	--network ${VM} \
 	--enable \
