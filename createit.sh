@@ -54,11 +54,12 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--type hdd \
 	--medium ${VMDK} &&
     VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT},,22" &&
+    VBoxManage modifyvm "${VM}" --nic1 nat &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT=${PORT} &&
     read -p "Waiting for startup ... " READ0 &&
     VBoxManage startvm ${VM} &&
     read -p "IS THE VERSION MACHINE READY?  " READ1 &&
-    ssh -i ${SSH_KEY} -l root -p 2222 127.0.0.1 hello &&
+    ssh -i ${SSH_KEY} -l root -p ${PORT} 127.0.0.1 hello &&
     read -p "IS THE TESTING COMPLETE?  " READ1 &&
     true
