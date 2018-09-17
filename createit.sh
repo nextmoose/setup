@@ -39,10 +39,11 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     VBoxManage \
 	natnetwork \
 	add \
-	--network ${VM} \
+	--netname ${VM} \
+	--network 10.0.0.0/8 \
 	--enable \
 	--dhcp off \
-	--port-forward-4 "guestssh,tcp,,${PORT},,22" &&
+	--port-forward-4 "ssh:tcp:[127.0.0.1]:${PORT}:[10.0.0.46]:22" &&
     VBoxManage storagectl ${VM} --name "SATA Controller" --add SATA &&
     VBoxManage \
 	storageattach \
