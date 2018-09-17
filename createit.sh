@@ -62,7 +62,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--device 0 \
 	--type hdd \
 	--medium ${VMDK} &&
-    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,,${PORT},,22" &&
+    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT},10.0.0.46,22" &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT=${PORT} &&
     read -p "Waiting for startup ... " READ0 &&
