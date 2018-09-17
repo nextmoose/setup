@@ -4,12 +4,12 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     SSH_KEY=$(mktemp) &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
+    PORT=$((${RANDOM}%9000+20000)) &&
     rm -f ${SSH_KEY} ${VMDK} &&
     cleanup(){
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
-	    VBoxManager natnetwork --remove ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
 	    rm -f ${SSH_KEY} ${ISONIX} &&
 	    true
@@ -51,13 +51,11 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--type hdd \
 	--medium ${VMDK} &&
     VBoxManage \
-	natnetwork \
-	add \
-	--netname ${VM} \
-	--network 10.0.0.0/8 \
-	--enable &&
+	modifyvm \
+	${VM} \
+	--natpf1 "guestssh,tcp,127.0.0.1,${PORT},127.0.0.1,22" &&
     VBoxManage startvm ${VM} &&
     read -p "IS THE VERSION MACHINE READY?  " READ1 &&
-    ssh -i ${ID_RSA} -l root 64.137.201.46 hello &&
+    ssh -i ${ID_RSA} -l root -p 2222 hello &&
     read -p "IS THE TESTING COMPLETE?  " READ1 &&
     true
