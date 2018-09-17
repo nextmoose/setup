@@ -5,13 +5,14 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
     PORT=27895 &&
+    KNOWN_HOSTS=$(mktemp) &&
     rm -f ${SSH_KEY} ${VMDK} &&
     cleanup(){
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
-	    rm -f ${ISONIX} &&
+	    rm -f ${ISONIX} ${KNOWN_HOSTS} &&
 	    true
     } &&
     trap cleanup EXIT &&
@@ -60,6 +61,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     read -p "Waiting for startup ... " READ0 &&
     VBoxManage startvm ${VM} &&
     read -p "IS THE VERSION MACHINE READY?  " READ1 &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT} 127.0.0.1 hello &&
+    ssh-keyscan -p ${PORT} 127.0.0.1 > ${KNOWN_HOSTS} &&
+    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile ${KNOWN_HOSTS} 127.0.0.1 hello &&
     read -p "IS THE TESTING COMPLETE?  " READ1 &&
     true
