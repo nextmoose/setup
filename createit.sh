@@ -52,6 +52,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--medium ${VMDK} &&
     VBoxManage \
 	natnetwork \
+	add \
 	--netname ${VM} \
 	--network 10.0.0.0/8 \
 	--enable &&
