@@ -59,11 +59,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT=${PORT} &&
     VBoxManage startvm ${VM} &&
-    while ! ssh-keyscan -p ${PORT} 127.0.0.1
-    do
-	echo waiting for vm ... &&
-	    sleep 1s
-    done &&
+    sleep 2m &&
     ssh-keyscan -p ${PORT} 127.0.0.1 > ${KNOWN_HOSTS} &&
     echo finished waiting for vm &&
     ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS} 127.0.0.1 hello
