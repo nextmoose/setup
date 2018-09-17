@@ -1,7 +1,7 @@
 #!/bin/sh
 
 VM=nixos-$((${RANDOM}%9000+1000)) &&
-    SSH_KEY=$(mktemp) &&
+    SSH_KEY=id_rsa &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
     PORT=$((${RANDOM}%9000+20000)) &&
@@ -16,20 +16,16 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	    true
     } &&
     trap cleanup EXIT &&
-    ssh-keygen -f ${SSH_KEY} -P "" -C "" &&
+    if [ ! -f ${SSH_KEY} ]
+    then
+	ssh-keygen -f ${SSH_KEY} -P "" -C ""
+    fi &&
     sed \
-	-e "s#ID_RSA.PUB#$(cat ${SSH_KEY}.pub)#" \
+	-e "s#ID_RSA.PUB#$(ssh-keygen -y -f id_rsa)#" \
 	-e "w${ISONIX}" \
 	iso.nix &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
     sudo lvcreate --name ${VM} --size 100GB volumes &&
-    VBoxManage \
-	natnetwork \
-	add \
-	--network ${VM} \
-	--enable \
-	--dhcp off \
-	--port-forward-4 "guestssh,tcp,127.0.0.1,${PORT},127.0.0.1,22" &&
     VBoxManage \
 	internalcommands \
 	createrawvmdk -filename  \
@@ -40,6 +36,13 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--name ${VM} \
 	--groups /nixos \
 	--register &&
+    VBoxManage \
+	natnetwork \
+	add \
+	--network ${VM} \
+	--enable \
+	--dhcp off \
+	--port-forward-4 "guestssh,tcp,,${PORT},,22" &&
     VBoxManage storagectl ${VM} --name "SATA Controller" --add SATA &&
     VBoxManage \
 	storageattach \
