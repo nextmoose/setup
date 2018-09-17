@@ -10,9 +10,9 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
-	    VBoxManage natnetwork remove ${VM} &&
+	    VBoxManage natnetwork remove --netname ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
-	    rm -f ${SSH_KEY} ${ISONIX} &&
+	    rm -f ${ISONIX} &&
 	    true
     } &&
     trap cleanup EXIT &&
