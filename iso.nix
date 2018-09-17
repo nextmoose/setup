@@ -22,9 +22,9 @@
   networking = {
     usePredictableInterfaceNames = false;
     interfaces.eth0.ipv4.addresses = [{
-      address = "64.137.201.46";
+      address = "10.0.0.46";
       prefixLength = 24;
     }];
-    defaultGateway = "64.137.201.1";
+    defaultGateway = "10.0.0.1";
   };
 }
