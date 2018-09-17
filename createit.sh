@@ -4,13 +4,12 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     SSH_KEY=id_rsa &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
-    PORT=$((${RANDOM}%9000+20000)) &&
+    PORT=27895 &&
     rm -f ${SSH_KEY} ${VMDK} &&
     cleanup(){
 	VBoxManage controlvm ${VM} poweroff soft &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
-	    VBoxManage natnetwork remove --netname ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
 	    rm -f ${ISONIX} &&
 	    true
