@@ -56,6 +56,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--natpf1 "guestssh,tcp,127.0.0.1,${PORT},127.0.0.1,22" &&
     VBoxManage startvm ${VM} &&
     read -p "IS THE VERSION MACHINE READY?  " READ1 &&
-    ssh -i ${ID_RSA} -l root -p 2222 hello &&
+    ssh -i ${ID_RSA} -l root -p 2222 127.0.0.1 hello &&
+    echo ${ID_RSA} &&
     read -p "IS THE TESTING COMPLETE?  " READ1 &&
     true
