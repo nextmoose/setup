@@ -31,7 +31,7 @@ VM=$(uuidgen) &&
 	--name ${VM} \
 	--groups /nixos \
 	--register &&
-    VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
+    VBoxManage storagectl ${VM} --name "SATA Controller" --add SATA &&
     VBoxManage \
 	storageattach \
 	${VM} \
