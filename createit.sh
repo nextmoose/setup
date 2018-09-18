@@ -74,6 +74,6 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     #    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS} 127.0.0.1 install &&
     VBoxManage controlvm ${VM} poweroff soft &&
     VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
-    VBoxManage startvm ${VM} &&
-    read -p "ARE YOU READY? " READY &&
+    # VBoxManage startvm ${VM} &&
+    # read -p "ARE YOU READY? " READY &&
     true
