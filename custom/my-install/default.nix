@@ -5,7 +5,6 @@ with import <nixpkgs> {};
 stdenv.mkDerivation {
   name = "my-install";
   src = ./src;
-  buildInputs = [ pkgs.haskellPackages.mount ];
   installPhase = ''
     mkdir $out &&
       mkdir $out/bin &&
