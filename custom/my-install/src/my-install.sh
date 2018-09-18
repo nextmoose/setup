@@ -21,7 +21,8 @@ w
 y
 EOF
 	    ) | gdisk /dev/sda
-    done    (cat <<EOF
+    done &&
+    (cat <<EOF
 n
 
 
