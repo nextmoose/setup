@@ -74,7 +74,7 @@ ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
 	    ) | nixos-install &&
+	    shutdown -h now &&
 	    true
-    ) &&
-    shutdown -h now &&
+    } &&
     true

@@ -56,6 +56,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--medium ${VMDK} &&
     VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT},,22" &&
     VBoxManage modifyvm "${VM}" --nic1 nat &&
+    VBoxManage modifyvm "${VM}" --memory 2000 &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT=${PORT} &&
     VBoxManage startvm ${VM} &&
