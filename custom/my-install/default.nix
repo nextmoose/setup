@@ -3,14 +3,13 @@
 with import <nixpkgs> {};
 
 stdenv.mkDerivation {
-  name = "install";
+  name = "my-install";
   src = ./src;
   buildInputs = [ pkgs.haskellPackages.mount ];
   installPhase = ''
     mkdir $out &&
       mkdir $out/bin &&
-      cp install.sh $out/bin/install.sh &&
-      chmod 0500 $out/bin/install &&
-      mkdir $out/volume
+      cp my-install.sh $out/bin/my-install &&
+      chmod 0500 $out/bin/my-install
   '';
 }

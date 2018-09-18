@@ -14,6 +14,7 @@
     (pkgs.writeShellScriptBin "hello" ''
       echo hello world
     '')
+    (import ./custom/my-install/default.nix  { inherit pkgs; })
   ];
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users.users.root.openssh.authorizedKeys.keys = [
