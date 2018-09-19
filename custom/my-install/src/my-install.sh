@@ -38,6 +38,8 @@ n
 
 +64G
 
+w
+Y
 EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
