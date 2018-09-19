@@ -25,7 +25,9 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	-e "w${ISONIX}" \
 	iso.nix &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
-    sudo lvcreate --name ${VM} --size 100GB volumes &&
+    echo AAAA 200 &&
+    sudo lvcreate -y --name ${VM} --size 100GB volumes &&
+    echo AAAA 201 &&
     VBoxManage \
 	internalcommands \
 	createrawvmdk -filename  \

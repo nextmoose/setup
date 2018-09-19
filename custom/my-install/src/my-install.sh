@@ -55,15 +55,16 @@ EOF
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
     echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
-    cryptsetup luksFormat /dev/sda4 &&
-    cryptsetup luksOpen /dev/sda4 secrets &&
+    echo password > /tmp/luks.txt &&
+    cryptsetup --key-file /tmp/luks.txt luksFormat /dev/sda4 &&
+    cryptsetup --key-file /tmp/luks.txt luksOpen /dev/sda4 secrets &&
     echo y | mkfs.ext4 -L SECRETS /dev/mapper/secrets &&
     pvcreate --force /dev/sda5 &&
     vgcreate volumes /dev/sda5 &&
     mount /dev/sda3 /mnt &&
     mkdir /mnt/boot &&
     mkdir /mnt/secrets &&
-    mount /dev/mapper/secrets /mnt/secrets &&
+    # mount /dev/mapper/secrets /mnt/secrets &&
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
