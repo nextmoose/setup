@@ -58,5 +58,10 @@ ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
+    (cat <<EOF
+${ROOT_PASSWORD}
+${ROOT_PASSWORD}
+EOF
+    ) | nixos-install &&
     echo INSTALLED AND READY TO REBOOT &&
     true
