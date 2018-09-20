@@ -5,14 +5,6 @@
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
-  i18n = {
-    consoleFont = "Lat2-Terminus16";
-    consoleKeyMap = "us";
-    defaultLocale = "en_US.UTF-8";
-  };
-  time.timeZone = "US/Eastern";
-  sound.enable = true;
-  hardware.pulseaudio.enable = true;
   services.xserver.enable = true;
   services.xserver.windowManager.i3.enable = true;
   services.xserver.libinput.enable = true;
