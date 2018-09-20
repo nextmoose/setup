@@ -85,5 +85,6 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
     echo REMOVED DISK &&
     VBoxManage startvm ${VM} &&
+    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS} 127.0.0.1 &&
     read -p "ARE YOU READY? " READY &&
     true
