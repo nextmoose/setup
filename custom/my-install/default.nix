@@ -9,7 +9,7 @@ stdenv.mkDerivation {
     mkdir $out &&
       mkdir $out/etc &&
       mkdir $out/etc/nixos &&
-      cp configuration.2.nix $out/etc/nixos &&
+      cp configuration.2.nix $out/etc/nixos/configuration.nix &&
       chmod 0400 $out/etc/nixos/configuration.nix &&
       mkdir $out/bin &&
       sed \
