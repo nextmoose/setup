@@ -83,6 +83,6 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     echo ABOUT TO REMOVE DISK &&
     VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
     echo REMOVED DISK &&
-    # VBoxManage startvm ${VM} &&
+    VBoxManage startvm ${VM} &&
     read -p "ARE YOU READY? " READY &&
     true
