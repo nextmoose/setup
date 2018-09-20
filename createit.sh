@@ -25,6 +25,10 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	-e "s#ID_RSA.PUB#$(ssh-keygen -y -f id_rsa)#" \
 	-e "w${ISONIX}" \
 	iso.nix &&
+    sed \
+	-e "s#ID_RSA.PUB#$(ssh-keygen -y -f id_rsa)#" \
+	-e "w$custom/my-install/src/configuration.2.nix" \
+	custom/my-install/src/configuration.nix &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
     echo AAAA 200 &&
     sudo lvcreate -y --name ${VM} --size 100GB volumes &&

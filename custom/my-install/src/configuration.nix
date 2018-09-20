@@ -19,7 +19,7 @@
       pkgs.emacs
     ];
     users.users.root.openssh.authorizedKeys.keys = [
-      "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDN4cXRk9jhThC31B88mR4DnZDu3IR4qFcM92LZbacNwZsgIkFMFbzh/afsw+XOo6BARUKENrTW+0ekUNJAaYYZ5bBxMFtuSGeaOrHDQZrmWgKevZzG9G3DwDY/7sTZuqVVCP8f7q5yT/WIafgf9mn2NDcq4zuo2oIYnXnDF6dCu5IVQ11054RNceqe4HSaB4Rg41C+5HCj6sKAIZGycNHVCZN52tlTVPNUHw/K9fj0yqNakYFgDHauvugq810Tyal+MLDIQ+PGOvh014rTvceehqX+KV2sL5IDQmx3C4G+tB62onyPW6q6ltfcXAx3W9ZBeuUuPghKegTXh1t9ZiGV "
+      "ID_RSA.PUB"
     ];
   };
   services = {

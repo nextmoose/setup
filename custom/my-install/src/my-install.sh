@@ -51,8 +51,8 @@ EOF
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     ROOT_PASSWORD=password &&
-    cat XXX/etc/nixos/configuration.nix > /mnt/etc/configuration.nix &&
-    diff -qrs XXX/etc/nixos/configuration.nix /mnt/etc/configuration.nix &&
+    cat XXX/etc/nixos/configuration.2.nix > /mnt/etc/configuration.nix &&
+    diff -qrs XXX/etc/nixos/configuration.2.nix /mnt/etc/configuration.nix &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
