@@ -15,7 +15,7 @@ stdenv.mkDerivation {
       sed \
         -e "s#XXX#$out#" \
 	-e "w$out/bin/my-install" \
-	$out/bin/my-install.sh &&
+	my-install.sh &&
       chmod 0500 $out/bin/my-install
   '';
 }
