@@ -8,7 +8,8 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     KNOWN_HOSTS=$(mktemp) &&
     rm -f ${SSH_KEY} ${VMDK} &&
     cleanup(){
-	VBoxManage controlvm ${VM} poweroff soft &&
+	echo CLEANING UP &&
+	    VBoxManage controlvm ${VM} poweroff soft &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
@@ -62,7 +63,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     VBoxManage modifyvm "${VM}" --firmware efi &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT=${PORT} &&
-    VBoxManage startvm ${VM} &&
+    VBoxManage startvm --type headless ${VM} &&
     echo ${KNOWN_HOSTS} &&
     ssh-keyscan -p ${PORT} 127.0.0.1 > ${KNOWN_HOSTS} &&
     sleep 1m &&
@@ -75,9 +76,13 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     echo waited for keyscan &&
     echo finished waiting for vm &&
     ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS} 127.0.0.1 my-install &&
+    echo INSTALLED ... NOW POWER OFF &&
     VBoxManage controlvm ${VM} poweroff soft &&
+    echo INSTALLED ... NOW POWERED OFF &&
     sleep 1m &&
-    VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
+    echo ABOUT TO REMOVE DISK &&x
+VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
+    echo REMOVED DISK &&
     VBoxManage startvm ${VM} &&
     read -p "ARE YOU READY? " READY &&
     true
