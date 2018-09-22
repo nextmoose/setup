@@ -65,5 +65,6 @@ ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
     diff -qrs XXX/etc/nixos/configuration.nix /mnt/etc/configuration.nix &&
+    echo diff -qrs XXX/etc/nixos/configuration.nix /mnt/etc/configuration.nix &&
     echo INSTALLED AND READY TO REBOOT &&
     true

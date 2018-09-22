@@ -5,7 +5,6 @@ VM=nixos &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
     PORT1=27895 &&
-    PORT2=27896 &&
     KNOWN_HOSTS1=$(mktemp) &&
     KNOWN_HOSTS2=$(mktemp) &&
     rm -f ${SSH_KEY} ${VMDK} &&
@@ -29,7 +28,8 @@ VM=nixos &&
 	-e "w${ISONIX}" \
 	iso.nix &&
     sed \
-	-e "s#ID_RSA.PUB#$(ssh-keygen -y -f id_rsa)#" \
+	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f id_rsa)#" \
+	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	-e "wcustom/my-install/src/configuration.2.nix" \
 	custom/my-install/src/configuration.nix &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
@@ -63,22 +63,21 @@ VM=nixos &&
 	--type hdd \
 	--medium ${VMDK} &&
     VBoxManage modifyvm "${VM}" --natpf1 "guestssh1,tcp,127.0.0.1,${PORT1},,22" &&
-    VBoxManage modifyvm "${VM}" --natpf1 "guestssh2,tcp,127.0.0.1,${PORT2},,22" &&
     VBoxManage modifyvm "${VM}" --nic1 nat &&
     VBoxManage modifyvm "${VM}" --memory 2000 &&
     VBoxManage modifyvm "${VM}" --firmware efi &&
     echo SSH KEY=${SSH_KEY} &&
     echo PORT1=${PORT1} &&
-    echo PORT2=${PORT2} &&
     VBoxManage startvm --type headless ${VM} &&
     echo ${KNOWN_HOSTS1} &&
-    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
     sleep 1m &&
+    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
     while [ -z "$(cat ${KNOWN_HOSTS1})" ]
     do
 	echo waiting for keyscan &&
-	    sleep 1m &&
-	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1}
+	    sleep 10s &&
+	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
+	    sleep 10s
     done &&
     echo waited for keyscan &&
     echo finished waiting for vm &&
@@ -93,15 +92,16 @@ VM=nixos &&
     echo REMOVED DISK &&
     VBoxManage startvm ${VM} &&
     echo ${KNOWN_HOSTS2} &&
-    ssh-keyscan -p ${PORT2} 127.0.0.1 > ${KNOWN_HOSTS1} &&
     sleep 1m &&
+    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2} &&
     while [ -z "$(cat ${KNOWN_HOSTS2})" ]
     do
 	echo waiting for keyscan &&
-	    sleep 1m &&
-	    ssh-keyscan -p ${PORT2} 127.0.0.1 > ${KNOWN_HOSTS2}
+	    sleep 10s &&
+	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2} &&
+	    sleep 10s
     done &&
     echo waited for keyscan &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT2} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 &&
+    ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 &&
     read -p "ARE YOU READY? " READY &&
     true
