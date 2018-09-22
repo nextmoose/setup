@@ -5,7 +5,7 @@ VM=nixos &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
     PORT1=27895 &&
-    PORT1=27896 &&
+    PORT2=27896 &&
     KNOWN_HOSTS1=$(mktemp) &&
     KNOWN_HOSTS2=$(mktemp) &&
     rm -f ${SSH_KEY} ${VMDK} &&
