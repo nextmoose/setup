@@ -61,8 +61,8 @@ VM=nixos &&
 	--device 0 \
 	--type hdd \
 	--medium ${VMDK} &&
-    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT1},,22" &&
-    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT2},,22" &&
+    VBoxManage modifyvm "${VM}" --natpf1 "guestssh1,tcp,127.0.0.1,${PORT1},,22" &&
+    VBoxManage modifyvm "${VM}" --natpf1 "guestssh2,tcp,127.0.0.1,${PORT2},,22" &&
     VBoxManage modifyvm "${VM}" --nic1 nat &&
     VBoxManage modifyvm "${VM}" --memory 2000 &&
     VBoxManage modifyvm "${VM}" --firmware efi &&
