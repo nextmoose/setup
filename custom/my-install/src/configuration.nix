@@ -26,7 +26,7 @@
     packages = [
       pkgs.emacs
     ];
-    users.users.root.openssh.authorizedKeys.keys = [
+    openssh.authorizedKeys.keyFiles = [
       "AUTHORIZED_KEY_PUBLIC"
     ];
   };
