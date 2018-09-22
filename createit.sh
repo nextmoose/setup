@@ -24,7 +24,8 @@ VM=nixos &&
 	ssh-keygen -f ${SSH_KEY} -P "" -C ""
     fi &&
     sed \
-	-e "s#ID_RSA.PUB#$(ssh-keygen -y -f id_rsa)#" \
+	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f id_rsa)#" \
+	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	-e "w${ISONIX}" \
 	iso.nix &&
     sed \
@@ -91,16 +92,16 @@ VM=nixos &&
     VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
     echo REMOVED DISK &&
     VBoxManage startvm ${VM} &&
-    echo ${KNOWN_HOSTS1} &&
-    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
+    echo ${KNOWN_HOSTS2} &&
+    ssh-keyscan -p ${PORT2} 127.0.0.1 > ${KNOWN_HOSTS1} &&
     sleep 1m &&
     while [ -z "$(cat ${KNOWN_HOSTS2})" ]
     do
 	echo waiting for keyscan &&
 	    sleep 1m &&
-	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2}
+	    ssh-keyscan -p ${PORT2} 127.0.0.1 > ${KNOWN_HOSTS2}
     done &&
     echo waited for keyscan &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 &&
+    ssh -i ${SSH_KEY} -l root -p ${PORT2} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 &&
     read -p "ARE YOU READY? " READY &&
     true
