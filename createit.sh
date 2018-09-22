@@ -1,11 +1,13 @@
 #!/bin/sh
 
-VM=nixos-$((${RANDOM}%9000+1000)) &&
+VM=nixos &&
     SSH_KEY=id_rsa &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
-    PORT=27895 &&
-    KNOWN_HOSTS=$(mktemp) &&
+    PORT1=27895 &&
+    PORT1=27896 &&
+    KNOWN_HOSTS1=$(mktemp) &&
+    KNOWN_HOSTS2=$(mktemp) &&
     rm -f ${SSH_KEY} ${VMDK} &&
     cleanup(){
 	echo CLEANING UP &&
@@ -13,7 +15,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	    sleep 1m &&
 	    VBoxManage unregistervm --delete ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
-	    rm -f ${ISONIX} ${KNOWN_HOSTS} &&
+	    rm -f ${ISONIX} ${KNOWN_HOSTS1} ${KNOWN_HOSTS2} &&
 	    true
     } &&
     trap cleanup EXIT &&
@@ -30,9 +32,7 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	-e "wcustom/my-install/src/configuration.2.nix" \
 	custom/my-install/src/configuration.nix &&
     nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
-    echo AAAA 200 &&
     sudo lvcreate -y --name ${VM} --size 100GB volumes &&
-    echo AAAA 201 &&
     VBoxManage \
 	internalcommands \
 	createrawvmdk -filename  \
@@ -61,26 +61,28 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
 	--device 0 \
 	--type hdd \
 	--medium ${VMDK} &&
-    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT},,22" &&
+    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT1},,22" &&
+    VBoxManage modifyvm "${VM}" --natpf1 "guestssh,tcp,127.0.0.1,${PORT2},,22" &&
     VBoxManage modifyvm "${VM}" --nic1 nat &&
     VBoxManage modifyvm "${VM}" --memory 2000 &&
     VBoxManage modifyvm "${VM}" --firmware efi &&
     echo SSH KEY=${SSH_KEY} &&
-    echo PORT=${PORT} &&
+    echo PORT1=${PORT1} &&
+    echo PORT2=${PORT2} &&
     VBoxManage startvm --type headless ${VM} &&
-    echo ${KNOWN_HOSTS} &&
-    ssh-keyscan -p ${PORT} 127.0.0.1 > ${KNOWN_HOSTS} &&
+    echo ${KNOWN_HOSTS1} &&
+    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
     sleep 1m &&
-    while [ -z "$(cat ${KNOWN_HOSTS})" ]
+    while [ -z "$(cat ${KNOWN_HOSTS1})" ]
     do
 	echo waiting for keyscan &&
 	    sleep 1m &&
-	    ssh-keyscan -p ${PORT} 127.0.0.1 > ${KNOWN_HOSTS}
+	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1}
     done &&
     echo waited for keyscan &&
     echo finished waiting for vm &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS} 127.0.0.1 my-install &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS} 127.0.0.1 &&
+    ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS1} 127.0.0.1 my-install &&
+    ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS1} 127.0.0.1 &&
     echo INSTALLED ... NOW POWER OFF &&
     VBoxManage controlvm ${VM} poweroff soft &&
     echo INSTALLED ... NOW POWERED OFF &&
@@ -89,6 +91,16 @@ VM=nixos-$((${RANDOM}%9000+1000)) &&
     VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
     echo REMOVED DISK &&
     VBoxManage startvm ${VM} &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS} 127.0.0.1 &&
+    echo ${KNOWN_HOSTS1} &&
+    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
+    sleep 1m &&
+    while [ -z "$(cat ${KNOWN_HOSTS2})" ]
+    do
+	echo waiting for keyscan &&
+	    sleep 1m &&
+	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2}
+    done &&
+    echo waited for keyscan &&
+    ssh -i ${SSH_KEY} -l root -p ${PORT} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 &&
     read -p "ARE YOU READY? " READY &&
     true
