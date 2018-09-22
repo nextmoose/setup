@@ -18,6 +18,6 @@
   ];
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users.users.root.openssh.authorizedKeys.keys = [
-    "AUTHORIZED_KEYS_PUBLIC"
+    "AUTHORIZED_KEY_PUBLIC"
   ];
 }
