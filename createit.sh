@@ -105,6 +105,10 @@ VM=nixos &&
 	while [ ${#} -gt 0 ]
 	do
 	    case ${1} in
+		--title)
+		    TITLE="${2}" &&
+			shift 2
+		    ;;
 		--expected)
 		    EXPECTED="${2}" &&
 			shift 2
@@ -121,17 +125,18 @@ VM=nixos &&
 	    esac
 	done &&
 	    OBSERVED=$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 "${COMMAND}") &&
-	    if [ 0 != ${1} ]
+	    echo TITLE=${TITLE} &&
+	    echo OBSERVED=${OBSERVED} &&
+	    echo EXPECTED=${EXPECTED} &&
+	    if [[ 0 != ${1} ]]
 	    then
 		echo The test command failed with error code ${!} &&
 		    exit 66
 	    elif [ "${OBSERVED}" != "${EXPECTED}" ]
 	    then
 		echo Observed did not equal Expected. &&
-		    echo OBSERVED=${OBSERVED} &&
-		    echo EXPECTED=${EXPECTED} &&
 		    exit 67
 	    fi
     } &&
-    test_it --expected wrong --command secrets &&
+    test_it --title "We have a secrets program." --expected wrong --command secrets &&
     true
