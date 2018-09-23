@@ -109,8 +109,12 @@ VM=nixos &&
 		    TITLE="${2}" &&
 			shift 2
 		    ;;
-		--expected)
-		    EXPECTED="${2}" &&
+		--expected-exit-code)
+		    EXPECTED_EXIT_CODE="${2}" &&
+			shift 2
+		    ;;
+		--expected-output)
+		    EXPECTED_OUTPUT="${2}" &&
 			shift 2
 		    ;;
 		--command)
@@ -124,21 +128,23 @@ VM=nixos &&
 		    ;;
 	    esac
 	done &&
-	    OBSERVED=$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 "${COMMAND}") &&
-	    EXIT_CODE=${!} &&
+	    OBSERVED_OUTPUT=$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 "${COMMAND}") &&
+	    OBSERVED_EXIT_CODE=${!} &&
 	    echo TITLE=${TITLE} &&
-	    echo OBSERVED=${OBSERVED} &&
-	    echo EXPECTED=${EXPECTED} &&
-	    echo EXIT_CODE=${EXIT_CODE} &&
-	    if [[ 0 != ${EXIT_CODE} ]]
+	    echo OBSERVED_OUTPUT=${OBSERVED_OUTPUT} &&
+	    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
+	    echo OBSERVED_EXIT_CODE=${OBSERVED_EXIT_CODE} &&
+	    echo EXPECTED_EXIT_CODE=${EXPECTED_EXIT_CODE} &&
+	    if [ "${OBSERVED_EXIT_CODE}" != "${EXPECTED_EXIT_CODE}" ]
 	    then
-		echo The test command failed with error code ${EXIT_CODE} &&
+		echo Unexpected exit code &&
 		    exit 66
-	    elif [ "${OBSERVED}" != "${EXPECTED}" ]
+	    elif [ "${OBSERVED_OUTPUT}" != "${EXPECTED_OUTPUT}" ]
 	    then
-		echo Observed did not equal Expected. &&
+		echo Unexpected output &&
 		    exit 67
 	    fi
     } &&
-    test_it --title "We have a secrets program." --expected hello --command secrets &&
+    test_it --title "Sanity" --expected-output 0 --expected-output hello --command nosuch &&
+    test_it --title "We have a secrets program." --expected-output 0 --expected-output hello --command secrets &&
     true
