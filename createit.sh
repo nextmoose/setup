@@ -82,7 +82,6 @@ VM=nixos &&
     echo waited for keyscan &&
     echo finished waiting for vm &&
     ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS1} 127.0.0.1 my-install &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS1} 127.0.0.1 &&
     echo INSTALLED ... NOW POWER OFF &&
     VBoxManage controlvm ${VM} poweroff soft &&
     echo INSTALLED ... NOW POWERED OFF &&
@@ -102,6 +101,6 @@ VM=nixos &&
 	    sleep 10s
     done &&
     echo waited for keyscan &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 &&
+    ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 &&
     read -p "ARE YOU READY? " READY &&
     true
