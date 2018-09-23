@@ -135,7 +135,7 @@ VM=nixos &&
 	    BEFORE=$(date +%s) &&
 	    if [ OBSERVED_OUTPUT="$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 '${COMMAND}')" ]
 	    then
-		OBSERVED_EXIT_CODE=${!} &&
+		OBSERVED_EXIT_CODE=${?} &&
 		    AFTER=$(date +%s) &&
 		    echo DURATION=$((${AFTER}-${BEFORE})) &&
 		    echo OBSERVED_OUTPUT=${OBSERVED_OUTPUT} &&
