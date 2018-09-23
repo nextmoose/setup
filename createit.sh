@@ -154,6 +154,5 @@ VM=nixos &&
 		    exit 68
 	    fi
     } &&
-    test_it --title "Sanity" --expected-output 0 --expected-output hello --command nosuch &&
-    test_it --title "We have a secrets program." --expected-output hello --command secrets &&
+    test_it --title "We have a secrets program." --expected-output hello --expected-exit-code 0 --command secrets &&
     true
