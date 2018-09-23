@@ -128,23 +128,32 @@ VM=nixos &&
 		    ;;
 	    esac
 	done &&
-	    OBSERVED_OUTPUT=$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 "${COMMAND}") &&
-	    OBSERVED_EXIT_CODE=${!} &&
 	    echo TITLE=${TITLE} &&
-	    echo OBSERVED_OUTPUT=${OBSERVED_OUTPUT} &&
+	    echo COMMAND=${COMMAND} &&
 	    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
-	    echo OBSERVED_EXIT_CODE=${OBSERVED_EXIT_CODE} &&
 	    echo EXPECTED_EXIT_CODE=${EXPECTED_EXIT_CODE} &&
-	    if [ "${OBSERVED_EXIT_CODE}" != "${EXPECTED_EXIT_CODE}" ]
+	    BEFORE=$(date +%s) &&
+	    if [ OBSERVED_OUTPUT="$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 '${COMMAND}')" ]
 	    then
-		echo Unexpected exit code &&
-		    exit 66
-	    elif [ "${OBSERVED_OUTPUT}" != "${EXPECTED_OUTPUT}" ]
-	    then
-		echo Unexpected output &&
-		    exit 67
+		OBSERVED_EXIT_CODE=${!} &&
+		    AFTER=$(date +%s) &&
+		    echo DURATION=$((${AFTER}-${BEFORE})) &&
+		    echo OBSERVED_OUTPUT=${OBSERVED_OUTPUT} &&
+		    echo OBSERVED_EXIT_CODE=${OBSERVED_EXIT_CODE} &&
+		    if [ "${OBSERVED_EXIT_CODE}" != "${EXPECTED_EXIT_CODE}" ]
+		    then
+			echo Unexpected exit code &&
+			    exit 66
+		    elif [ "${OBSERVED_OUTPUT}" != "${EXPECTED_OUTPUT}" ]
+		    then
+			echo Unexpected output &&
+			    exit 67
+		    fi
+	    else
+		echo There was a problem running the command &&
+		    exit 68
 	    fi
     } &&
     test_it --title "Sanity" --expected-output 0 --expected-output hello --command nosuch &&
-    test_it --title "We have a secrets program." --expected-output 0 --expected-output hello --command secrets &&
+    test_it --title "We have a secrets program." --expected-output hello --command secrets &&
     true
