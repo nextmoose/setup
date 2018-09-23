@@ -89,7 +89,7 @@ VM=nixos &&
     echo ABOUT TO REMOVE DISK &&
     VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
     echo REMOVED DISK &&
-    VBoxManage startvm ${VM} &&
+    VBoxManage startvm --type headless ${VM} &&
     echo ${KNOWN_HOSTS2} &&
     sleep 1m &&
     ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2} &&
