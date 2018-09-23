@@ -128,7 +128,7 @@ VM=nixos &&
 	    echo TITLE=${TITLE} &&
 	    echo OBSERVED=${OBSERVED} &&
 	    echo EXPECTED=${EXPECTED} &&
-	    if [ 0 != ${!} ]
+	    if [[ 0 != ${!} ]]
 	    then
 		echo The test command failed with error code ${!} &&
 		    exit 66
