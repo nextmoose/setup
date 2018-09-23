@@ -101,9 +101,37 @@ VM=nixos &&
 	    sleep 10s
     done &&
     echo waited for keyscan &&
-    if [ "2hello" == $(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 secrets) ]
-    then
-	echo the secrets program does not work &&
-	    exit 64
-    fi &&
+    test_it() {
+	while [ ${#} -gt 0 ]
+	do
+	    case ${1} in
+		--expected)
+		    EXPECTED="${2}" &&
+			shift 2
+		    ;;
+		--command)
+		    COMMAND="${2}" &&
+			shift 2
+		    ;;
+		*)
+		    echo Unexpected Argument &&
+			echo ${@} &&
+			exit 65
+		    ;;
+	    esac
+	done &&
+	    OBSERVED=$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 "${COMMAND}") &&
+	    if [ 0 != ${1} ]
+	    then
+		echo The test command failed with error code ${!} &&
+		    exit 66
+	    elif [ "${OBSERVED}" != "${EXPECTED}" ]
+	    then
+		echo Observed did not equal Expected. &&
+		    echo OBSERVED=${OBSERVED} &&
+		    echo EXPECTED=${EXPECTED} &&
+		    exit 67
+	    fi
+    } &&
+    test_it --expected wrong --command secrets &&
     true
