@@ -32,7 +32,7 @@ VM=nixos &&
 	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	-e "wcustom/my-install/src/configuration.2.nix" \
 	custom/my-install/src/configuration.nix &&
-    nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
+    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
     sudo lvcreate -y --name ${VM} --size 100GB volumes &&
     VBoxManage \
 	internalcommands \
@@ -81,7 +81,7 @@ VM=nixos &&
     done &&
     echo waited for keyscan &&
     echo finished waiting for vm &&
-    ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS1} 127.0.0.1 my-install &&
+    time ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS1} 127.0.0.1 my-install &&
     echo INSTALLED ... NOW POWER OFF &&
     VBoxManage controlvm ${VM} poweroff soft &&
     echo INSTALLED ... NOW POWERED OFF &&
@@ -148,6 +148,8 @@ VM=nixos &&
 	    then
 		echo Unexpected output &&
 		    exit 67
+	    else
+		echo SUCCESS
 	    fi
     } &&
     test_it --title "We have a secrets program." --expected-output hello --expected-exit-code 0 --command secrets &&
