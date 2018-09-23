@@ -138,5 +138,5 @@ VM=nixos &&
 		    exit 67
 	    fi
     } &&
-    test_it --title "We have a secrets program." --expected wrong --command secrets &&
+    test_it --title "We have a secrets program." --expected hello --command secrets &&
     true
