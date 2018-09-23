@@ -52,6 +52,7 @@ EOF
     nixos-generate-config --root /mnt &&
     ROOT_PASSWORD=password &&
     cat XXX/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
+    cp -r XXX/etc/nixos/custom /mnt/etc/nixos &&
     diff -qrs XXX/etc/nixos/configuration.nix /mnt/etc/nixos/configuration.nix &&
     (cat <<EOF
 ${ROOT_PASSWORD}
