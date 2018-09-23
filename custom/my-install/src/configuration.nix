@@ -24,7 +24,7 @@
     extraGroups = [ "wheel" ];
     hashedPassword = "HASHED_PASSWORD";
     packages = [
-      pkgs.emacs
+      (import ./custom/secrets/default.nix { inherit pkgs; })
     ];
     openssh.authorizedKeys.keys = [
       "AUTHORIZED_KEY_PUBLIC"
