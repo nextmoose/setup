@@ -7,11 +7,12 @@ VM=nixos &&
     PORT1=27895 &&
     KNOWN_HOSTS1=$(mktemp) &&
     KNOWN_HOSTS2=$(mktemp) &&
+    NAP=1m &&
     rm -f ${SSH_KEY} ${VMDK} &&
     cleanup(){
 	echo CLEANING UP &&
 	    VBoxManage controlvm ${VM} poweroff soft &&
-	    sleep 1m &&
+	    sleep ${NAP} &&
 	    VBoxManage unregistervm --delete ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
 	    rm -f ${ISONIX} ${KNOWN_HOSTS1} ${KNOWN_HOSTS2} &&
@@ -70,14 +71,14 @@ VM=nixos &&
     echo PORT1=${PORT1} &&
     VBoxManage startvm --type headless ${VM} &&
     echo ${KNOWN_HOSTS1} &&
-    sleep 1m &&
+    sleep ${NAP} &&
     ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
     while [ -z "$(cat ${KNOWN_HOSTS1})" ]
     do
 	echo waiting for keyscan &&
-	    sleep 10s &&
+	    sleep ${NAP} &&
 	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
-	    sleep 10s
+	    sleep ${NAP}
     done &&
     echo waited for keyscan &&
     echo finished waiting for vm &&
@@ -85,20 +86,20 @@ VM=nixos &&
     echo INSTALLED ... NOW POWER OFF &&
     VBoxManage controlvm ${VM} poweroff soft &&
     echo INSTALLED ... NOW POWERED OFF &&
-    sleep 1m &&
+    sleep ${NAP} &&
     echo ABOUT TO REMOVE DISK &&
     VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
     echo REMOVED DISK &&
     VBoxManage startvm --type headless ${VM} &&
     echo ${KNOWN_HOSTS2} &&
-    sleep 1m &&
+    sleep ${NAP} &&
     ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2} &&
     while [ -z "$(cat ${KNOWN_HOSTS2})" ]
     do
 	echo waiting for keyscan &&
-	    sleep 10s &&
+	    sleep ${NAP} &&
 	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2} &&
-	    sleep 10s
+	    sleep ${NAP}
     done &&
     echo waited for keyscan &&
     test_it() {
