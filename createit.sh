@@ -101,6 +101,5 @@ VM=nixos &&
 	    sleep 10s
     done &&
     echo waited for keyscan &&
-    [ "hello" == $(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 secrets) ] &&
-    read -p "ARE YOU READY? " READY &&
+    [ "2hello" == $(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 secrets) ] &&
     true
