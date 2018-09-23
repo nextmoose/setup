@@ -125,12 +125,14 @@ VM=nixos &&
 	    esac
 	done &&
 	    OBSERVED=$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 "${COMMAND}") &&
+	    EXIT_CODE=${!} &&
 	    echo TITLE=${TITLE} &&
 	    echo OBSERVED=${OBSERVED} &&
 	    echo EXPECTED=${EXPECTED} &&
-	    if [[ 0 != ${!} ]]
+	    echo EXIT_CODE=${EXIT_CODE} &&
+	    if [[ 0 != ${EXIT_CODE} ]]
 	    then
-		echo The test command failed with error code ${!} &&
+		echo The test command failed with error code ${EXIT_CODE} &&
 		    exit 66
 	    elif [ "${OBSERVED}" != "${EXPECTED}" ]
 	    then
