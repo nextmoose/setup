@@ -8,7 +8,7 @@ EE=$(date +%s) &&
     PORT1=27895 &&
     KNOWN_HOSTS1=$(mktemp) &&
     KNOWN_HOSTS2=$(mktemp) &&
-    NAP=1m &&
+    NAP=30s &&
     rm -f ${SSH_KEY} ${VMDK} &&
     cleanup(){
 	echo CLEANING UP &&
