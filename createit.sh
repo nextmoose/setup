@@ -128,7 +128,7 @@ VM=nixos &&
 	    echo TITLE=${TITLE} &&
 	    echo OBSERVED=${OBSERVED} &&
 	    echo EXPECTED=${EXPECTED} &&
-	    if [[ 0 != ${1} ]]
+	    if [ 0 != ${!} ]
 	    then
 		echo The test command failed with error code ${!} &&
 		    exit 66
@@ -138,5 +138,5 @@ VM=nixos &&
 		    exit 67
 	    fi
     } &&
-    test_it --title "We have a secrets program." --expected hello --command secrets &&
+    test_it --title "We have a secrets program." --expected wrong --command secrets &&
     true
