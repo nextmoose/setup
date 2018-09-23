@@ -1,6 +1,7 @@
 #!/bin/sh
 
-VM=nixos &&
+EE=$(date +%s) &&
+    VM=nixos &&
     SSH_KEY=id_rsa &&
     VMDK=$(mktemp) &&
     ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
@@ -16,6 +17,8 @@ VM=nixos &&
 	    VBoxManage unregistervm --delete ${VM} &&
 	    sudo lvremove --force /dev/volumes/${VM} &&
 	    rm -f ${ISONIX} ${KNOWN_HOSTS1} ${KNOWN_HOSTS2} &&
+	    FF=$(date +%s) &&
+	    echo TOTAL EXECUTION TIME=$((${FF}-${EE})) seconds. &&
 	    true
     } &&
     trap cleanup EXIT &&
@@ -33,7 +36,9 @@ VM=nixos &&
 	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	-e "wcustom/my-install/src/configuration.2.nix" \
 	custom/my-install/src/configuration.nix &&
+    AA=$(date +%s) &&
     time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
+    BB=$(date +%s) &&
     sudo lvcreate -y --name ${VM} --size 100GB volumes &&
     VBoxManage \
 	internalcommands \
@@ -82,7 +87,9 @@ VM=nixos &&
     done &&
     echo waited for keyscan &&
     echo finished waiting for vm &&
+    CC=$(date +%s) &&
     time ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS1} 127.0.0.1 my-install &&
+    DD=$(date +%s) &&
     echo INSTALLED ... NOW POWER OFF &&
     VBoxManage controlvm ${VM} poweroff soft &&
     echo INSTALLED ... NOW POWERED OFF &&
@@ -154,4 +161,7 @@ VM=nixos &&
 	    fi
     } &&
     test_it --title "We have a secrets program." --expected-output hello --expected-exit-code 0 --command secrets &&
+    echo PASSED ALL TESTS &&
+    echo TIME TO BUILD ISO IMAGE = $((${BB}-${AA})) seconds. &&
+    echo TIME TO RUN INSTALL PROGRAM = $((${DD}-${CC})) seconds. &&
     true
