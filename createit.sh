@@ -48,6 +48,14 @@ EOF
 	    -e "w../transient/iso.nix" \
 	    iso.nix
     fi &&
+    if [ ! -f ../transient/user.nix ]
+    then
+	sed \
+	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/user.id_rsa)#" \
+	    -e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
+	    -e "w../transient/user.nix" \
+	    user.nix
+    fi &&
     if [ ! -d ../transient/installer ]
     then
 	mkdir ../transient/installer

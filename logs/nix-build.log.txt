@@ -1,0 +1,1 @@
+/nix/store/qm2dym0xqphsv4qglpl0y4pd2vf1ss5c-nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso
