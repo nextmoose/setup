@@ -79,11 +79,9 @@ EOF
     (
 	LOG_FILE=$(pwd)/logs/nix-build.log.txt &&
 	    cd ../transient &&
-	    echo AAAA 20 &&
-	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix > ${LOG_FILE} &&
-	    echo AAAA 21
+	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix > ${LOG_FILE}
     ) &&
-    if [ -z "$(VBoxManage list vms | grep nixos)" ]
+    if [ ! -z "$(VBoxManage list vms | grep nixos)" ]
     then
 	VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage unregistervm --delete nixos
@@ -97,9 +95,9 @@ EOF
     VBoxManage modifyvm nixos --nic1 nat &&
     VBoxManage modifyvm nixos --memory 2000 &&
     VBoxManage modifyvm nixos --firmware efi &&
-    VBoxManage startvm --type headless nixos &&
-    VBoxManage startvm --type nixos &&
+    VBoxManage startvm nixos &&
     fuckit() {
+	VBoxManage startvm --type headless nixos &&
 	time ssh nixos installer > logs/installer.log.txt 2>&1 &&
 	    VBoxManage controlvm nixos poweroff soft &&
 	    echo INSTALLED ... NOW POWERED OFF &&
