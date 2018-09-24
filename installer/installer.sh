@@ -51,15 +51,15 @@ EOF
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     ROOT_PASSWORD=password &&
-    cat XXX/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
-    cp -r XXX/etc/nixos/custom /mnt/etc/nixos &&
-    diff -qrs XXX/etc/nixos/configuration.nix /mnt/etc/nixos/configuration.nix &&
+    cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
+    cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
+    diff -qrs OUT/etc/nixos/configuration.nix /mnt/etc/nixos/configuration.nix &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
-    diff -qrs XXX/etc/nixos/configuration.nix /mnt/etc/nixos/configuration.nix &&
-    echo diff -qrs XXX/etc/nixos/configuration.nix /mnt/etc/nixos/configuration.nix &&
+    diff -qrs OUT/etc/nixos/configuration.nix /mnt/etc/nixos/configuration.nix &&
+    echo diff -qrs OUT/etc/nixos/configuration.nix /mnt/etc/nixos/configuration.nix &&
     echo INSTALLED AND READY TO REBOOT &&
     true

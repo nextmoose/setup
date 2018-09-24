@@ -1,1 +1,0 @@
-/nix/store/j3yfgih121gfkvkpv44w10jvp5b8d2mk-nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso

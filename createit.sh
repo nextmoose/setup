@@ -1,23 +1,20 @@
 #!/bin/sh
 
 NAP=1s &&
-    if [ ${#} -gt 0 ]
+    if [ 1 == "$(VBoxManage showvminfo nixos | grep -c running)" ]
     then
-	if [ 1 == "$(VBoxManage showvminfo nixos | grep -c running)" ]
-	then
-	    VBoxManage controlvm nixos poweroff soft &&
-		sleep ${NAP}
-	fi &&
-	    if [ ! -z "$(VBoxManage list vms | grep nixos)" ]
-	    then
-		VBoxManage unregistervm --delete nixos
-	    fi &&
-	    if [ ! -z "$(sudo lvs | grep nixos)" ]
-	    then
-		sudo lvremove --force /dev/volumes/nixos
-	    fi &&
-	    rm -rf ../transient
+	VBoxManage controlvm nixos poweroff soft &&
+	    sleep ${NAP}
     fi &&
+    if [ ! -z "$(VBoxManage list vms | grep nixos)" ]
+    then
+	VBoxManage unregistervm --delete nixos
+    fi &&
+    if [ ! -z "$(sudo lvs | grep nixos)" ]
+    then
+	sudo lvremove --force /dev/volumes/nixos
+    fi &&
+    rm -rf ../transient &&
     export PORT=27895 &&
     if [ ! -d ../transient ]
     then
@@ -146,7 +143,7 @@ EOF
 	    ssh-keyscan -p ${PORT} 127.0.0.1 > ../transient/.ssh/alpha.known_hosts
     done &&
     export HOME=../transient &&
-    ssh -F ../transient/.ssh/config alpha &&
+    time ssh -F ../transient/.ssh/config alpha installer > logs/installer.log.txt 2>&1 &&
     fuckit() {
 	VBoxManage startvm --type headless nixos &&
 	time ssh nixos installer > logs/installer.log.txt 2>&1 &&
