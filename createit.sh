@@ -1,5 +1,51 @@
 #!/bin/sh
 
+export PORT=27895 &&
+    if [ ! -d work ]
+    then
+	mkdir work
+    fi &&
+    if [ ! -d work/.ssh ]
+    then
+	mkdir work/.ssh &&
+	    chmod 0700 work/.ssh
+    fi &&
+    if [ ! -f work/.ssh/config ]
+    then
+	(cat > work/.ssh/config <<EOF
+Host nixos
+HostName 127.0.0.1
+User user
+Port ${PORT}
+IdentityFile ~/.ssh/user.id_rsa
+UserKnownHostsFile ~/.ssh/known_hosts
+EOF
+	) &&
+	    chmod 0400 work/.ssh/config
+    fi &&
+    if [ ! -f work/.ssh/host.id_rsa ]
+    then
+	ssh-keygen -f work/.ssh/host.id_rsa -P "" -C "" &&
+	    chmod 0400 work/.ssh/host.id_rsa &&
+	    rm -f work/.ssh/host.id_rsa.pub
+    fi &&
+    if [ ! -f work/.ssh/known_hosts ]
+    then
+	ssh-keygen -y -f work.ssh/host.id_rsa > work/.ssh/known_hosts &&
+	    chmod 0400 work/.ssh/known_hosts
+    fi &&
+    if [ ! -f work/.ssh/user.id_rsa ]
+    then
+	ssh-keygen -f work/.ssh/user.id_rsa -P "" -C "" &&
+	    chmod 0400 work/.ssh/user.id_rsa &&
+	    rm -f work/.ssh/user.id_rsa
+    fi &&
+    if [ ! -f work/.ssh/known_hosts ]
+    then
+	
+    fi
+
+
 EE=$(date +%s) &&
     VM=nixos &&
     SSH_KEY=id_rsa &&
