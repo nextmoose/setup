@@ -35,29 +35,29 @@ Host alpha
 HostName 127.0.0.1
 User user
 Port ${PORT}
-IdentityFile ~/.ssh/id_rsa
-UserKnownHostsFile ~/.ssh/alpha.known_hosts
+IdentityFile $(pwd)/../transient/.ssh/id_rsa
+UserKnownHostsFile $(pwd)/../transient/.ssh/alpha.known_hosts
 
 Host beta
 HostName 127.0.0.1
 User user
 Port ${PORT}
-IdentityFile ~/.ssh/id_rsa
-UserKnownHostsFile ~/.ssh/beta.known_hosts
+IdentityFile $(pwd)/../transient/.ssh/id_rsa
+UserKnownHostsFile $(pwd)/../transient/.ssh/beta.known_hosts
 
 Host gamma
 HostName 127.0.0.1
 User user
 Port ${PORT}
-IdentityFile ~/.ssh/id_rsa
-UserKnownHostsFile ~/.ssh/gamma.known_hosts
+IdentityFile $(pwd)/../transient/.ssh/id_rsa
+UserKnownHostsFile $(pwd)/../transient/.ssh/gamma.known_hosts
 
 Host delta
 HostName 127.0.0.1
 User user
 Port ${PORT}
-IdentityFile ~/.ssh/id_rsa
-UserKnownHostsFile ~/.ssh/delta.known_hosts
+IdentityFile $(pwd)/../transient/.ssh/id_rsa
+UserKnownHostsFile $(pwd)/../transient/.ssh/delta.known_hosts
 EOF
 	) &&
 	    chmod 0400 ../transient/.ssh/config
@@ -145,6 +145,7 @@ EOF
 	sleep 1s &&
 	    ssh-keyscan -p ${PORT} 127.0.0.1 > ../transient/.ssh/alpha.known_hosts
     done &&
+    export HOME=../transient &&
     ssh -F ../transient/.ssh/config alpha &&
     fuckit() {
 	VBoxManage startvm --type headless nixos &&
