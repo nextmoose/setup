@@ -1,6 +1,10 @@
 #!/bin/sh
 
-export PORT=27895 &&
+if [ ${#} -gt 0 ]
+then
+    rm -rf ../transient
+fi &&
+    export PORT=27895 &&
     if [ ! -d ../transient ]
     then
 	mkdir ../transient
@@ -63,7 +67,7 @@ EOF
     if [ ! -f ../transient/installer/default.nix ]
     then
 	sed \
-	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f id_rsa)#" \
+	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/user.id_rsa)#" \
 	    -e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	    -e "w../transient/installer/default.nix" \
 	    installer.nix
@@ -89,10 +93,13 @@ EOF
 	    cd ../transient &&
 	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix > ${LOG_FILE}
     ) &&
+    if [ 1 == "$(VBoxManage showvminfo nixos | grep -c running)" ]
+    then
+	VBoxManage controlvm nixos poweroff soft
+    fi &&
     if [ ! -z "$(VBoxManage list vms | grep nixos)" ]
     then
-	VBoxManage controlvm nixos poweroff soft &&
-	    VBoxManage unregistervm --delete nixos
+	VBoxManage unregistervm --delete nixos
     fi &&
     VBoxManage createvm --name nixos --groups /nixos --register &&
     VBoxManage storagectl nixos --name "IDE" --add IDE &&
@@ -168,7 +175,5 @@ EOF
 	    } &&
 	    test_it --title "We have a secrets program." --expected-output hello --expected-exit-code 0 --command secrets &&
 	    echo PASSED ALL TESTS &&
-	    echo TIME TO BUILD ISO IMAGE = $((${BB}-${AA})) seconds. &&
-	    echo TIME TO RUN INSTALL PROGRAM = $((${DD}-${CC})) seconds. &&
 	    true
     }
