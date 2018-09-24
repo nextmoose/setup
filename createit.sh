@@ -17,33 +17,47 @@ fi &&
     if [ ! -f ../transient/.ssh/config ]
     then
 	(cat > ../transient/.ssh/config <<EOF
-Host nixos
+Host alpha
 HostName 127.0.0.1
 User user
 Port ${PORT}
-IdentityFile ~/.ssh/user.id_rsa
-UserKnownHostsFile ~/.ssh/known_hosts
+IdentityFile ~/.ssh/id_rsa
+UserKnownHostsFile ~/.ssh/alpha.known_hosts
+
+Host beta
+HostName 127.0.0.1
+User user
+Port ${PORT}
+IdentityFile ~/.ssh/id_rsa
+UserKnownHostsFile ~/.ssh/beta.known_hosts
+
+Host gamma
+HostName 127.0.0.1
+User user
+Port ${PORT}
+IdentityFile ~/.ssh/id_rsa
+UserKnownHostsFile ~/.ssh/gamma.known_hosts
+
+Host delta
+HostName 127.0.0.1
+User user
+Port ${PORT}
+IdentityFile ~/.ssh/id_rsa
+UserKnownHostsFile ~/.ssh/delta.known_hosts
 EOF
 	) &&
 	    chmod 0400 ../transient/.ssh/config
     fi &&
-    if [ ! -f ../transient/.ssh/host.id_rsa ]
+    if [ ! -f ../transient/.ssh/id_rsa ]
     then
-	ssh-keygen -f ../transient/.ssh/host.id_rsa -P "" -C "" &&
-	    chmod 0400 ../transient/.ssh/host.id_rsa &&
-	    rm -f ../transient/.ssh/host.id_rsa.pub
+	ssh-keygen -f ../transient/.ssh/id_rsa -P "" -C "" &&
+	    chmod 0400 ../transient/.ssh/id_rsa &&
+	    rm -f ../transient/.ssh/id_rsa.pub
     fi &&
-    if [ ! -f ../transient/.ssh/user.id_rsa ]
-    then
-	ssh-keygen -f ../transient/.ssh/user.id_rsa -P "" -C "" &&
-	    chmod 0400 ../transient/.ssh/user.id_rsa &&
-	    rm -f ../transient/.ssh/user.id_rsa.pub
-    fi &&
-    if [ ! -f ../transient/.ssh/known_hosts ]
-    then
-	ssh-keygen -y -f ../transient/.ssh/host.id_rsa > ../transient/.ssh/known_hosts &&
-	    chmod 0400 ../transient/.ssh/known_hosts
-    fi &&
+    echo > ../transient/.ssh/alpha.known_hosts &&
+    echo > ../transient/.ssh/beta.known_hosts &&
+    echo > ../transient/.ssh/gamma.known_hosts &&
+    echo > ../transient/.ssh/delta.known_hosts &&
     if [ ! -f ../transient/iso.nix ]
     then
 	sed \
@@ -111,6 +125,12 @@ EOF
     VBoxManage modifyvm nixos --memory 2000 &&
     VBoxManage modifyvm nixos --firmware efi &&
     VBoxManage startvm nixos &&
+    while [ -z "$(cat ../transient/.ssh/alpha.known_hosts)" ]
+    do
+	sleep 1s &&
+	    ssh-keyscan -p ${PORT} 127.0.0.1 > ../transient/.ssh/alpha.known_hosts
+    done &&
+    ssh alpha &&
     fuckit() {
 	VBoxManage startvm --type headless nixos &&
 	time ssh nixos installer > logs/installer.log.txt 2>&1 &&
