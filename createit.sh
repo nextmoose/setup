@@ -29,16 +29,16 @@ EOF
 	    chmod 0400 ../transient/.ssh/host.id_rsa &&
 	    rm -f ../transient/.ssh/host.id_rsa.pub
     fi &&
-    if [ ! -f ../transient/.ssh/known_hosts ]
-    then
-	ssh-keygen -y -f ../transient/.ssh/host.id_rsa > ../transient/.ssh/known_hosts &&
-	    chmod 0400 ../transient/.ssh/known_hosts
-    fi &&
     if [ ! -f ../transient/.ssh/user.id_rsa ]
     then
 	ssh-keygen -f ../transient/.ssh/user.id_rsa -P "" -C "" &&
 	    chmod 0400 ../transient/.ssh/user.id_rsa &&
-	    rm -f ../transient/.ssh/user.id_rsa
+	    rm -f ../transient/.ssh/user.id_rsa.pub
+    fi &&
+    if [ ! -f ../transient/.ssh/known_hosts ]
+    then
+	ssh-keygen -y -f ../transient/.ssh/host.id_rsa > ../transient/.ssh/known_hosts &&
+	    chmod 0400 ../transient/.ssh/known_hosts
     fi &&
     if [ ! -f ../transient/iso.nix ]
     then
