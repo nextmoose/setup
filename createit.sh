@@ -75,7 +75,7 @@ EOF
     if [ ! -f ../transient/iso.nix ]
     then
 	sed \
-	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/user.id_rsa)#" \
+	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/id_rsa)#" \
 	    -e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	    -e "w../transient/iso.nix" \
 	    iso.nix
@@ -83,7 +83,7 @@ EOF
     if [ ! -f ../transient/user.nix ]
     then
 	sed \
-	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/user.id_rsa)#" \
+	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/id_rsa)#" \
 	    -e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	    -e "w../transient/user.nix" \
 	    user.nix
@@ -95,7 +95,7 @@ EOF
     if [ ! -f ../transient/installer/default.nix ]
     then
 	sed \
-	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/user.id_rsa)#" \
+	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/id_rsa)#" \
 	    -e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	    -e "w../transient/installer/default.nix" \
 	    installer.nix

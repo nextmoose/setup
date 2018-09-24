@@ -7,5 +7,8 @@
     hashedPassword = "HASHED_PASSWORD";
     packages = [
     ];
+    openssh.authorizedKeys.keys = [
+      "AUTHORIZED_KEY_PUBLIC"
+    ];
   };
 }
