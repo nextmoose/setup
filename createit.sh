@@ -1,18 +1,18 @@
 #!/bin/sh
 
 export PORT=27895 &&
-    if [ ! -d work ]
+    if [ ! -d ../transient ]
     then
-	mkdir work
+	mkdir ../transient
     fi &&
-    if [ ! -d work/.ssh ]
+    if [ ! -d ../transient/.ssh ]
     then
-	mkdir work/.ssh &&
-	    chmod 0700 work/.ssh
+	mkdir ../transient/.ssh &&
+	    chmod 0700 ../transient/.ssh
     fi &&
-    if [ ! -f work/.ssh/config ]
+    if [ ! -f ../transient/.ssh/config ]
     then
-	(cat > work/.ssh/config <<EOF
+	(cat > ../transient/.ssh/config <<EOF
 Host nixos
 HostName 127.0.0.1
 User user
@@ -21,193 +21,157 @@ IdentityFile ~/.ssh/user.id_rsa
 UserKnownHostsFile ~/.ssh/known_hosts
 EOF
 	) &&
-	    chmod 0400 work/.ssh/config
+	    chmod 0400 ../transient/.ssh/config
     fi &&
-    if [ ! -f work/.ssh/host.id_rsa ]
+    if [ ! -f ../transient/.ssh/host.id_rsa ]
     then
-	ssh-keygen -f work/.ssh/host.id_rsa -P "" -C "" &&
-	    chmod 0400 work/.ssh/host.id_rsa &&
-	    rm -f work/.ssh/host.id_rsa.pub
+	ssh-keygen -f ../transient/.ssh/host.id_rsa -P "" -C "" &&
+	    chmod 0400 ../transient/.ssh/host.id_rsa &&
+	    rm -f ../transient/.ssh/host.id_rsa.pub
     fi &&
-    if [ ! -f work/.ssh/known_hosts ]
+    if [ ! -f ../transient/.ssh/known_hosts ]
     then
-	ssh-keygen -y -f work.ssh/host.id_rsa > work/.ssh/known_hosts &&
-	    chmod 0400 work/.ssh/known_hosts
+	ssh-keygen -y -f ../transient/.ssh/host.id_rsa > ../transient/.ssh/known_hosts &&
+	    chmod 0400 ../transient/.ssh/known_hosts
     fi &&
-    if [ ! -f work/.ssh/user.id_rsa ]
+    if [ ! -f ../transient/.ssh/user.id_rsa ]
     then
-	ssh-keygen -f work/.ssh/user.id_rsa -P "" -C "" &&
-	    chmod 0400 work/.ssh/user.id_rsa &&
-	    rm -f work/.ssh/user.id_rsa
+	ssh-keygen -f ../transient/.ssh/user.id_rsa -P "" -C "" &&
+	    chmod 0400 ../transient/.ssh/user.id_rsa &&
+	    rm -f ../transient/.ssh/user.id_rsa
     fi &&
-    if [ ! -f work/.ssh/known_hosts ]
+    if [ ! -f ../transient/iso.nix ]
     then
-	
-    fi
-
-
-EE=$(date +%s) &&
-    VM=nixos &&
-    SSH_KEY=id_rsa &&
-    VMDK=$(mktemp) &&
-    ISONIX=$(mktemp $(pwd)/XXXXXXXX) &&
-    PORT1=27895 &&
-    KNOWN_HOSTS1=$(mktemp) &&
-    KNOWN_HOSTS2=$(mktemp) &&
-    NAP=1s &&
-    rm -f ${SSH_KEY} ${VMDK} &&
-    cleanup(){
-	echo CLEANING UP &&
-	    VBoxManage controlvm ${VM} poweroff soft &&
+	sed \
+	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ../transient/.ssh/user.id_rsa)#" \
+	    -e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
+	    -e "w../transient/iso.nix" \
+	    iso.nix
+    fi &&
+    if [ ! -d ../transient/installer ]
+    then
+	mkdir ../transient/installer
+    fi &&
+    if [ ! -f ../transient/installer/default.nix ]
+    then
+	sed \
+	    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f id_rsa)#" \
+	    -e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
+	    -e "w../transient/installer/default.nix" \
+	    installer.nix
+    fi &&
+    if [ ! -d ../transient/installer/src ]
+    then
+	cp -r installer ../transient/installer/src
+    fi &&
+    if [ ! -d ../transient/custom ]
+    then
+	cp -r custom ../transient
+    fi &&
+    if [ -z "$(sudo lvs | grep nixos)" ]
+    then
+	sudo lvcreate --y --name nixos --size 100GB volumes
+    fi &&
+    echo AAAA 1 &&
+    if [ ! -f ../transient/nixos.vmdk ]
+    then
+	VBoxManage internalcommands createrawvmdk -filename ../transient/nixos.vmdk -rawdisk /dev/volumes/nixos
+    fi &&
+    echo AAAA 2 &&
+    if [ ! -d logs ]
+    then
+	mkdir logs
+    fi &&
+    (
+	LOG_FILE=$(pwd)/logs/nix-build.log.txt &&
+	    cd ../transient &&
+	    echo AAAA 20 &&
+	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix > ${LOG_FILE} &&
+	    echo AAAA 21
+    ) &&
+    echo AAAA 10 &&
+    if [ -z "$(VBoxManage list vms | grep nixos)" ]
+    then
+	VBoxManage controlvm nixos poweroff soft &&
+	    VBoxManage unregistervm --delete nixos
+    fi &&
+    VBoxManage createvm --name nixos --groups /nixos --register &&
+    VBoxManage storagectl nixos --name "IDE" --add IDE &&
+    echo AAAAA 30 &&
+    VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ../transient/nixos.vmdk &&
+    echo AAAAA 40 &&
+    VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
+    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ../transient/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
+    VBoxManage modifyvm nixos --natpf1 "guestssh1,tcp,127.0.0.1,${PORT},,22" &&
+    VBoxManage modifyvm nixos --nic1 nat &&
+    VBoxManage modifyvm nixos --memory 2000 &&
+    VBoxManage modifyvm nixos --firmware efi &&
+    VBoxManage startvm --type headless nixos &&
+    VBoxManage startvm --type nixos &&
+    fuckit() {
+	time ssh nixos installer > logs/installer.log.txt 2>&1 &&
+	    VBoxManage controlvm nixos poweroff soft &&
+	    echo INSTALLED ... NOW POWERED OFF &&
 	    sleep ${NAP} &&
-	    VBoxManage unregistervm --delete ${VM} &&
-	    sudo lvremove --force /dev/volumes/${VM} &&
-	    rm -f ${ISONIX} ${KNOWN_HOSTS1} ${KNOWN_HOSTS2} &&
-	    FF=$(date +%s) &&
-	    echo TOTAL EXECUTION TIME=$((${FF}-${EE})) seconds. &&
+	    echo ABOUT TO REMOVE DISK &&
+	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
+	    echo REMOVED DISK &&
+	    VBoxManage startvm --type headless nixos &&
+	    sleep ${NAP} &&
+	    echo waited for keyscan &&
+	    test_it() {
+		while [ ${#} -gt 0 ]
+		do
+		    case ${1} in
+			--title)
+			    TITLE="${2}" &&
+				shift 2
+			    ;;
+			--expected-exit-code)
+			    EXPECTED_EXIT_CODE="${2}" &&
+				shift 2
+			    ;;
+			--expected-output)
+			    EXPECTED_OUTPUT="${2}" &&
+				shift 2
+			    ;;
+			--command)
+			    COMMAND="${2}" &&
+				shift 2
+			    ;;
+			*)
+			    echo Unexpected Argument &&
+				echo ${@} &&
+				exit 65
+			    ;;
+		    esac
+		done &&
+		    echo TITLE=${TITLE} &&
+		    echo COMMAND=${COMMAND} &&
+		    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
+		    echo EXPECTED_EXIT_CODE=${EXPECTED_EXIT_CODE} &&
+		    BEFORE=$(date +%s) &&
+		    OBSERVED_OUTPUT="$(ssh nixos \"${COMMAND}\")" &&
+		    OBSERVED_EXIT_CODE=${?} &&
+		    AFTER=$(date +%s) &&
+		    echo DURATION=$((${AFTER}-${BEFORE})) &&
+		    echo OBSERVED_OUTPUT=${OBSERVED_OUTPUT} &&
+		    echo OBSERVED_EXIT_CODE=${OBSERVED_EXIT_CODE} &&
+		    if [ "${OBSERVED_EXIT_CODE}" != "${EXPECTED_EXIT_CODE}" ]
+		    then
+			echo Unexpected exit code &&
+			    exit 66
+		    elif [ "${OBSERVED_OUTPUT}" != "${EXPECTED_OUTPUT}" ]
+		    then
+			echo Unexpected output &&
+			    exit 67
+		    else
+			echo SUCCESS
+		    fi
+	    } &&
+	    test_it --title "We have a secrets program." --expected-output hello --expected-exit-code 0 --command secrets &&
+	    echo PASSED ALL TESTS &&
+	    echo TIME TO BUILD ISO IMAGE = $((${BB}-${AA})) seconds. &&
+	    echo TIME TO RUN INSTALL PROGRAM = $((${DD}-${CC})) seconds. &&
 	    true
-    } &&
-    trap cleanup EXIT &&
-    if [ ! -f ${SSH_KEY} ]
-    then
-	ssh-keygen -f ${SSH_KEY} -P "" -C ""
-    fi &&
-    sed \
-	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f id_rsa)#" \
-	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
-	-e "w${ISONIX}" \
-	iso.nix &&
-    sed \
-	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f id_rsa)#" \
-	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
-	-e "wcustom/my-install/src/configuration.2.nix" \
-	custom/my-install/src/configuration.nix &&
-    AA=$(date +%s) &&
-    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX} &&
-    BB=$(date +%s) &&
-    sudo lvcreate -y --name ${VM} --size 100GB volumes &&
-    VBoxManage \
-	internalcommands \
-	createrawvmdk -filename  \
-	${VMDK} \
-	-rawdisk /dev/volumes/${VM} &&
-    VBoxManage \
-	createvm \
-	--name ${VM} \
-	--groups /nixos \
-	--register &&
-    VBoxManage storagectl ${VM} --name "SATA Controller" --add SATA &&
-    VBoxManage \
-	storageattach \
-	${VM} \
-	--storagectl "SATA Controller" \
-	--port 0 \
-	--device 0 \
-	--type dvddrive \
-	--medium $(pwd)/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
-    VBoxManage storagectl ${VM} --name "IDE" --add IDE &&
-    VBoxManage \
-	storageattach \
-	${VM} \
-	--storagectl "IDE" \
-	--port 0 \
-	--device 0 \
-	--type hdd \
-	--medium ${VMDK} &&
-    VBoxManage modifyvm "${VM}" --natpf1 "guestssh1,tcp,127.0.0.1,${PORT1},,22" &&
-    VBoxManage modifyvm "${VM}" --nic1 nat &&
-    VBoxManage modifyvm "${VM}" --memory 2000 &&
-    VBoxManage modifyvm "${VM}" --firmware efi &&
-    echo SSH KEY=${SSH_KEY} &&
-    echo PORT1=${PORT1} &&
-    VBoxManage startvm --type headless ${VM} &&
-    echo ${KNOWN_HOSTS1} &&
-    sleep ${NAP} &&
-    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
-    while [ -z "$(cat ${KNOWN_HOSTS1})" ]
-    do
-	echo waiting for keyscan &&
-	    sleep ${NAP} &&
-	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS1} &&
-	    sleep ${NAP}
-    done &&
-    echo waited for keyscan &&
-    echo finished waiting for vm &&
-    CC=$(date +%s) &&
-    time ssh -i ${SSH_KEY} -l root -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS1} 127.0.0.1 my-install &&
-    DD=$(date +%s) &&
-    echo INSTALLED ... NOW POWER OFF &&
-    VBoxManage controlvm ${VM} poweroff soft &&
-    echo INSTALLED ... NOW POWERED OFF &&
-    sleep ${NAP} &&
-    echo ABOUT TO REMOVE DISK &&
-    VBoxManage storageattach ${VM} --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
-    echo REMOVED DISK &&
-    VBoxManage startvm --type headless ${VM} &&
-    echo ${KNOWN_HOSTS2} &&
-    sleep ${NAP} &&
-    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2} &&
-    while [ -z "$(cat ${KNOWN_HOSTS2})" ]
-    do
-	echo waiting for keyscan &&
-	    sleep ${NAP} &&
-	    ssh-keyscan -p ${PORT1} 127.0.0.1 > ${KNOWN_HOSTS2} &&
-	    sleep ${NAP}
-    done &&
-    echo waited for keyscan &&
-    test_it() {
-	while [ ${#} -gt 0 ]
-	do
-	    case ${1} in
-		--title)
-		    TITLE="${2}" &&
-			shift 2
-		    ;;
-		--expected-exit-code)
-		    EXPECTED_EXIT_CODE="${2}" &&
-			shift 2
-		    ;;
-		--expected-output)
-		    EXPECTED_OUTPUT="${2}" &&
-			shift 2
-		    ;;
-		--command)
-		    COMMAND="${2}" &&
-			shift 2
-		    ;;
-		*)
-		    echo Unexpected Argument &&
-			echo ${@} &&
-			exit 65
-		    ;;
-	    esac
-	done &&
-	    echo TITLE=${TITLE} &&
-	    echo COMMAND=${COMMAND} &&
-	    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
-	    echo EXPECTED_EXIT_CODE=${EXPECTED_EXIT_CODE} &&
-	    BEFORE=$(date +%s) &&
-	    echo ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 '${COMMAND}' &&
-	    OBSERVED_OUTPUT="$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 \"${COMMAND}\")" &&
-	    OBSERVED_EXIT_CODE=${?} &&
-	    AFTER=$(date +%s) &&
-	    echo DURATION=$((${AFTER}-${BEFORE})) &&
-	    echo OBSERVED_OUTPUT=${OBSERVED_OUTPUT} &&
-	    echo OBSERVED_EXIT_CODE=${OBSERVED_EXIT_CODE} &&
-	    if [ "${OBSERVED_EXIT_CODE}" != "${EXPECTED_EXIT_CODE}" ]
-	    then
-		echo Unexpected exit code &&
-		    exit 66
-	    elif [ "${OBSERVED_OUTPUT}" != "${EXPECTED_OUTPUT}" ]
-	    then
-		echo Unexpected output &&
-		    exit 67
-	    else
-		echo SUCCESS
-	    fi
-    } &&
-    test_it --title "We have a secrets program." --expected-output hello --expected-exit-code 0 --command secrets &&
-    echo PASSED ALL TESTS &&
-    echo TIME TO BUILD ISO IMAGE = $((${BB}-${AA})) seconds. &&
-    echo TIME TO RUN INSTALL PROGRAM = $((${DD}-${CC})) seconds. &&
-    true
+    }

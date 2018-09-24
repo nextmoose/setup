@@ -9,12 +9,8 @@
     # doesn't need to run "nix-channel --update" first.
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
-  environment.variables.FOO="bar";
   environment.systemPackages = [
-    (pkgs.writeShellScriptBin "hello" ''
-      echo hello world
-    '')
-    (import ./custom/my-install/default.nix  { inherit pkgs; })
+    (import ./installer/default.nix  { inherit pkgs; })
   ];
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
   users.users.root.openssh.authorizedKeys.keys = [
