@@ -64,20 +64,14 @@ EOF
     then
 	cp -r installer ../transient/installer/src
     fi &&
-    if [ ! -d ../transient/custom ]
-    then
-	cp -r custom ../transient
-    fi &&
     if [ -z "$(sudo lvs | grep nixos)" ]
     then
 	sudo lvcreate --y --name nixos --size 100GB volumes
     fi &&
-    echo AAAA 1 &&
     if [ ! -f ../transient/nixos.vmdk ]
     then
 	VBoxManage internalcommands createrawvmdk -filename ../transient/nixos.vmdk -rawdisk /dev/volumes/nixos
     fi &&
-    echo AAAA 2 &&
     if [ ! -d logs ]
     then
 	mkdir logs
@@ -89,7 +83,6 @@ EOF
 	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix > ${LOG_FILE} &&
 	    echo AAAA 21
     ) &&
-    echo AAAA 10 &&
     if [ -z "$(VBoxManage list vms | grep nixos)" ]
     then
 	VBoxManage controlvm nixos poweroff soft &&
@@ -97,9 +90,7 @@ EOF
     fi &&
     VBoxManage createvm --name nixos --groups /nixos --register &&
     VBoxManage storagectl nixos --name "IDE" --add IDE &&
-    echo AAAAA 30 &&
     VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ../transient/nixos.vmdk &&
-    echo AAAAA 40 &&
     VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
     VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ../transient/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
     VBoxManage modifyvm nixos --natpf1 "guestssh1,tcp,127.0.0.1,${PORT},,22" &&
