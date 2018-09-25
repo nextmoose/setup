@@ -21,6 +21,7 @@
   services.xserver.libinput.enable = true;
   security.sudo.wheelNeedsPassword = false;
   environment.systemPackages = [
+    pkgs.sudo
     (import ./installer/default.nix  { inherit pkgs; })
   ];
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];

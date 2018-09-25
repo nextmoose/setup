@@ -1,7 +1,7 @@
 #!/bin/sh
 
 NAP=1s &&
-    if [ 1 == "$(VBoxManage showvminfo nixos | grep -c running)" ]
+    if [ 1 == $(VBoxManage showvminfo nixos | grep -c "^State:\s*running") ]
     then
 	VBoxManage controlvm nixos poweroff soft &&
 	    sleep ${NAP}

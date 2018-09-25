@@ -1,1 +1,0 @@
-/nix/store/wip977adfxrr63ssvam7a0i0gvl21zk3-nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso
