@@ -73,7 +73,7 @@ EOF
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
 	    VBoxManage storagectl nixos --name "IDE" --add IDE &&
 	    VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ${WORK_DIR}/nixos.vmdk &&
-	    VBoxManage modifyvm nixos --natpf1 "guestssh1,tcp,127.0.0.1,${PORT1},,22" &&
+	    VBoxManage modifyvm nixos --natpf1 "guestssh1,tcp,127.0.0.1,${PORT},,22" &&
 	    VBoxManage modifyvm nixos --nic1 nat &&
 	    VBoxManage modifyvm nixos --memory 2000 &&
 	    VBoxManage modifyvm nixos --firmware efi &&
