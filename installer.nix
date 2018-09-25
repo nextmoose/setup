@@ -4,12 +4,16 @@ with import <nixpkgs> {};
 
 stdenv.mkDerivation {
   name = "installer";
-  src = src;
+  src = ./src;
   installPhase = ''
     mkdir $out &&
       mkdir $out/etc &&
       mkdir $out/etc/nixos &&
+      echo "AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA" &&
+      ls -lah . &&
+      echo AAAAA &&
       cp configuration.nix $out/etc/nixos/configuration.nix &&
+      echo BBBBB &&
       chmod 0400 $out/etc/nixos/configuration.nix &&
       cp -r custom $out/etc/nixos &&
       mkdir $out/bin &&
