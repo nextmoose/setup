@@ -22,6 +22,6 @@ WORK_DIR=$(mktemp -d) &&
 	configuration.nix.template &&
     (
 	cd ${WORK_DIR}
-	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=${ISONIX}
+	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
     ) &&
     true
