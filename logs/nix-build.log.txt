@@ -1,0 +1,1 @@
+/nix/store/2vc4zv6ajjgxb7qh8xj3v2dan6ls0vim-nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso
