@@ -2,13 +2,42 @@
 
 WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
+    PORT=20560 &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
     } &&
     trap cleanup EXIT &&
     mkdir ${WORK_DIR}/.ssh &&
+    chmod 0700 ${WORK_DIR}/.ssh &&
     ssh-keygen -f ${WORK_DIR}/.ssh/id_rsa -P "" -C "" &&
+    (cat > ${WORK_DIR}/.ssh/config <<EOF
+Host alpha
+HostName 127.0.0.1
+User root
+Port ${PORT}
+IdentityFile ${WORK_DIR}/.ssh/id_rsa
+UserKnownHostsFile ${WORK_DIR}/.ssh/alpha.known_hosts
+
+Host beta
+HostName 127.0.0.1
+User root
+Port ${PORT}
+IdentityFile ${WORK_DIR}/.ssh/id_rsa
+UserKnownHostsFile ${WORK_DIR}/.ssh/beta.known_hosts
+
+Host gamma
+HostName 127.0.0.1
+User user
+Port ${PORT}
+IdentityFile ${WORK_DIR}/.ssh/id_rsa
+UserKnownHostsFile ${WORK_DIR}/.ssh/gamma.known_hosts
+EOF
+    ) &&
+    chmod 0600 ${WORK_DIR}/.ssh/config &&
+    touch ${WORK_DIR}/.ssh/alpha.known_hosts &&
+    touch ${WORK_DIR}/.ssh/beta.known_hosts &&
+    touch ${WORK_DIR}/.ssh/gamma.known_hosts &&
     sed \
 	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
 	-e "w${WORK_DIR}/iso.nix" \
@@ -48,6 +77,16 @@ WORK_DIR=$(mktemp -d) &&
 	    VBoxManage modifyvm nixos --nic1 nat &&
 	    VBoxManage modifyvm nixos --memory 2000 &&
 	    VBoxManage modifyvm nixos --firmware efi &&
+	    VBoxManage startvm --type headless nixos &&
+	    knownhosts() {
+		while [ -z "$(cat ${WORK_DIR}/.ssh/${1}.known_hosts)" ]
+		do
+		    sleep 1s &&
+			ssh-keygen -p ${PORT} 127.0.0.1 > ${WORK_DIR}/.ssh/${1}.known_hosts
+		done
+	    } &&
+	    knownhosts alpha &&
+	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer
     ) &&
     STATUS=PASS &&
     true
