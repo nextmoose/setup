@@ -1,6 +1,10 @@
 #!/bin/sh
 
 WORK_DIR=$(mktemp -d) &&
+    cleanup() {
+	echo ${WORK_DIR}
+    } &&
+    trap cleanup EXIT &&
     mkdir ${WORK_DIR}/.ssh &&
     ssh-keygen -f ${WORK_DIR}/.ssh/id_rsa -P "" -C "" &&
     sed \
@@ -15,5 +19,5 @@ WORK_DIR=$(mktemp -d) &&
 	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
 	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	-e "w${WORK_DIR}/installer/src/configuration.nix" \
-	configuration.nix &&
+	configuration.nix.template &&
     true
