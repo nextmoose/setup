@@ -67,7 +67,7 @@ EOF
     done &&
     (
 	sudo lvcreate -y --name nixos --size 100GB volumes &&
-	    VBoxManage internalcommands createrawvmdk -filename nixos -rawdisk /dev/volumes/nixos &&
+	    VBoxManage internalcommands createrawvmdk -filename ${WORK_DIR}/nixos.vmdk -rawdisk /dev/volumes/nixos &&
 	    VBoxManage createvm --name nixos --groups /nixos --register &&
 	    VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
