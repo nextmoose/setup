@@ -7,7 +7,7 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir $out &&
       mkdir $out/bin &&
-      cp secrets.sh $out/bin/secrets &&
+      sed -e "s#OUT#$out#" -e "w$out/bin/secrets" secrets.sh &&
       chmod 0555 $out/bin/secrets
   '';
 }

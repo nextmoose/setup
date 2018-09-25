@@ -3,16 +3,18 @@
 WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
     PORT=20560 &&
+    SECRET=b9ad5f5e-9052-408f-949c-5125d77fb2cf &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
     } &&
     trap cleanup EXIT &&
-    mkdir ${WORK_DIR}/.ssh &&
-    chmod 0700 ${WORK_DIR}/.ssh &&
-    ssh-keygen -f ${WORK_DIR}/.ssh/id_rsa -P "" -C "" &&
-    (cat > ${WORK_DIR}/.ssh/config <<EOF
-Host alpha
+    (
+	mkdir ${WORK_DIR}/.ssh &&
+	    chmod 0700 ${WORK_DIR}/.ssh &&
+	    ssh-keygen -f ${WORK_DIR}/.ssh/id_rsa -P "" -C "" &&
+	    (cat > ${WORK_DIR}/.ssh/config <<EOF
+Host alpha  
 HostName 127.0.0.1
 User root
 Port ${PORT}
@@ -33,25 +35,28 @@ Port ${PORT}
 IdentityFile ${WORK_DIR}/.ssh/id_rsa
 UserKnownHostsFile ${WORK_DIR}/.ssh/gamma.known_hosts
 EOF
+	    ) &&
+	    chmod 0600 ${WORK_DIR}/.ssh/config &&
+	    touch ${WORK_DIR}/.ssh/alpha.known_hosts &&
+	    touch ${WORK_DIR}/.ssh/beta.known_hosts &&
+	    touch ${WORK_DIR}/.ssh/gamma.known_hosts &&
+	    sed \
+		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
+		-e "w${WORK_DIR}/iso.nix" \
+		iso.nix.template &&
+	    mkdir ${WORK_DIR}/installer &&
+	    cp installer.nix ${WORK_DIR}/installer/default.nix &&
+	    mkdir ${WORK_DIR}/installer/src &&
+	    cp installer.sh ${WORK_DIR}/installer/src/installer.sh &&
+	    sed \
+		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
+		-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
+		-e "w${WORK_DIR}/installer/src/configuration.nix" \
+		configuration.nix.template &&
+	    cp -r custom ${WORK_DIR}/installer/src/custom &&
+	    mkdir ${WORK_DIR}/installer/src/secrets &&
+	    echo ${SECRET} > ${WORK_DIR}/installer/src/secrets/secret
     ) &&
-    chmod 0600 ${WORK_DIR}/.ssh/config &&
-    touch ${WORK_DIR}/.ssh/alpha.known_hosts &&
-    touch ${WORK_DIR}/.ssh/beta.known_hosts &&
-    touch ${WORK_DIR}/.ssh/gamma.known_hosts &&
-    sed \
-	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
-	-e "w${WORK_DIR}/iso.nix" \
-	iso.nix.template &&
-    mkdir ${WORK_DIR}/installer &&
-    cp installer.nix ${WORK_DIR}/installer/default.nix &&
-    mkdir ${WORK_DIR}/installer/src &&
-    cp installer.sh ${WORK_DIR}/installer/src/installer.sh &&
-    sed \
-	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
-	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
-	-e "w${WORK_DIR}/installer/src/configuration.nix" \
-	configuration.nix.template &&
-    cp -r custom ${WORK_DIR}/installer/src/custom &&
     (
 	cd ${WORK_DIR}
 	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
@@ -82,7 +87,7 @@ EOF
 		while [ -z "$(cat ${WORK_DIR}/.ssh/${1}.known_hosts)" ]
 		do
 		    sleep 1s &&
-			ssh-keygen -p ${PORT} 127.0.0.1 > ${WORK_DIR}/.ssh/${1}.known_hosts
+			ssh-keyscan -p ${PORT} 127.0.0.1 > ${WORK_DIR}/.ssh/${1}.known_hosts
 		done
 	    } &&
 	    knownhosts alpha &&
@@ -142,7 +147,8 @@ EOF
 			echo SUCCESS
 		    fi
 	    } &&
-	    testit --title "We have a secrets program." --expected-output hello --expected-exit-code 0 --command secrets
+	    testit --title "We have a secrets program." --expected-output ${SECRET} --expected-exit-code 0 --command secrets secret
+	    testit --title "We have a secrets program." --expected-output ${SECRET} --expected-exit-code 65 --command secrets nosecret
     ) &&
     STATUS=PASS &&
     true
