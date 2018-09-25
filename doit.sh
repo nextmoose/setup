@@ -14,7 +14,7 @@ WORK_DIR=$(mktemp -d) &&
     mkdir ${WORK_DIR}/installer &&
     cp installer.nix ${WORK_DIR}/installer/default.nix &&
     mkdir ${WORK_DIR}/installer/src &&
-    cp installer.sh ${WORK_DIR}/installer/installer.sh &&
+    cp installer.sh ${WORK_DIR}/installer/src/installer.sh &&
     sed \
 	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
 	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
