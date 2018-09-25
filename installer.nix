@@ -13,7 +13,7 @@ stdenv.mkDerivation {
       mkdir $out/bin &&
       sed \
         -e "s#OUT#$out#" \
-	-e "w$out/bin/my-install" \
+	-e "w$out/bin/installer" \
 	installer.sh &&
       chmod 0500 $out/bin/installer
   '';
