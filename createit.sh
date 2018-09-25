@@ -160,7 +160,7 @@ EE=$(date +%s) &&
 		echo SUCCESS
 	    fi
     } &&
-    test_it --title "We have a secrets program." --expected-output hello --expected-exit-code 0 --command secrets &&
+    test_it --title "We have a secrets program." --expected-output goodbye --expected-exit-code 0 --command secrets &&
     echo PASSED ALL TESTS &&
     echo TIME TO BUILD ISO IMAGE = $((${BB}-${AA})) seconds. &&
     echo TIME TO RUN INSTALL PROGRAM = $((${DD}-${CC})) seconds. &&

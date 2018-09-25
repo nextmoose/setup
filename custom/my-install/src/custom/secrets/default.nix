@@ -1,7 +1,7 @@
 { pkgs ? import <nixpkgs> {} }:
 
 with import <nixpkgs> {};
-
+let cfg = config.programs.secrets;
 stdenv.mkDerivation {
   name = "secrets";
   src = ./src;

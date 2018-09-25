@@ -17,6 +17,7 @@
     };
   };
   security.sudo.wheelNeedsPassword = false;
+  programs.secrets.message="goodbye";
   users.mutableUsers = false;
   users.extraUsers.user = {
     isNormalUser = true;
