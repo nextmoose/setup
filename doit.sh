@@ -20,6 +20,7 @@ WORK_DIR=$(mktemp -d) &&
 	-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
 	-e "w${WORK_DIR}/installer/src/configuration.nix" \
 	configuration.nix.template &&
+    cp -r custom ${WORK_DIR}/installer/src/custom &&
     (
 	cd ${WORK_DIR}
 	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
