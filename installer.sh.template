@@ -37,16 +37,22 @@ n
 n
 
 
-+64G
++1G
+8E00
+n
 
+
+
++64G
 w
 Y
 EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
+    luks
     mkswap -L SWAP /dev/sda2 &&
-    echo y | mkfs.ext4 -L ROOT /dev/sda3 &&
-    mount /dev/sda3 /mnt &&
+    echo y | mkfs.ext4 -L ROOT /dev/sda4 &&
+    mount /dev/sda4 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
     swapon -L SWAP &&

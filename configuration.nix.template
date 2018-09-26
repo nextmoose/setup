@@ -16,6 +16,9 @@
       libinput.enable = true;
     };
   };
+  environment.systemPackages = [
+    pkgs.dropBear
+  ];
   security.sudo.wheelNeedsPassword = false;
   users.mutableUsers = false;
   users.extraUsers.user = {
