@@ -55,7 +55,7 @@ EOF
 		configuration.nix.template &&
 	    cp -r custom ${WORK_DIR}/installer/src/custom &&
 	    mkdir ${WORK_DIR}/installer/src/secrets &&
-	    echo ${SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --symmetric secret.txt --output ${WORK_DIR}/installer/src/secrets/secret.txt.gpg
+	    echo ${SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
     ) &&
     (
 	cd ${WORK_DIR}
