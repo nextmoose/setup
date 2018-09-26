@@ -156,7 +156,7 @@ EOF
 		    fi &&
 		    date
 	    } &&
-	    testit --title "We have a secrets program." --expected-output ${SECRET} --expected-exit-code 0 --command "secrets secret" &&
+	    testit --title "We have a secrets program." --expected-output $(cat secret.txt) --expected-exit-code 0 --command "secrets secret" &&
 	    testit --title "We have a secrets program.  It fails on undefined secrets." --expected-exit-code 65 --command "secrets nosecret"
     ) &&
     STATUS=PASS &&
