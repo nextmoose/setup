@@ -128,8 +128,7 @@ EOF
 		    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
 		    echo EXPECTED_EXIT_CODE=${EXPECTED_EXIT_CODE} &&
 		    BEFORE=$(date +%s) &&
-		    echo ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 '${COMMAND}' &&
-		    OBSERVED_OUTPUT="$(ssh -i ${SSH_KEY} -l user -p ${PORT1} -o UserKnownHostsFile=${KNOWN_HOSTS2} 127.0.0.1 \"${COMMAND}\")" &&
+		    OBSERVED_OUTPUT="$(ssh -F ${WORK_DIR}/.ssh/config gamma \"${COMMAND}\")" &&
 		    OBSERVED_EXIT_CODE=${?} &&
 		    AFTER=$(date +%s) &&
 		    echo DURATION=$((${AFTER}-${BEFORE})) &&
