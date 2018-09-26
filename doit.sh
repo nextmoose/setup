@@ -97,6 +97,10 @@ EOF
 	    VBoxManage startvm --type headless nixos &&
 	    knownhosts gamma &&
 	    testit() {
+		TITLE= &&
+		    EXPECTED_EXIT_CODE= &&
+		    EXPECTED_OUTPUT= &&
+		    COMMAND= &&
 		while [ ${#} -gt 0 ]
 		do
 		    case ${1} in
@@ -123,6 +127,8 @@ EOF
 			    ;;
 		    esac
 		done &&
+		    echo &&
+		    date &&
 		    echo TITLE=${TITLE} &&
 		    echo COMMAND=${COMMAND} &&
 		    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
@@ -144,7 +150,8 @@ EOF
 			    exit 67
 		    else
 			echo SUCCESS
-		    fi
+		    fi &&
+		    date
 	    } &&
 	    testit --title "We have a secrets program." --expected-output ${SECRET} --expected-exit-code 0 --command "secrets secret" &&
 	    testit --title "We have a secrets program.  It fails on undefined secrets." --expected-exit-code 65 --command "secrets nosecret"
