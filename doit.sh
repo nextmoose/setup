@@ -98,6 +98,8 @@ EOF
 	    VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    VBoxManage startvm --type headless nixos &&
+	    knownhosts beta &&
+	    ssh -F ${WORK_DIR}/.ssh/config beta &&
 	    knownhosts gamma &&
 	    testit() {
 		TITLE= &&

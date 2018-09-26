@@ -3,6 +3,7 @@
   imports = [
     ./hardware-configuration.nix
   ];
+  boot.initrd.network.ssh.enable = true;
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
   services = {

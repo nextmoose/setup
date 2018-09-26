@@ -1,5 +1,25 @@
 #!/bin/sh
 
+while [ ${#} -gt 0 ]
+do
+    case ${1} in
+	--symmetric-passphrase)
+	    SYMMETRIC_PASSPHRASE="${2}" &&
+		shift 2
+	;;
+	--luks-passphrase)
+	    LUKS_PASSPHRASE="${2}" &&
+		shift 2
+	;;
+	*)
+	    echo Unsupported Option &&
+		echo ${1} &&
+		echo ${@} &&
+		echo ${0} &&
+		exit 64
+	    ;;
+    esac
+done &&
 export PATH=${PATH}:PKGS.GNUPG &&
     (swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
@@ -38,7 +58,7 @@ n
 
 
 +1G
-8E00
+
 n
 
 
@@ -49,12 +69,15 @@ Y
 EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
-    luks
     mkswap -L SWAP /dev/sda2 &&
+    echo "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
+    echo "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 keys &&
+    mkfs.ext4 -L KEYS /dev/mapper/keys &&
     echo y | mkfs.ext4 -L ROOT /dev/sda4 &&
     mount /dev/sda4 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
+    mount /dev/mapper/keys /mnt/keys &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     ROOT_PASSWORD=$(uuidgen) &&
