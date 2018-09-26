@@ -57,13 +57,13 @@ n
 n
 
 
-
 +1G
+
 n
 
 
-
 +64G
+
 w
 Y
 EOF
@@ -73,7 +73,7 @@ EOF
     echo "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 keys &&
     mkfs.ext4 -L KEYS /dev/mapper/keys &&
-    echo y | mkfs.ext4 -L ROOT /dev/sda4 &&
+    mkfs.ext4 -L ROOT /dev/sda4 &&
     mount /dev/sda4 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
