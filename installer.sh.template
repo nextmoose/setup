@@ -77,6 +77,7 @@ EOF
     mount /dev/sda4 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
+    mkdir /mnt/keys &&
     mount /dev/mapper/keys /mnt/keys &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
