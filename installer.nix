@@ -14,6 +14,7 @@ stdenv.mkDerivation {
       mkdir $out/bin &&
       sed \
         -e "s#OUT#$out#" \
+        -e "s#PKGS.GNUPG#${pkgs.gnupg}/bin#" \
 	-e "w$out/bin/installer" \
 	installer.sh.template &&
       chmod 0500 $out/bin/installer

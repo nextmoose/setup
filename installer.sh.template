@@ -1,8 +1,6 @@
 #!/bin/sh
 
-export PATH=${PATH}:GNUPG/bin &&
-    echo AAAA1 ${PATH} &&
-    echo AAAA2 GNUPG=GNUPG &&
+export PATH=${PATH}:PKGS.GNUPG &&
     which gpg &&
     (swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
