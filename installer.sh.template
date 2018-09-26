@@ -54,6 +54,7 @@ EOF
     ROOT_PASSWORD=$(uuidgen) &&
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
+    mkdir /mnt/etc/nixos/custom/secrets/src/secrets &&
     tee | gpg --batch --passphrase-fd 0 --output /mnt/etc/nixos/custom/secrets/src/secrets/secret --decrypt OUT/etc/secrets/secret.txt.gpg &&
     cp -r OUT/etc/secrets /mnt/etc/nixos/custom/secrets/src &&
     (cat <<EOF
