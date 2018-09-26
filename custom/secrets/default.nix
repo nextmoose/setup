@@ -8,6 +8,8 @@ stdenv.mkDerivation {
     mkdir $out &&
       mkdir $out/bin &&
       sed -e "s#OUT#$out#" -e "w$out/bin/secrets" secrets.sh &&
-      chmod 0555 $out/bin/secrets
+      chmod 0555 $out/bin/secrets &&
+      mkdir $out/etc &&
+      cp -r secrets $out/etc
   '';
 }
