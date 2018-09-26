@@ -63,11 +63,13 @@ EOF
     ) &&
     if [ "0" != "$(VBoxManage showvminfo nixos | grep -c running)" ]
     then
-	VBoxManage controlvm nixos poweroff soft
+	VBoxManage controlvm nixos poweroff soft &&
+	    sleep 10s
     fi &&
     if [ "0" != "$(VBoxManage list vms | grep -c nixos)" ]
     then
-	VBoxManage unregistervm --delete nixos
+	VBoxManage unregistervm --delete nixos &&
+	    sleep 10s
     fi &&
     if [ "0" != "$(sudo lvs | grep -c nixos)" ]
     then
