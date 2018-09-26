@@ -3,7 +3,7 @@
 WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
     PORT=20560 &&
-    SYMMETRIC_PASSWORD=02b723d0-bf0b-45d8-a79c-353d17823746 &&
+    SYMMETRIC_PASSPHRASE=02b723d0-bf0b-45d8-a79c-353d17823746 &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
@@ -64,6 +64,7 @@ EOF
     VBoxManage list vms | grep nixos | while read VM
     do
 	VBoxManage controlvm nixos poweroff soft &&
+	    sleep 1s &&
 	    VBoxManage unregistervm --delete nixos
     done &&
     sudo lvs | grep nixos | while read VOL
