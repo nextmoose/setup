@@ -4,6 +4,7 @@ with import <nixpkgs> {};
 stdenv.mkDerivation {
   name = "secrets";
   src = ./src;
+  buildInputs = [ pkgs.gnupg ];
   installPhase = ''
     mkdir $out &&
       mkdir $out/bin &&
