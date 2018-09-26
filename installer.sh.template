@@ -1,7 +1,6 @@
 #!/bin/sh
 
 export PATH=${PATH}:PKGS.GNUPG &&
-    which gpg &&
     (swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
     (umount /mnt/boot || true) &&
@@ -55,7 +54,7 @@ EOF
     ROOT_PASSWORD=$(uuidgen) &&
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
-    tee | gpg --passphrase-fd 0 --decrypt OUT/etc/secrets/${FILE} --output /mnt/etc/nixos/custom/secrets/src/secrets/${FILE%.gpg} &&
+    tee | gpg --passphrase-fd 0 --output /mnt/etc/nixos/custom/secrets/src/secrets/secret.gpg --decrypt OUT/etc/secrets/secret &&
     cp -r OUT/etc/secrets /mnt/etc/nixos/custom/secrets/src &&
     (cat <<EOF
 ${ROOT_PASSWORD}
