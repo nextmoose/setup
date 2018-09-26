@@ -15,7 +15,7 @@ stdenv.mkDerivation {
       sed \
         -e "s#OUT#$out#" \
 	-e "w$out/bin/installer" \
-	installer.sh &&
+	installer.sh.template &&
       chmod 0500 $out/bin/installer
   '';
 }
