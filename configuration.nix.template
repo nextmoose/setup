@@ -3,11 +3,14 @@
   imports = [
     ./hardware-configuration.nix
   ];
-  boot.initrd.network.ssh = {
-    enable = true;
-    authorizedKeys = [
-      "AUTHORIZED_KEY_PUBLIC"
-    ];
+  boot.initrd.network = {
+    network.enable = true;
+    ssh = {
+      enable = true;
+      authorizedKeys = [
+        "AUTHORIZED_KEY_PUBLIC"
+      ];
+    };
   };
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
