@@ -4,7 +4,7 @@
     ./hardware-configuration.nix
   ];
   boot.initrd.network = {
-    network.enable = true;
+    enable = true;
     ssh = {
       enable = true;
       authorizedKeys = [
