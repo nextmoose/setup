@@ -1,6 +1,7 @@
 #!/bin/sh
 
-(swapoff -L SWAP || true ) &&
+export PATH=${PATH}:${GNUPG}/bin &&
+    (swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
     (umount /mnt/boot || true) &&
     (umount /mnt || true) &&
