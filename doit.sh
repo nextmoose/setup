@@ -61,18 +61,18 @@ EOF
 	cd ${WORK_DIR}
 	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
     ) &&
-    VBoxManage showvminfo nixos | grep running | while read VM
-    do
+    if [ "0" != "$(VBoxManage showvminfo nixos | grep -c running)" ]
+    then
 	VBoxManage controlvm nixos poweroff soft
-    done &&
-    VBoxManage list vms | grep nixos | while read VM
-    do
+    fi &&
+    if [ "0" != "$(VBoxManage list vms | grep -c nixos)" ]
+    then
 	VBoxManage unregistervm --delete nixos
-    done &&
-    sudo lvs | grep nixos | while read VOL
-    do
+    fi &&
+    if [ "0" != "$(sudo lvs | grep -c nixos)" ]
+    then
 	sudo lvremove --force /dev/volumes/nixos
-    done &&
+    fi &&
     (
 	sudo lvcreate -y --name nixos --size 100GB volumes &&
 	    VBoxManage internalcommands createrawvmdk -filename ${WORK_DIR}/nixos.vmdk -rawdisk /dev/volumes/nixos &&
