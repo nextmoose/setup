@@ -8,7 +8,18 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir $out &&
       mkdir $out/bin &&
-      sed -e "s#OUT#$out#" -e "s#GNUPG#$pkgs.gnupg#" -e "w$out/bin/secrets" secrets.sh &&
+      sed -e "s#OUT#$out#" -e "s#GNUPG#${pkgs.gnupg}#" -e "w$out/bin/secrets" secrets.sh &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      cat $out/bin/secrets &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
+      echo AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA &&
       chmod 0555 $out/bin/secrets &&
       mkdir $out/etc &&
       cp -r secrets $out/etc
