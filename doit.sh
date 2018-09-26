@@ -3,7 +3,7 @@
 WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
     PORT=20560 &&
-    SECRET=b9ad5f5e-9052-408f-949c-5125d77fb2cf &&
+    SYMMETRIC_PASSWORD=02b723d0-bf0b-45d8-a79c-353d17823746 &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
@@ -55,7 +55,7 @@ EOF
 		configuration.nix.template &&
 	    cp -r custom ${WORK_DIR}/installer/src/custom &&
 	    mkdir ${WORK_DIR}/installer/src/secrets &&
-	    echo ${SECRET} > ${WORK_DIR}/installer/src/secrets/secret
+	    echo ${SYMMETRIC_PASSPHRASE} | gpg --symmetric secret.txt > ${WORK_DIR}/installer/src/secrets/secret.txt.gpg
     ) &&
     (
 	cd ${WORK_DIR}
@@ -91,7 +91,7 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha &&
-	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer &&
+	    echo ${SYMMETRIC_PASSPHRASE} | time ssh -F ${WORK_DIR}/.ssh/config alpha installer &&
 	    VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    VBoxManage startvm --type headless nixos &&
