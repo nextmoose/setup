@@ -5,3 +5,4 @@ then
     cat "OUT/etc/secrets/${@}"
 else
     exit 65
+fi
