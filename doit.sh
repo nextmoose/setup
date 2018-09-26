@@ -61,11 +61,13 @@ EOF
 	cd ${WORK_DIR}
 	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
     ) &&
+    VBoxManage showvminfo nixos | grep running | while read VM
+    do
+	VBoxManage controlvm nixos poweroff soft
+    done &&
     VBoxManage list vms | grep nixos | while read VM
     do
-	VBoxManage controlvm nixos poweroff soft &&
-	    sleep 1s &&
-	    VBoxManage unregistervm --delete nixos
+	VBoxManage unregistervm --delete nixos
     done &&
     sudo lvs | grep nixos | while read VOL
     do
