@@ -128,7 +128,7 @@ EOF
 		    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
 		    echo EXPECTED_EXIT_CODE=${EXPECTED_EXIT_CODE} &&
 		    BEFORE=$(date +%s) &&
-		    OBSERVED_OUTPUT="$(ssh -F ${WORK_DIR}/.ssh/config gamma \"${COMMAND}\")" &&
+		    OBSERVED_OUTPUT="$(ssh -F ${WORK_DIR}/.ssh/config gamma ${COMMAND})" &&
 		    OBSERVED_EXIT_CODE=${?} &&
 		    AFTER=$(date +%s) &&
 		    echo DURATION=$((${AFTER}-${BEFORE})) &&
