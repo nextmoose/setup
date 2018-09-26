@@ -53,7 +53,7 @@ EOF
     ROOT_PASSWORD=$(uuidgen) &&
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
-    tee | gpg --passphrase-fd 0 --decrypt --symmetric OUT/etc/secrets/${FILE} --output /mnt/etc/nixos/custom/secrets/src/secrets/${FILE%.gpg} 
+    tee | gpg --passphrase-fd 0 --decrypt OUT/etc/secrets/${FILE} --output /mnt/etc/nixos/custom/secrets/src/secrets/${FILE%.gpg} &&
     cp -r OUT/etc/secrets /mnt/etc/nixos/custom/secrets/src &&
     (cat <<EOF
 ${ROOT_PASSWORD}
