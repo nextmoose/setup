@@ -12,6 +12,7 @@
       ];
     };
   };
+  networking.interfaces.lo.ipv4.addresses = [ { address = "127.0.0.1"; prefixLength = 24; } ];
   boot.initrd.kernelModules = [ "r8169" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
