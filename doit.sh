@@ -13,7 +13,9 @@ WORK_DIR=$(mktemp -d) &&
 	mkdir ${WORK_DIR}/.ssh &&
 	    chmod 0700 ${WORK_DIR}/.ssh &&
 	    ssh-keygen -f ${WORK_DIR}/.ssh/id_rsa -P "" -C "" &&
-	    ssh-keygen -f ${WORK_DIR}/.ssh/beta.id_rsa -P "" -C "" &&
+	    dropbearkey -t rsa -f ${WORK_DIR}/.ssh/beta.id_rsa &&
+	    dropbearkey -t dss -f ${WORK_DIR}/.ssh/beta.id_dss &&
+	    dropbearkey -t ecdsa -f ${WORK_DIR}/.ssh/beta.id_ecdsa &&
 	    (cat > ${WORK_DIR}/.ssh/config <<EOF
 Host alpha  
 HostName 127.0.0.1
@@ -50,6 +52,8 @@ EOF
 	    mkdir ${WORK_DIR}/installer/src &&
 	    cp installer.sh.template ${WORK_DIR}/installer/src/installer.sh.template &&
 	    cp ${WORK_DIR}/.ssh/beta.id_rsa ${WORK_DIR}/installer/src/beta.id_rsa &&
+	    cp ${WORK_DIR}/.ssh/beta.id_dss ${WORK_DIR}/installer/src/beta.id_dss &&
+	    cp ${WORK_DIR}/.ssh/beta.id_ecdsa ${WORK_DIR}/installer/src/beta.id_ecdsa &&
 	    sed \
 		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
 		-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
