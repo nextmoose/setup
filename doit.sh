@@ -3,7 +3,8 @@
 WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
     PORT=20560 &&
-    SYMMETRIC_PASSPHRASE=02b723d0-bf0b-45d8-a79c-353d17823746 &&
+    SYMMETRIC_PASSPHRASE=9c17b0a7-5288-41ca-8f69-899db249a0f1 &&
+    LUKS_PASSPHRASE=password &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
@@ -102,7 +103,7 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha &&
-	    echo ${SYMMETRIC_PASSPHRASE} | time ssh -F ${WORK_DIR}/.ssh/config alpha installer &&
+	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase ${SYMMETRIC_PASSPHRASE} --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    VBoxManage startvm --type headless nixos &&
