@@ -2,7 +2,9 @@
 
 WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
-    PORT=20560 &&
+    ALPHA_PORT=20560 &&
+    BETA_PORT=25954 &&
+    GAMMA_PORT=29156 &&
     SYMMETRIC_PASSPHRASE=9c17b0a7-5288-41ca-8f69-899db249a0f1 &&
     LUKS_PASSPHRASE=password &&
     cleanup() {
@@ -21,21 +23,21 @@ WORK_DIR=$(mktemp -d) &&
 Host alpha  
 HostName 127.0.0.1
 User root
-Port ${PORT}
+Port ${ALPHA_PORT}
 IdentityFile ${WORK_DIR}/.ssh/id_rsa
 UserKnownHostsFile ${WORK_DIR}/.ssh/alpha.known_hosts
 
 Host beta
 HostName 127.0.0.1
 User root
-Port ${PORT}
+Port ${BETA_PORT}
 IdentityFile ${WORK_DIR}/.ssh/id_rsa
 UserKnownHostsFile ${WORK_DIR}/.ssh/beta.known_hosts
 
 Host gamma
 HostName 127.0.0.1
 User user
-Port ${PORT}
+Port ${GAMMA_PORT}
 IdentityFile ${WORK_DIR}/.ssh/id_rsa
 UserKnownHostsFile ${WORK_DIR}/.ssh/gamma.known_hosts
 EOF
@@ -90,7 +92,9 @@ EOF
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
 	    VBoxManage storagectl nixos --name "IDE" --add IDE &&
 	    VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ${WORK_DIR}/nixos.vmdk &&
-	    VBoxManage modifyvm nixos --natpf1 "guestssh1,tcp,127.0.0.1,${PORT},,22" &&
+	    VBoxManage modifyvm nixos --natpf1 "alpha,tcp,127.0.0.1,${ALPHA_PORT},,22" &&
+	    VBoxManage modifyvm nixos --natpf1 "beta,tcp,127.0.0.1,${BETA_PORT},,22" &&
+	    VBoxManage modifyvm nixos --natpf1 "gamma,tcp,127.0.0.1,${GAMMA_PORT},,25778" &&
 	    VBoxManage modifyvm nixos --nic1 nat &&
 	    VBoxManage modifyvm nixos --memory 2000 &&
 	    VBoxManage modifyvm nixos --firmware efi &&
@@ -99,18 +103,17 @@ EOF
 		while [ -z "$(cat ${WORK_DIR}/.ssh/${1}.known_hosts)" ]
 		do
 		    sleep 1s &&
-			ssh-keyscan -p ${PORT} 127.0.0.1 > ${WORK_DIR}/.ssh/${1}.known_hosts
+			ssh-keyscan -p ${2} 127.0.0.1 > ${WORK_DIR}/.ssh/${1}.known_hosts
 		done
 	    } &&
-	    knownhosts alpha &&
-	    echo time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
+	    knownhosts alpha ${ALPHA_PORT} &&
 	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    VBoxManage startvm --type headless nixos &&
-	    knownhosts beta &&
+	    knownhosts beta ${BETA_PORT} &&
 	    ssh -F ${WORK_DIR}/.ssh/config beta &&
-	    knownhosts gamma &&
+	    knownhosts gamma ${GAMMA_PORT} &&
 	    testit() {
 		TITLE= &&
 		    EXPECTED_EXIT_CODE= &&
