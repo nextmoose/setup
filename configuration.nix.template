@@ -7,9 +7,6 @@
     enable = true;
     ssh = {
       enable = true;
-      hostRSAKey = ./beta.id_rsa;
-      hostDSSKey = ./beta.id_dss;
-      hostECDSAKey = ./beta.id_ecdsa;
       authorizedKeys = [
         "AUTHORIZED_KEY_PUBLIC"
       ];
