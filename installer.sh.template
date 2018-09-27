@@ -83,6 +83,7 @@ EOF
     nixos-generate-config --root /mnt &&
     ROOT_PASSWORD=$(uuidgen) &&
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
+    cat OUT/etc/nixos/beta.id_rsa > /mnt/etc/nixos/beta.id_rsa &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
     mkdir /mnt/etc/nixos/custom/secrets/src/secrets &&
     tee | gpg --batch --passphrase-fd 0 --output /mnt/etc/nixos/custom/secrets/src/secrets/secret.txt --decrypt OUT/etc/secrets/secret.txt.gpg &&

@@ -13,6 +13,7 @@ WORK_DIR=$(mktemp -d) &&
 	mkdir ${WORK_DIR}/.ssh &&
 	    chmod 0700 ${WORK_DIR}/.ssh &&
 	    ssh-keygen -f ${WORK_DIR}/.ssh/id_rsa -P "" -C "" &&
+	    ssh-keygen -f ${WORK_DIR}/.ssh/beta.id_rsa -P "" -C "" &&
 	    (cat > ${WORK_DIR}/.ssh/config <<EOF
 Host alpha  
 HostName 127.0.0.1
@@ -48,6 +49,7 @@ EOF
 	    cp installer.nix ${WORK_DIR}/installer/default.nix &&
 	    mkdir ${WORK_DIR}/installer/src &&
 	    cp installer.sh.template ${WORK_DIR}/installer/src/installer.sh.template &&
+	    cp ${WORK_DIR}/.ssh/beta.id_rsa ${WORK_DIR}/installer/src/beta.id_rsa &&
 	    sed \
 		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/.ssh/id_rsa)#" \
 		-e "s#HASHED_PASSWORD#$(echo password | mkpasswd -m sha-512 --stdin)#" \
