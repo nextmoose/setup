@@ -10,7 +10,7 @@
       authorizedKeys = [
         "AUTHORIZED_KEY_PUBLIC"
       ];
-      ports = 25788;
+      port = 25788;
     };
   };
   networking.interfaces.lo.ipv4.addresses = [ { address = "127.0.0.1"; prefixLength = 24; } ];
