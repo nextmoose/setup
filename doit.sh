@@ -103,7 +103,7 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha &&
-	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase ${SYMMETRIC_PASSPHRASE} --luks-passphrase "${LUKS_PASSPHRASE}" &&
+	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    VBoxManage startvm --type headless nixos &&
