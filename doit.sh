@@ -96,10 +96,12 @@ EOF
 	    VBoxManage modifyvm nixos --natpf1 "beta,tcp,127.0.0.1,${BETA_PORT},,22" &&
 	    VBoxManage modifyvm nixos --natpf1 "gamma,tcp,127.0.0.1,${GAMMA_PORT},,25778" &&
 	    VBoxManage modifyvm nixos --nic1 nat &&
+	    VBoxManage modifyvm nixos --nic2 bridged &&
+	    VBoxManage modifyvm nixos --bridgedadapter wlo1 &&
 	    VBoxManage modifyvm nixos --memory 2000 &&
 	    VBoxManage modifyvm nixos --firmware efi &&
 	    VBoxManage startvm --type headless nixos &&
-	    knownhosts() {
+xs	    knownhosts() {
 		while [ -z "$(cat ${WORK_DIR}/.ssh/${1}.known_hosts)" ]
 		do
 		    sleep 1s &&
@@ -108,6 +110,8 @@ EOF
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
 	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
+	    echo time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
+	    ssh -F ${WORK_DIR}/.ssh/config alpha installer &&
 	    VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    VBoxManage startvm --type headless nixos &&
