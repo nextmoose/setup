@@ -13,7 +13,7 @@
       port = 25788;
     };
   };
-  networking.interfaces.lo.ipv4.addresses = [ { address = "127.0.0.1"; prefixLength = 24; } ];
+  networking.interfaces.eth0.ipv4.addresses = [ { address = "10.0.0.100"; prefixLength = 24; } ];
   boot.initrd.kernelModules = [ "r8169" ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
