@@ -93,11 +93,11 @@ EOF
 	    VBoxManage storagectl nixos --name "IDE" --add IDE &&
 	    VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ${WORK_DIR}/nixos.vmdk &&
 	    VBoxManage modifyvm nixos --natpf1 "alpha,tcp,127.0.0.1,${ALPHA_PORT},,22" &&
-	    VBoxManage modifyvm nixos --natpf1 "beta,tcp,127.0.0.1,${BETA_PORT},,25778" &&
+	    VBoxManage modifyvm nixos --natpf1 "beta,tcp,127.0.0.1,${BETA_PORT},,22" &&
 	    VBoxManage modifyvm nixos --natpf1 "gamma,tcp,127.0.0.1,${GAMMA_PORT},,22" &&
 	    VBoxManage modifyvm nixos --nic1 nat &&
-#	    VBoxManage modifyvm nixos --nic2 bridged &&
-#	    VBoxManage modifyvm nixos --bridgeadapter2 wlo1 &&
+	    VBoxManage modifyvm nixos --nic2 bridged &&
+	    VBoxManage modifyvm nixos --bridgeadapter2 wlo1 &&
 	    VBoxManage modifyvm nixos --memory 2000 &&
 	    VBoxManage modifyvm nixos --firmware efi &&
 	    VBoxManage startvm --type headless nixos &&

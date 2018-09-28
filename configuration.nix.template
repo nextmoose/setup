@@ -10,7 +10,6 @@
       authorizedKeys = [
         "AUTHORIZED_KEY_PUBLIC"
       ];
-      port = 25788;
     };
   };
   networking.useDHCP = true;
