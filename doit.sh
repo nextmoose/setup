@@ -101,7 +101,7 @@ EOF
 	    VBoxManage modifyvm nixos --memory 2000 &&
 	    VBoxManage modifyvm nixos --firmware efi &&
 	    VBoxManage startvm --type headless nixos &&
-xs	    knownhosts() {
+	    knownhosts() {
 		while [ -z "$(cat ${WORK_DIR}/.ssh/${1}.known_hosts)" ]
 		do
 		    sleep 1s &&
