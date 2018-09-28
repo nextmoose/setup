@@ -43,6 +43,7 @@ y
 EOF
 	    ) | gdisk /dev/sda
     done &&
+    echo FINISHED CLEAN UP &&
     (cat <<EOF
 n
 
@@ -70,29 +71,49 @@ EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
+    echo AAAAAA 00100 &&
     echo "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
+    echo AAAAAA 00200 &&
     echo "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 keys &&
+    echo AAAAAA 00300 &&
     mkfs.ext4 -L KEYS /dev/mapper/keys &&
+    echo AAAAAA 00400 &&
     mkfs.ext4 -L ROOT /dev/sda4 &&
+    echo AAAAAA 00100 &&
     mount /dev/sda4 /mnt &&
+    echo AAAAAA 00500 &&
     mkdir /mnt/boot &&
+    echo AAAAAA 00600 &&
     mount /dev/sda1 /mnt/boot/ &&
+    echo AAAAAA 00700 &&
     mkdir /mnt/keys &&
+    echo AAAAAA 00800 &&
     mount /dev/mapper/keys /mnt/keys &&
+    echo AAAAAA 00900 &&
     swapon -L SWAP &&
+    echo AAAAAA 01000 &&
     nixos-generate-config --root /mnt &&
+    echo AAAAAA 00100 &&
     ROOT_PASSWORD=$(uuidgen) &&
+    echo AAAAAA 01100 &&
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
+    echo AAAAAA 01200 &&
     cat OUT/etc/nixos/beta.id_rsa > /mnt/etc/nixos/beta.id_rsa &&
+    echo AAAAAA 01300 &&
     cat OUT/etc/nixos/beta.id_dss > /mnt/etc/nixos/beta.id_dss &&
+    echo AAAAAA 01400 &&
     cat OUT/etc/nixos/beta.id_ecdsa > /mnt/etc/nixos/beta.id_ecdsa &&
+    echo AAAAAA 01500 &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
+    echo AAAAAA 01600 &&
     mkdir /mnt/etc/nixos/custom/secrets/src/secrets &&
+    echo AAAAAA 01700 &&
     echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output /mnt/etc/nixos/custom/secrets/src/secrets/secret.txt --decrypt OUT/etc/secrets/secret.txt.gpg &&
-    cp -r OUT/etc/secrets /mnt/etc/nixos/custom/secrets/src &&
+    echo FINISHED SETUP &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
+    echo FINISHED INSTALLING &&
     true
