@@ -97,7 +97,7 @@ EOF
 	    VBoxManage modifyvm nixos --natpf1 "gamma,tcp,127.0.0.1,${GAMMA_PORT},,25778" &&
 	    VBoxManage modifyvm nixos --nic1 nat &&
 	    VBoxManage modifyvm nixos --nic2 bridged &&
-	    VBoxManage modifyvm nixos --bridgedadapter wlo1 &&
+	    VBoxManage modifyvm nixos --bridgeadapter2 wlo1 &&
 	    VBoxManage modifyvm nixos --memory 2000 &&
 	    VBoxManage modifyvm nixos --firmware efi &&
 	    VBoxManage startvm --type headless nixos &&
