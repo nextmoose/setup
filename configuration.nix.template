@@ -12,6 +12,11 @@
       ];
     };
   };
+  boot.initrd.preDeviceCommands = ''
+    echo HELLO WORLD &&
+       echo password | cryptsetup --key-file - luksOpen /dev/sda3 keys
+      echo TAKE CARE
+  '';
   networking.useDHCP = true;
   boot.initrd.kernelModules = [ "r8169" ];
   boot.loader.systemd-boot.enable = true;
