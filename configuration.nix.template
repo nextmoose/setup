@@ -17,6 +17,10 @@
       echo Shell commands to be executed before udev is started to create device nodes. &&
       echo THIS IS NUMBER ONE. &&
       echo THIS IS WHERE THE DISK WILL BE UNLOCKED. &&
+      echo ifconfig lo: 127.0.0.2 netmask 255.0.0.0 up &&
+      time ifconfig lo: 127.0.0.2 netmask 255.0.0.0 up &&
+      echo ifconfig &&
+      time ifconfig &&
       echo END PRE_DEVICE_COMMAND
   '';
   boot.initrd.postDeviceCommands = ''
