@@ -77,12 +77,12 @@ EOF
 	then
 	    VBoxManage controlvm nixos poweroff soft &&
 		sleep 10s
+	fi &&
+	if [ "0" != "$(VBoxManage list vms | grep -c nixos)" ]
+	then
+	    VBoxManage unregistervm --delete nixos &&
+		sleep 10s
 	fi
-    fi &&
-    if [ "0" != "$(VBoxManage list vms | grep -c nixos)" ]
-    then
-	VBoxManage unregistervm --delete nixos &&
-	    sleep 10s
     fi &&
     if [ "0" != "$(sudo lvs | grep -c nixos)" ]
     then
