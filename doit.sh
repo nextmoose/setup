@@ -7,6 +7,7 @@ WORK_DIR=$(mktemp -d) &&
     GAMMA_PORT=29156 &&
     SYMMETRIC_PASSPHRASE=9c17b0a7-5288-41ca-8f69-899db249a0f1 &&
     LUKS_PASSPHRASE=password &&
+    LUKS_CODE=191E1F1F111813201C &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
@@ -115,8 +116,10 @@ EOF
 	    VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    VBoxManage startvm --type headless nixos &&
-	    knownhosts beta ${BETA_PORT} &&
-	    ssh -F ${WORK_DIR}/.ssh/config beta &&
+	    sleep 1m &&
+	    VBoxManage controlvm nixos keyboardputscancode ${LUKS_CODE} &&
+#	    knownhosts beta ${BETA_PORT} &&
+#	    ssh -F ${WORK_DIR}/.ssh/config beta &&
 	    knownhosts gamma ${GAMMA_PORT} &&
 	    testit() {
 		TITLE= &&
