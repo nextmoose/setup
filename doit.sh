@@ -7,7 +7,7 @@ WORK_DIR=$(mktemp -d) &&
     GAMMA_PORT=29156 &&
     SYMMETRIC_PASSPHRASE=9c17b0a7-5288-41ca-8f69-899db249a0f1 &&
     LUKS_PASSPHRASE=password &&
-    LUKS_CODE=191E1F1F111813201C &&
+    LUKS_CODE="19 1E 1F 1F 11 18 13 20 1C" &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
@@ -120,7 +120,16 @@ EOF
 	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    sudo VBoxManage startvm --type headless nixos &&
 	    sleep 1m &&
-	    sudo VBoxManage controlvm nixos keyboardputscancode ${LUKS_CODE} &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 19 &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 1E &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 1F &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 1F &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 11 &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 18 &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 13 &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 20 &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 1C &&
+#	    sudo VBoxManage controlvm nixos keyboardputscancode "${LUKS_CODE}" &&
 #	    knownhosts beta ${BETA_PORT} &&
 #	    ssh -F ${WORK_DIR}/.ssh/config beta &&
 	    knownhosts gamma ${GAMMA_PORT} &&
