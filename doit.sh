@@ -94,7 +94,7 @@ EOF
 		RELEASE= &&
 		for SYMBOL in ${@}
 		do
-		    case SYMBOL in
+		    case ${SYMBOL} in
 			"alfa")
 			    PRESS=1E
 			    ;;
@@ -246,7 +246,6 @@ EOF
 	    keyboardputscancode papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
 #	    sudo VBoxManage controlvm nixos keyboardputscancode 19 99 1E 9E 1F 9F 1F 9F 11 91 18 98 13 93 20 A0 1C 9C &&
 	    echo KEYED IN LUKS PASSWORD &&
-	    sleep 2m &&
 	    knownhosts gamma ${GAMMA_PORT} &&
 	    testit() {
 		TITLE= &&
