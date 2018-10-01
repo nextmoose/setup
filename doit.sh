@@ -5,8 +5,8 @@ WORK_DIR=$(mktemp -d) &&
     ALPHA_PORT=20560 &&
     BETA_PORT=25954 &&
     GAMMA_PORT=29156 &&
-    SYMMETRIC_PASSPHRASE=9c17b0a7-5288-41ca-8f69-899db249a0f1 &&
-    LUKS_PASSPHRASE=password &&
+    SYMMETRIC_PASSPHRASE=passphrase &&
+    LUKS_PASSPHRASE=passphrase &&
     LUKS_CODE="19 1E 1F 1F 11 18 13 20 1C" &&
     cleanup() {
 	echo ${STATUS} &&
@@ -93,6 +93,8 @@ EOF
 	sudo lvremove --force /dev/volumes/test
     fi &&
     (
+	# see
+	# http://www.ee.bgu.ac.il/~microlab/MicroLab/Labs/ScanCodes.htm
 	keyboardputscancode() {
 	    PRESS= &&
 		RELEASE= &&
@@ -103,18 +105,22 @@ EOF
 			    PRESS=1E
 			    ;;
 			"bravo")
+			    PRESS=30
 			    ;;
 			"charlie")
 			    PRESS=2E
 			    ;;
 			"delta")
+			    PRESS=20
 			    ;;
 			"echo")
 			    PRESS=12
 			    ;;
 			"foxtrot")
+			    PRESS=21
 			    ;;
 			"golf")
+			    PRESS=22
 			    ;;
 			"hotel")
 			    PRESS=23
@@ -123,6 +129,7 @@ EOF
 			    PRESS=17
 			    ;;
 			"juiliett")
+			    PRESS=24
 			    ;;
 			"kilo")
 			    PRESS= ## FIXME
@@ -137,11 +144,13 @@ EOF
 			    PRESS=31
 			    ;;
 			"oscar")
+			    PRESS=18
 			    ;;
 			"papa")
 			    PRESS=19
 			    ;;
 			"quebec")
+			    PRESS=10
 			    ;;
 			"romeo")
 			    PRESS=13
@@ -156,35 +165,49 @@ EOF
 			    PRESS=16
 			    ;;
 			"victor")
+			    PRESS=2F
 			    ;;
 			"whiskey")
+			    PRESS=11
 			    ;;
 			"xray")
+			    PRESS=2D
 			    ;;
 			"yankee")
 			    PRESS=15
 			    ;;
 			"zulu")
+			    PRESS=2C
 			    ;;
 			"zero")
+			    PRESS=0B
 			    ;;
 			"one")
+			    PRESS=02
 			    ;;
 			"two")
+			    PRESS=03
 			    ;;
 			"three")
+			    PRESS=04
 			    ;;
 			"four")
+			    PRESS=05
 			    ;;
 			"five")
+			    PRESS=06
 			    ;;
 			"six")
+			    PRESS=07
 			    ;;
 			"seven")
+			    PRESS=08
 			    ;;
 			"eight")
+			    PRESS=09
 			    ;;
 			"nine")
+			    PRESS=0A
 			    ;;
 			"space")
 			    PRESS=39
