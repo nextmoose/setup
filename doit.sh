@@ -104,6 +104,7 @@ EOF
 	    sudo VBoxManage modifyvm nixos --bridgeadapter2 wlo1 &&
 	    sudo VBoxManage modifyvm nixos --memory 2000 &&
 	    sudo VBoxManage modifyvm nixos --firmware efi &&
+	    echo AAAAAA &&
 	    sudo VBoxManage startvm --type headless nixos &&
 	    knownhosts() {
 		while [ -z "$(cat ${WORK_DIR}/.ssh/${1}.known_hosts)" ]
@@ -116,11 +117,11 @@ EOF
 	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    echo time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    ssh -F ${WORK_DIR}/.ssh/config alpha ifconfig &&
-	    VBoxManage controlvm nixos poweroff soft &&
+	    sudo VBoxManage controlvm nixos poweroff soft &&
 	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
-	    VBoxManage startvm --type headless nixos &&
+	    sudo VBoxManage startvm --type headless nixos &&
 	    sleep 1m &&
-	    VBoxManage controlvm nixos keyboardputscancode ${LUKS_CODE} &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode ${LUKS_CODE} &&
 #	    knownhosts beta ${BETA_PORT} &&
 #	    ssh -F ${WORK_DIR}/.ssh/config beta &&
 	    knownhosts gamma ${GAMMA_PORT} &&
