@@ -20,7 +20,16 @@ do
 	    ;;
     esac
 done &&
-export PATH=${PATH}:PKGS.GNUPG &&
+    if [ -z "${SYMMETRIC_PASSPHRASE}" ]
+    then
+	echo Unspecified SYMMETRIC_PASSPHRASE &&
+	    exit 65
+    elif [ -z "${LUKS_PASSPHRASE}" ]
+    then
+	echo Unspecified LUKS_PASSPHRASE &&
+	    exit 66
+    fi &&
+    export PATH=${PATH}:PKGS.GNUPG &&
     (swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
     (umount /mnt/boot || true) &&
