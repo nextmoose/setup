@@ -88,6 +88,10 @@ EOF
     then
 	sudo lvremove --force /dev/volumes/nixos
     fi &&
+    if [ "0" != "$(sudo lvs | grep -c test)" ]
+    then
+	sudo lvremove --force /dev/volumes/test
+    fi &&
     (
 	keyboardputscancode() {
 	    PRESS= &&
@@ -121,6 +125,7 @@ EOF
 			"juiliett")
 			    ;;
 			"kilo")
+			    PRESS= ## FIXME
 			    ;;
 			"lima")
 			    PRESS=26
@@ -208,6 +213,8 @@ EOF
 		done
 	} &&
 	    sudo lvcreate -y --name nixos --size 100GB volumes &&
+	    sudo lvcreate -y --name test --size 1GB volumes &&
+	    sudo mkfs.ext4 /dev/volumes/test &&
 	    sudo VBoxManage internalcommands createrawvmdk -filename ${WORK_DIR}/nixos.vmdk -rawdisk /dev/volumes/nixos &&
 	    sudo VBoxManage createvm --name nixos --groups /nixos --register &&
 	    sudo VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
