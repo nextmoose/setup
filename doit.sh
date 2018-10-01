@@ -71,16 +71,16 @@ EOF
 	cd ${WORK_DIR}
 	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
     ) &&
-    if [ $(VBoxManage showvminfo nixos) ]
+    if [ $(sudo VBoxManage showvminfo nixos) ]
     then
-	if [ "0" != "$(VBoxManage showvminfo nixos | grep -c running)" ]
+	if [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	then
-	    VBoxManage controlvm nixos poweroff soft &&
+	    sudo VBoxManage controlvm nixos poweroff soft &&
 		sleep 10s
 	fi &&
-	if [ "0" != "$(VBoxManage list vms | grep -c nixos)" ]
+	if [ "0" != "$(sudo VBoxManage list vms | grep -c nixos)" ]
 	then
-	    VBoxManage unregistervm --delete nixos &&
+	    sudo VBoxManage unregistervm --delete nixos &&
 		sleep 10s
 	fi
     fi &&
@@ -91,21 +91,20 @@ EOF
     (
 	sudo lvcreate -y --name nixos --size 100GB volumes &&
 	    sudo VBoxManage internalcommands createrawvmdk -filename ${WORK_DIR}/nixos.vmdk -rawdisk /dev/volumes/nixos &&
-	    sudo chown 1000:100 ${WORK_DIR}/nixos.vmdk &&
-	    VBoxManage createvm --name nixos --groups /nixos --register &&
-	    VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
-	    VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
-	    VBoxManage storagectl nixos --name "IDE" --add IDE &&
-	    VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ${WORK_DIR}/nixos.vmdk &&
-	    VBoxManage modifyvm nixos --natpf1 "alpha,tcp,127.0.0.1,${ALPHA_PORT},,22" &&
-	    VBoxManage modifyvm nixos --natpf1 "beta,tcp,127.0.0.1,${BETA_PORT},,22" &&
-	    VBoxManage modifyvm nixos --natpf1 "gamma,tcp,127.0.0.1,${GAMMA_PORT},,22" &&
-	    VBoxManage modifyvm nixos --nic1 nat &&
-	    VBoxManage modifyvm nixos --nic2 bridged &&
-	    VBoxManage modifyvm nixos --bridgeadapter2 wlo1 &&
-	    VBoxManage modifyvm nixos --memory 2000 &&
-	    VBoxManage modifyvm nixos --firmware efi &&
-	    VBoxManage startvm --type headless nixos &&
+	    sudo VBoxManage createvm --name nixos --groups /nixos --register &&
+	    sudo VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
+	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
+	    sudo VBoxManage storagectl nixos --name "IDE" --add IDE &&
+	    sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ${WORK_DIR}/nixos.vmdk &&
+	    sudo VBoxManage modifyvm nixos --natpf1 "alpha,tcp,127.0.0.1,${ALPHA_PORT},,22" &&
+	    sudo VBoxManage modifyvm nixos --natpf1 "beta,tcp,127.0.0.1,${BETA_PORT},,22" &&
+	    sudo VBoxManage modifyvm nixos --natpf1 "gamma,tcp,127.0.0.1,${GAMMA_PORT},,22" &&
+	    sudo VBoxManage modifyvm nixos --nic1 nat &&
+	    sudo VBoxManage modifyvm nixos --nic2 bridged &&
+	    sudo VBoxManage modifyvm nixos --bridgeadapter2 wlo1 &&
+	    sudo VBoxManage modifyvm nixos --memory 2000 &&
+	    sudo VBoxManage modifyvm nixos --firmware efi &&
+	    sudo VBoxManage startvm --type headless nixos &&
 	    knownhosts() {
 		while [ -z "$(cat ${WORK_DIR}/.ssh/${1}.known_hosts)" ]
 		do
