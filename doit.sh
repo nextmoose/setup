@@ -96,144 +96,140 @@ EOF
 	# see
 	# http://www.ee.bgu.ac.il/~microlab/MicroLab/Labs/ScanCodes.htm
 	keyboardputscancode() {
-	    PRESS= &&
-		RELEASE= &&
-		for SYMBOL in ${@}
+	    PRESS=-- &&
+		RELEASE=-- &&
+		while read -n1 SYMBOL
 		do
 		    case ${SYMBOL} in
-			"alfa")
+			"a")
 			    PRESS=1E
 			    ;;
-			"bravo")
+			"b")
 			    PRESS=30
 			    ;;
-			"charlie")
+			"c")
 			    PRESS=2E
 			    ;;
-			"delta")
+			"d")
 			    PRESS=20
 			    ;;
-			"echo")
+			"e")
 			    PRESS=12
 			    ;;
-			"foxtrot")
+			"f")
 			    PRESS=21
 			    ;;
-			"golf")
+			"g")
 			    PRESS=22
 			    ;;
-			"hotel")
+			"h")
 			    PRESS=23
 			    ;;
-			"india")
+			"i")
 			    PRESS=17
 			    ;;
-			"juiliett")
+			"j")
 			    PRESS=24
 			    ;;
-			"kilo")
-			    PRESS= ## FIXME
+			"k")
+			    PRESS=25
 			    ;;
-			"lima")
+			"l")
 			    PRESS=26
 			    ;;
-			"mike")
+			"m")
 			    PRESS=32
 			    ;;
-			"november")
+			"n")
 			    PRESS=31
 			    ;;
-			"oscar")
+			"o")
 			    PRESS=18
 			    ;;
-			"papa")
+			"p")
 			    PRESS=19
 			    ;;
-			"quebec")
+			"q")
 			    PRESS=10
 			    ;;
-			"romeo")
+			"r")
 			    PRESS=13
 			    ;;
-			"sierra")
+			"s")
 			    PRESS=1F
 			    ;;
-			"tango")
+			"t")
 			    PRESS=14
 			    ;;
-			"uniform")
+			"u")
 			    PRESS=16
 			    ;;
-			"victor")
+			"v")
 			    PRESS=2F
 			    ;;
-			"whiskey")
+			"w")
 			    PRESS=11
 			    ;;
-			"xray")
+			"x")
 			    PRESS=2D
 			    ;;
-			"yankee")
+			"y")
 			    PRESS=15
 			    ;;
-			"zulu")
+			"z")
 			    PRESS=2C
 			    ;;
-			"zero")
+			"0")
 			    PRESS=0B
 			    ;;
-			"one")
+			"1")
 			    PRESS=02
 			    ;;
-			"two")
+			"2")
 			    PRESS=03
 			    ;;
-			"three")
+			"3")
 			    PRESS=04
 			    ;;
-			"four")
+			"4")
 			    PRESS=05
 			    ;;
-			"five")
+			"5")
 			    PRESS=06
 			    ;;
-			"six")
+			"6")
 			    PRESS=07
 			    ;;
-			"seven")
+			"7")
 			    PRESS=08
 			    ;;
-			"eight")
+			"8")
 			    PRESS=09
 			    ;;
-			"nine")
+			"9")
 			    PRESS=0A
 			    ;;
-			"space")
+			" ")
 			    PRESS=39
 			    ;;
-			"hyphen")
+			"-")
 			    PRESS=0C
-			    ;;
-			"enter")
-			    PRESS=1C
 			    ;;
 			*)
 			    echo Unknown Symbol &&
 				echo ${SYMBOL} &&
 				exit 64
 		    esac &&
-			if [ -z "${PRESS}" ]
+			if [ "${PRESS}" == "--" ]
 			then
 			    echo Undefined Symbol &&
 				echo ${SYMBOL} &&
 				exit 65
 			fi &&
 			RELEASE=$(printf "%X" $((0x${PRESS}+0x80))) &&
-			echo sudo VBoxManage controlvm nixos keyboardputscancode ${SYMBOL} ${PRESS} ${RELEASE} &&
-			sudo VBoxManage controlvm nixos keyboardputscancode ${PRESS} ${RELEASE} &&
-			sleep 1s
-		done
+			sudo VBoxManage controlvm nixos keyboardputscancode ${PRESS} ${RELEASE}
+		done &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 1C 9C &&
 	} &&
 	    sudo lvcreate -y --name nixos --size 100GB volumes &&
 	    sudo lvcreate -y --name test --size 1GB volumes &&
@@ -261,8 +257,7 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    keyboardputscancode india november sierra tango alfa lima lima echo romeo space hyphen hyphen lima uniform kilo sierra hyphen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo space hyphen hyphen sierra yankee mike mike echo tango romeo india charlie hyphen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
-#	    ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
+	    echo "installer --symmetric-passphrase ${SYMMETRIC_PASSPHRASE} --luks-passphrase ${LUKS_PASSPHRASE}" | keyboardputscancode &&
 	    while [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	    do
 		echo waiting for install to complete &&
@@ -273,8 +268,7 @@ EOF
 	    sudo VBoxManage startvm --type headless nixos &&
 	    sleep 1m &&
 	    echo KEYING IN LUKS PASSWORD &&
-	    keyboardputscancode papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
-#	    sudo VBoxManage controlvm nixos keyboardputscancode 19 99 1E 9E 1F 9F 1F 9F 11 91 18 98 13 93 20 A0 1C 9C &&
+	    echo "${LUKS_PASSPHRASE}" | keyboardputscancode &&
 	    echo KEYED IN LUKS PASSWORD &&
 	    knownhosts gamma ${GAMMA_PORT} &&
 	    testit() {
