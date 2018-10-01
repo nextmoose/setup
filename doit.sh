@@ -78,18 +78,136 @@ EOF
 	    sudo VBoxManage controlvm nixos poweroff soft &&
 		sleep 10s
 	fi &&
-	if [ "0" != "$(sudo VBoxManage list vms | grep -c nixos)" ]
-	then
-	    sudo VBoxManage unregistervm --delete nixos &&
-		sleep 10s
-	fi
+	    if [ "0" != "$(sudo VBoxManage list vms | grep -c nixos)" ]
+	    then
+		sudo VBoxManage unregistervm --delete nixos &&
+		    sleep 10s
+	    fi
     fi &&
     if [ "0" != "$(sudo lvs | grep -c nixos)" ]
     then
 	sudo lvremove --force /dev/volumes/nixos
     fi &&
     (
-	sudo lvcreate -y --name nixos --size 100GB volumes &&
+	keyboardputscancode() {
+	    PRESS= &&
+		RELEASE= &&
+		for SYMBOL in ${@}
+		do
+		    case SYMBOL in
+			"alfa")
+			    PRESS=1E
+			    ;;
+			"bravo")
+			    ;;
+			"charlie")
+			    PRESS=2E
+			    ;;
+			"delta")
+			    ;;
+			"echo")
+			    PRESS=12
+			    ;;
+			"foxtrot")
+			    ;;
+			"golf")
+			    ;;
+			"hotel")
+			    PRESS=23
+			    ;;
+			"india")
+			    PRESS=17
+			    ;;
+			"juiliett")
+			    ;;
+			"kilo")
+			    ;;
+			"lima")
+			    PRESS=26
+			    ;;
+			"mike")
+			    PRESS=32
+			    ;;
+			"november")
+			    PRESS=31
+			    ;;
+			"oscar")
+			    ;;
+			"papa")
+			    PRESS=19
+			    ;;
+			"quebec")
+			    ;;
+			"romeo")
+			    PRESS=13
+			    ;;
+			"sierra")
+			    PRESS=1F
+			    ;;
+			"tango")
+			    PRESS=14
+			    ;;
+			"uniform")
+			    PRESS=16
+			    ;;
+			"victor")
+			    ;;
+			"whiskey")
+			    ;;
+			"xray")
+			    ;;
+			"yankee")
+			    PRESS=15
+			    ;;
+			"zulu")
+			    ;;
+			"zero")
+			    ;;
+			"one")
+			    ;;
+			"two")
+			    ;;
+			"three")
+			    ;;
+			"four")
+			    ;;
+			"five")
+			    ;;
+			"six")
+			    ;;
+			"seven")
+			    ;;
+			"eight")
+			    ;;
+			"nine")
+			    ;;
+			"space")
+			    PRESS=39
+			    ;;
+			"hypen")
+			    PRESS=0C
+			    ;;
+			"enter")
+			    PRESS=1C
+			    ;;
+			*)
+			    echo Unknown Symbol &&
+				echo ${SYMBOL} &&
+				exit 64
+		    esac &&
+			if [ -z "${PRESS}" ]
+			then
+			    echo Undefined Symbol &&
+				echo ${SYMBOL} &&
+				exit 65
+			fi &&
+			RELEASE=$(printf "%X" $((0x${PRESS}+0x80))) &&
+			echo sudo VBoxManage controlvm nixos keyboardputscancode ${SYMBOL} ${PRESS} ${RELEASE} &&
+			sudo VBoxManage controlvm nixos keyboardputscancode ${PRESS} ${RELEASE} &&
+			sleep 10s
+		done
+	} &&
+	    sudo lvcreate -y --name nixos --size 100GB volumes &&
 	    sudo VBoxManage internalcommands createrawvmdk -filename ${WORK_DIR}/nixos.vmdk -rawdisk /dev/volumes/nixos &&
 	    sudo VBoxManage createvm --name nixos --groups /nixos --register &&
 	    sudo VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
@@ -113,8 +231,8 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    #	    sudo VBoxManage controlvm nixos keyboardputscancode 17 97 31 B1 1F 9F 14 94 1E 9E 26 A6 26 A6 12 92 13 93 1C 9C &&
-	    ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
+	    keyboardputscancode india sierra tango alfa lima lima echo romeo space hyphen hyphen lima uniform kilo sierra hypen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo space hyphen hyphen sierra yankee mike mike echo tango romeo india charlie hypen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
+#	    ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    while [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	    do
 		echo waiting for install to complete &&
@@ -125,7 +243,8 @@ EOF
 	    sudo VBoxManage startvm --type headless nixos &&
 	    sleep 1m &&
 	    echo KEYING IN LUKS PASSWORD &&
-	    sudo VBoxManage controlvm nixos keyboardputscancode 19 99 1E 9E 1F 9F 1F 9F 11 91 18 98 13 93 20 A0 1C 9C &&
+	    keyboardputscancode papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
+#	    sudo VBoxManage controlvm nixos keyboardputscancode 19 99 1E 9E 1F 9F 1F 9F 11 91 18 98 13 93 20 A0 1C 9C &&
 	    echo KEYED IN LUKS PASSWORD &&
 	    sleep 2m &&
 	    knownhosts gamma ${GAMMA_PORT} &&
@@ -134,32 +253,32 @@ EOF
 		    EXPECTED_EXIT_CODE= &&
 		    EXPECTED_OUTPUT= &&
 		    COMMAND= &&
-		while [ ${#} -gt 0 ]
-		do
-		    case ${1} in
-			--title)
-			    TITLE="${2}" &&
-				shift 2
-			    ;;
-			--expected-exit-code)
-			    EXPECTED_EXIT_CODE="${2}" &&
-				shift 2
-			    ;;
-			--expected-output)
-			    EXPECTED_OUTPUT="${2}" &&
-				shift 2
-			    ;;
-			--command)
-			    COMMAND="${2}" &&
-				shift 2
-			    ;;
-			*)
-			    echo Unexpected Argument &&
-				echo ${@} &&
-				exit 65
-			    ;;
-		    esac
-		done &&
+		    while [ ${#} -gt 0 ]
+		    do
+			case ${1} in
+			    --title)
+				TITLE="${2}" &&
+				    shift 2
+				;;
+			    --expected-exit-code)
+				EXPECTED_EXIT_CODE="${2}" &&
+				    shift 2
+				;;
+			    --expected-output)
+				EXPECTED_OUTPUT="${2}" &&
+				    shift 2
+				;;
+			    --command)
+				COMMAND="${2}" &&
+				    shift 2
+				;;
+			    *)
+				echo Unexpected Argument &&
+				    echo ${@} &&
+				    exit 65
+				;;
+			esac
+		    done &&
 		    echo &&
 		    date &&
 		    echo TITLE=${TITLE} &&
