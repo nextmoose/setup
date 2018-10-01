@@ -113,7 +113,8 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    sudo VBoxManage controlvm nixos keyboardputscancode 17 97 31 B1 1F 9F 14 94 1E 9E 26 A6 26 A6 12 92 13 93 1C 9C &&
+	    #	    sudo VBoxManage controlvm nixos keyboardputscancode 17 97 31 B1 1F 9F 14 94 1E 9E 26 A6 26 A6 12 92 13 93 1C 9C &&
+	    ssh -F ${WORK_DIR}/.ssh/config alpha installer &&
 	    while [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	    do
 		echo waiting for install to complete &&
