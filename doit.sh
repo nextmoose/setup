@@ -204,7 +204,7 @@ EOF
 			RELEASE=$(printf "%X" $((0x${PRESS}+0x80))) &&
 			echo sudo VBoxManage controlvm nixos keyboardputscancode ${SYMBOL} ${PRESS} ${RELEASE} &&
 			sudo VBoxManage controlvm nixos keyboardputscancode ${PRESS} ${RELEASE} &&
-			sleep 10s
+			sleep 1s
 		done
 	} &&
 	    sudo lvcreate -y --name nixos --size 100GB volumes &&
@@ -231,8 +231,7 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    keyboardputscancode papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
-	    keyboardputscancode india november sierra tango alfa lima lima echo romeo space hyphen hyphen lima uniform kilo sierra hypen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo space hyphen hyphen sierra yankee mike mike echo tango romeo india charlie hypen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
+	    keyboardputscancode india november sierra tango alfa lima lima echo romeo space hyphen hyphen lima uniform kilo sierra hyphen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo space hyphen hyphen sierra yankee mike mike echo tango romeo india charlie hyphen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
 #	    ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    while [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	    do
