@@ -184,7 +184,7 @@ EOF
 			"space")
 			    PRESS=39
 			    ;;
-			"hypen")
+			"hyphen")
 			    PRESS=0C
 			    ;;
 			"enter")
@@ -231,7 +231,8 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    keyboardputscancode india sierra tango alfa lima lima echo romeo space hyphen hyphen lima uniform kilo sierra hypen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo space hyphen hyphen sierra yankee mike mike echo tango romeo india charlie hypen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
+	    keyboardputscancode papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
+	    keyboardputscancode india november sierra tango alfa lima lima echo romeo space hyphen hyphen lima uniform kilo sierra hypen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo space hyphen hyphen sierra yankee mike mike echo tango romeo india charlie hypen papa alfa sierra sierra papa hotel romeo alfa sierra echo space papa alfa sierra sierra papa hotel romeo alfa sierra echo enter &&
 #	    ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    while [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	    do
