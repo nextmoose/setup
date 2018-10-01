@@ -113,8 +113,30 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
-	    echo time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
+	    read -p FUCK IT &&
+	    sudo VBoxManage controlvm nixos keyboardputscancode 17 97 31 B1 1F 9F 14 94 1E 9E 26 A6 26 A6 12 92 13 93 1C 9C &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 31 &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 14 &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 1E &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 26 &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 26 &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 12 &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 13 &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 17 &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 1C &&
+	    sleep 10s &&
+	    sudo VBoxManage controlvm nixos keyboardscancode 9C &&	    
+#	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
+#	    echo time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    ssh -F ${WORK_DIR}/.ssh/config alpha ifconfig &&
 	    sudo VBoxManage controlvm nixos poweroff soft &&
 	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
@@ -128,7 +150,7 @@ EOF
 	    sudo VBoxManage controlvm nixos keyboardputscancode 18 &&
 	    sudo VBoxManage controlvm nixos keyboardputscancode 13 &&
 	    sudo VBoxManage controlvm nixos keyboardputscancode 20 &&
-	    sudo VBoxManage controlvm nixos keyboardputscancode 1C &&
+#	    sudo VBoxManage controlvm nixos keyboardputscancode 1C &&
 #	    sudo VBoxManage controlvm nixos keyboardputscancode "${LUKS_CODE}" &&
 #	    knownhosts beta ${BETA_PORT} &&
 #	    ssh -F ${WORK_DIR}/.ssh/config beta &&
