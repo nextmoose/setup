@@ -71,7 +71,7 @@ EOF
 	cd ${WORK_DIR}
 	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
     ) &&
-    if [ $(sudo VBoxManage showvminfo nixos) ]
+    if [ "$(sudo VBoxManage showvminfo nixos)" ]
     then
 	if [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	then
