@@ -114,7 +114,7 @@ EOF
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
 	    #	    sudo VBoxManage controlvm nixos keyboardputscancode 17 97 31 B1 1F 9F 14 94 1E 9E 26 A6 26 A6 12 92 13 93 1C 9C &&
-	    ssh -F ${WORK_DIR}/.ssh/config alpha installer &&
+	    ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" &&
 	    while [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	    do
 		echo waiting for install to complete &&
@@ -124,7 +124,9 @@ EOF
 	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    sudo VBoxManage startvm --type headless nixos &&
 	    sleep 1m &&
+	    echo KEYING IN LUKS PASSWORD &&
 	    sudo VBoxManage controlvm nixos keyboardputscancode 19 99 1E 9E 1F 9F 1F 9F 11 91 18 98 13 93 20 A0 1C 9C &&
+	    echo KEYED IN LUKS PASSWORD &&
 	    sleep 2m &&
 	    knownhosts gamma ${GAMMA_PORT} &&
 	    testit() {
