@@ -259,12 +259,8 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    echo "installer --symmetric-passphrase ${SYMMETRIC_PASSPHRASE} --luks-passphrase ${LUKS_PASSPHRASE}" | sed -e "s# #_#g" | keyboardputscancode &&
-	    while [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
-	    do
-		echo waiting for install to complete &&
-		    sleep 10s
-	    done &&
+	    ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase ${SYMMETRIC_PASSPHRASE} --luks-passphrase ${LUKS_PASSPHRASE}" &&
+#	    echo "installer --symmetric-passphrase ${SYMMETRIC_PASSPHRASE} --luks-passphrase ${LUKS_PASSPHRASE}" | sed -e "s# #_#g" | keyboardputscancode &&
 	    sudo VBoxManage controlvm nixos poweroff soft &&
 	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    sudo VBoxManage startvm --type headless nixos &&

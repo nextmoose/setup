@@ -1,25 +1,29 @@
 #!/bin/sh
 
-while [ ${#} -gt 0 ]
-do
-    case ${1} in
-	--symmetric-passphrase)
-	    SYMMETRIC_PASSPHRASE="${2}" &&
-		shift 2
-	;;
-	--luks-passphrase)
-	    LUKS_PASSPHRASE="${2}" &&
-		shift 2
-	;;
-	*)
-	    echo Unsupported Option &&
-		echo ${1} &&
-		echo ${@} &&
-		echo ${0} &&
-		exit 64
-	    ;;
-    esac
-done &&
+SHUTDOWN=true &&
+    while [ ${#} -gt 0 ]
+    do
+	case ${1} in
+	    --symmetric-passphrase)
+		SYMMETRIC_PASSPHRASE="${2}" &&
+		    shift 2
+		;;
+	    --luks-passphrase)
+		LUKS_PASSPHRASE="${2}" &&
+		    shift 2
+		;;
+	    --no-shutdown)
+		SHUTDOWN=false
+		;;
+	    *)
+		echo Unsupported Option &&
+		    echo ${1} &&
+		    echo ${@} &&
+		    echo ${0} &&
+		    exit 64
+		;;
+	esac
+    done &&
     if [ -z "${SYMMETRIC_PASSPHRASE}" ]
     then
 	echo Unspecified SYMMETRIC_PASSPHRASE &&
@@ -103,5 +107,8 @@ ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
-    shutdown -h now &&
+    if [ ${SHUTDOWN} ]
+    then
+	shutdown -h now
+    fi &&
     true
