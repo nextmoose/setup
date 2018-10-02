@@ -1,12 +1,30 @@
 #!/bin/sh
 
-WORK_DIR=$(mktemp -d) &&
+read -p "SYMMETRIC PASSPHRASE? " REAL_SYMMETRIC_PASSPHRASE &&
+    read -p "VERIFY SYMMETRIC_PASSPHRASE? " VERIFY_REAL_SYMMETRIC_PASSPHRASE &&
+    if [ "${REAL_SYMMETRIC_PASSPHRASE}" == "${VERIFY_REAL_SYMMETRIC_PASSPHRASE}" ]
+    then
+	echo VERIFIED SYMMETRIC PASSPHRASE
+    else
+	echo FAILED TO VERIFY SYMMETRIC PASSPHRASE &&
+	    exit 65
+    fi &&
+    read -p "LUKS PASSPHRASE? " REAL_LUKS_PASSPHRASE &&
+    read -p "VERIFY LUKS_PASSPHRASE? " VERIFY_REAL_LUKS_PASSPHRASE &&
+    if [ "${REAL_LUKS_PASSPHRASE}" != "${VERIFY_REAL_LUKS_PASSPHRASE}" ]
+    then
+	echo VERIFIED LUKS PASSPHRASE
+    else
+	echo FAILED TO VERIFY LUKS PASSPHRASE &&
+	    exit 65
+    fi &&
+    WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
     ALPHA_PORT=20560 &&
     BETA_PORT=25954 &&
     GAMMA_PORT=29156 &&
-    SYMMETRIC_PASSPHRASE=passphrase &&
-    LUKS_PASSPHRASE=passphrase &&
+    TEST_SYMMETRIC_PASSPHRASE=passphrase &&
+    TEST_LUKS_PASSPHRASE=passphrase &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
@@ -64,7 +82,7 @@ EOF
 		configuration.nix.template &&
 	    cp -r custom ${WORK_DIR}/installer/src/custom &&
 	    mkdir ${WORK_DIR}/installer/src/secrets &&
-	    echo ${SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
+	    echo ${TEST_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
     ) &&
     (
 	cd ${WORK_DIR}
@@ -252,13 +270,13 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${SYMMETRIC_PASSPHRASE}" --luks-passphrase "${LUKS_PASSPHRASE}" --no-shutdown &&
+	    time ssh -F ${WORK_DIR}/.ssh/config alpha installer --symmetric-passphrase "${TEST_SYMMETRIC_PASSPHRASE}" --luks-passphrase "${TEST_LUKS_PASSPHRASE}" --no-shutdown &&
 	    sudo VBoxManage controlvm nixos poweroff soft &&
 	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    sudo VBoxManage startvm --type headless nixos &&
 	    sleep 1m &&
 	    echo KEYING IN LUKS PASSWORD &&
-	    echo "${LUKS_PASSPHRASE}" | keyboardputscancode &&
+	    echo "${TEST_LUKS_PASSPHRASE}" | keyboardputscancode &&
 	    echo KEYED IN LUKS PASSWORD &&
 	    knownhosts gamma ${GAMMA_PORT} &&
 	    testit() {
