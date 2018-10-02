@@ -1,0 +1,11 @@
+{ config, pkgs, ... }:
+{
+  services.openssh = {
+    enable = true;
+    forwardX11 = true;
+  };
+  users.extraUsers.user.hashedPassword = "HASHED_PASSWORD";
+  users.extraUsers.user.openssh.authorizedKeys.keys = [
+    "AUTHORIZED_KEY_PUBLIC"
+  ];
+}

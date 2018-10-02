@@ -78,10 +78,11 @@ EOF
 	    touch ${WORK_DIR}/test/.ssh/alpha.known_hosts &&
 	    touch ${WORK_DIR}/test/.ssh/beta.known_hosts &&
 	    touch ${WORK_DIR}/test/.ssh/gamma.known_hosts &&
+	    cp iso.nix ${WORK_DIR}/test/iso.nix &&
 	    sed \
 		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/test/.ssh/id_rsa)#" \
-		-e "w${WORK_DIR}/test/iso.nix" \
-		iso.nix.template &&
+		-e "w${WORK_DIR}/test/iso-ssh.nix" \
+		iso-ssh.nix.template &&
 	    mkdir ${WORK_DIR}/test/installer &&
 	    cp installer.nix ${WORK_DIR}/test/installer/default.nix &&
 	    mkdir ${WORK_DIR}/test/installer/src &&
