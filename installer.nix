@@ -8,9 +8,7 @@ stdenv.mkDerivation {
       mkdir $out/etc &&
       mkdir $out/etc/nixos &&
       cp configuration.nix $out/etc/nixos/configuration.nix &&
-      cp beta.id_rsa $out/etc/nixos/beta.id_rsa &&
-      cp beta.id_dss $out/etc/nixos/beta.id_dss &&
-      cp beta.id_ecdsa $out/etc/nixos/beta.id_ecdsa &&
+      cp configuration.isolated.nix $out/etc/nixos/configuration.isolated.nix &&
       cp -r custom $out/etc/nixos &&
       cp -r secrets $out/etc/secrets &&
       chmod 0400 $out/etc/nixos/configuration.nix &&
