@@ -3,6 +3,7 @@
   imports = [
     <nixpkgs/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix>
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
+    ./iso.isolated.nix
   ];
   environment.systemPackages = [
     (import ./installer/default.nix  { inherit pkgs; })

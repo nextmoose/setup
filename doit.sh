@@ -1,27 +1,27 @@
 #!/bin/sh
 
 later_passwords() {
-    read -s -p "SYMMETRIC PASSPHRASE? " REAL_SYMMETRIC_PASSPHRASE &&
-	read -s -p "VERIFY SYMMETRIC_PASSPHRASE? " VERIFY_REAL_SYMMETRIC_PASSPHRASE &&
-	if [ "${REAL_SYMMETRIC_PASSPHRASE}" == "${VERIFY_REAL_SYMMETRIC_PASSPHRASE}" ]
+    read -s -p "SYMMETRIC PASSPHRASE? " CONFIRMED_SYMMETRIC_PASSPHRASE &&
+	read -s -p "VERIFY SYMMETRIC_PASSPHRASE? " VERIFY_CONFIRMED_SYMMETRIC_PASSPHRASE &&
+	if [ "${CONFIRMED_SYMMETRIC_PASSPHRASE}" == "${VERIFY_CONFIRMED_SYMMETRIC_PASSPHRASE}" ]
 	then
 	    echo VERIFIED SYMMETRIC PASSPHRASE
 	else
 	    echo FAILED TO VERIFY SYMMETRIC PASSPHRASE &&
 		exit 65
 	fi &&
-	read -s -p "LUKS PASSPHRASE? " REAL_LUKS_PASSPHRASE &&
-	read -s -p "VERIFY LUKS_PASSPHRASE? " VERIFY_REAL_LUKS_PASSPHRASE &&
-	if [ "${REAL_LUKS_PASSPHRASE}" != "${VERIFY_REAL_LUKS_PASSPHRASE}" ]
+	read -s -p "LUKS PASSPHRASE? " CONFIRMED_LUKS_PASSPHRASE &&
+	read -s -p "VERIFY LUKS_PASSPHRASE? " VERIFY_CONFIRMED_LUKS_PASSPHRASE &&
+	if [ "${CONFIRMED_LUKS_PASSPHRASE}" != "${VERIFY_CONFIRMED_LUKS_PASSPHRASE}" ]
 	then
 	    echo VERIFIED LUKS PASSPHRASE
 	else
 	    echo FAILED TO VERIFY LUKS PASSPHRASE &&
 		exit 65
 	fi &&
-	read -s -p "PASSWORD? " REAL_PASSWORD &&
-	read -s -p "VERIFY LUKS_PASSWORD? " VERIFY_REAL_PASSWORD &&
-	if [ "${REAL_PASSWORD}" != "${VERIFY_REAL_PASSWORD}" ]
+	read -s -p "PASSWORD? " CONFIRMED_PASSWORD &&
+	read -s -p "VERIFY LUKS_PASSWORD? " VERIFY_CONFIRMED_PASSWORD &&
+	if [ "${CONFIRMED_PASSWORD}" != "${VERIFY_CONFIRMED_PASSWORD}" ]
 	then
 	    echo VERIFIED PASSWORD
 	else
@@ -35,73 +35,74 @@ later_passwords() {
     ALPHA_PORT=20560 &&
     BETA_PORT=25954 &&
     GAMMA_PORT=29156 &&
-    TEST_SYMMETRIC_PASSPHRASE=$(uuidgen) &&
-    TEST_LUKS_PASSPHRASE=$(uuidgen) &&
-    TEST_PASSWORD=$(uuidgen) &&
+    VIRTUAL_SYMMETRIC_PASSPHRASE=$(uuidgen) &&
+    VIRTUAL_LUKS_PASSPHRASE=$(uuidgen) &&
+    VIRTUAL_PASSWORD=$(uuidgen) &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
     } &&
     trap cleanup EXIT &&
     (
-	mkdir ${WORK_DIR}/test &&
-	    mkdir ${WORK_DIR}/test/.ssh &&
-	    chmod 0700 ${WORK_DIR}/test/.ssh &&
-	    ssh-keygen -f ${WORK_DIR}/test/.ssh/id_rsa -P "" -C "" &&
-	    dropbearkey -t rsa -f ${WORK_DIR}/test/.ssh/beta.id_rsa &&
-	    dropbearkey -t dss -f ${WORK_DIR}/test/.ssh/beta.id_dss &&
-	    dropbearkey -t ecdsa -f ${WORK_DIR}/test/.ssh/beta.id_ecdsa &&
-	    (cat > ${WORK_DIR}/test/.ssh/config <<EOF
+	mkdir ${WORK_DIR}/virtual &&
+	    mkdir ${WORK_DIR}/virtual/.ssh &&
+	    chmod 0700 ${WORK_DIR}/virtual/.ssh &&
+	    ssh-keygen -f ${WORK_DIR}/virtual/.ssh/id_rsa -P "" -C "" &&
+	    dropbearkey -t rsa -f ${WORK_DIR}/virtual/.ssh/beta.id_rsa &&
+	    dropbearkey -t dss -f ${WORK_DIR}/virtual/.ssh/beta.id_dss &&
+	    dropbearkey -t ecdsa -f ${WORK_DIR}/virtual/.ssh/beta.id_ecdsa &&
+	    (cat > ${WORK_DIR}/virtual/.ssh/config <<EOF
 Host alpha  
 HostName 127.0.0.1
 User root
 Port ${ALPHA_PORT}
-IdentityFile ${WORK_DIR}/test/.ssh/id_rsa
-UserKnownHostsFile ${WORK_DIR}/test/.ssh/alpha.known_hosts
+IdentityFile ${WORK_DIR}/virtual/.ssh/id_rsa
+UserKnownHostsFile ${WORK_DIR}/virtual/.ssh/alpha.known_hosts
 
 Host beta
 HostName 127.0.0.1
 User root
 Port ${BETA_PORT}
-IdentityFile ${WORK_DIR}/test/.ssh/id_rsa
-UserKnownHostsFile ${WORK_DIR}/test/.ssh/beta.known_hosts
+IdentityFile ${WORK_DIR}/virtual/.ssh/id_rsa
+UserKnownHostsFile ${WORK_DIR}/virtual/.ssh/beta.known_hosts
 
 Host gamma
 HostName 127.0.0.1
 User user
 Port ${GAMMA_PORT}
-IdentityFile ${WORK_DIR}/test/.ssh/id_rsa
-UserKnownHostsFile ${WORK_DIR}/test/.ssh/gamma.known_hosts
+IdentityFile ${WORK_DIR}/virtual/.ssh/id_rsa
+UserKnownHostsFile ${WORK_DIR}/virtual/.ssh/gamma.known_hosts
 EOF
 	    ) &&
-	    chmod 0600 ${WORK_DIR}/test/.ssh/config &&
-	    touch ${WORK_DIR}/test/.ssh/alpha.known_hosts &&
-	    touch ${WORK_DIR}/test/.ssh/beta.known_hosts &&
-	    touch ${WORK_DIR}/test/.ssh/gamma.known_hosts &&
-	    cp iso.nix ${WORK_DIR}/test/iso.nix &&
+	    chmod 0600 ${WORK_DIR}/virtual/.ssh/config &&
+	    touch ${WORK_DIR}/virtual/.ssh/alpha.known_hosts &&
+	    touch ${WORK_DIR}/virtual/.ssh/beta.known_hosts &&
+	    touch ${WORK_DIR}/virtual/.ssh/gamma.known_hosts &&
+	    cp iso.nix ${WORK_DIR}/virtual/iso.nix &&
 	    sed \
-		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/test/.ssh/id_rsa)#" \
-		-e "w${WORK_DIR}/test/iso-ssh.nix" \
-		iso.test.nix.template &&
-	    mkdir ${WORK_DIR}/test/installer &&
-	    cp installer.nix ${WORK_DIR}/test/installer/default.nix &&
-	    mkdir ${WORK_DIR}/test/installer/src &&
-	    cp installer.sh.template ${WORK_DIR}/test/installer/src/installer.sh.template &&
-	    cp ${WORK_DIR}/test/.ssh/beta.id_rsa ${WORK_DIR}/test/installer/src/beta.id_rsa &&
-	    cp ${WORK_DIR}/test/.ssh/beta.id_dss ${WORK_DIR}/test/installer/src/beta.id_dss &&
-	    cp ${WORK_DIR}/test/.ssh/beta.id_ecdsa ${WORK_DIR}/test/installer/src/beta.id_ecdsa &&
+		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/virtual/.ssh/id_rsa)#" \
+		-e "w${WORK_DIR}/virtual/iso.isolated.nix" \
+		iso.virtual.nix.template &&
+	    mkdir ${WORK_DIR}/virtual/installer &&
+	    cp installer.nix ${WORK_DIR}/virtual/installer/default.nix &&
+	    mkdir ${WORK_DIR}/virtual/installer/src &&
+	    cp installer.sh.template ${WORK_DIR}/virtual/installer/src/installer.sh.template &&
+	    cp ${WORK_DIR}/virtual/.ssh/beta.id_rsa ${WORK_DIR}/virtual/installer/src/beta.id_rsa &&
+	    cp ${WORK_DIR}/virtual/.ssh/beta.id_dss ${WORK_DIR}/virtual/installer/src/beta.id_dss &&
+	    cp ${WORK_DIR}/virtual/.ssh/beta.id_ecdsa ${WORK_DIR}/virtual/installer/src/beta.id_ecdsa &&
+	    cp configuration.nix ${WORK_DIR}/virtual/installer/src/configuration.nix &&
 	    sed \
-		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/test/.ssh/id_rsa)#" \
-		-e "s#HASHED_PASSWORD#$(echo ${TEST_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
-		-e "w${WORK_DIR}/test/installer/src/configuration.nix" \
-		configuration.test.nix.template &&
-	    cp -r custom ${WORK_DIR}/test/installer/src/custom &&
-	    mkdir ${WORK_DIR}/test/installer/src/secrets &&
-	    echo ${TEST_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/test/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
+		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/virtual/.ssh/id_rsa)#" \
+		-e "s#HASHED_PASSWORD#$(echo ${VIRTUAL_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
+		-e "w${WORK_DIR}/virtual/installer/src/configuration.isolated.nix" \
+		configuration.virtual.nix.template &&
+	    cp -r custom ${WORK_DIR}/virtual/installer/src/custom &&
+	    mkdir ${WORK_DIR}/virtual/installer/src/secrets &&
+	    echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
     ) &&
     (
-	cd ${WORK_DIR}/test
-	time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
+	cd ${WORK_DIR}/virtual &&
+	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
     ) &&
     if [ "$(sudo VBoxManage showvminfo nixos)" ]
     then
@@ -262,12 +263,12 @@ EOF
 		done
 	} &&
 	    sudo lvcreate -y --name nixos --size 100GB volumes &&
-	    sudo VBoxManage internalcommands createrawvmdk -filename ${WORK_DIR}/test/nixos.vmdk -rawdisk /dev/volumes/nixos &&
+	    sudo VBoxManage internalcommands createrawvmdk -filename ${WORK_DIR}/virtual/nixos.vmdk -rawdisk /dev/volumes/nixos &&
 	    sudo VBoxManage createvm --name nixos --groups /nixos --register &&
 	    sudo VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
-	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/test/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
+	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/virtual/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
 	    sudo VBoxManage storagectl nixos --name "IDE" --add IDE &&
-	    sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ${WORK_DIR}/test/nixos.vmdk &&
+	    sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ${WORK_DIR}/virtual/nixos.vmdk &&
 	    sudo VBoxManage modifyvm nixos --natpf1 "alpha,tcp,127.0.0.1,${ALPHA_PORT},,22" &&
 	    sudo VBoxManage modifyvm nixos --natpf1 "beta,tcp,127.0.0.1,${BETA_PORT},,22" &&
 	    sudo VBoxManage modifyvm nixos --natpf1 "gamma,tcp,127.0.0.1,${GAMMA_PORT},,22" &&
@@ -278,20 +279,20 @@ EOF
 	    sudo VBoxManage modifyvm nixos --firmware efi &&
 	    sudo VBoxManage startvm --type headless nixos &&
 	    knownhosts() {
-		while [ -z "$(cat ${WORK_DIR}/test/.ssh/${1}.known_hosts)" ]
+		while [ -z "$(cat ${WORK_DIR}/virtual/.ssh/${1}.known_hosts)" ]
 		do
 		    sleep 1s &&
-			ssh-keyscan -p ${2} 127.0.0.1 > ${WORK_DIR}/test/.ssh/${1}.known_hosts
+			ssh-keyscan -p ${2} 127.0.0.1 > ${WORK_DIR}/virtual/.ssh/${1}.known_hosts
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    time ssh -F ${WORK_DIR}/test/.ssh/config alpha installer --symmetric-passphrase "${TEST_SYMMETRIC_PASSPHRASE}" --luks-passphrase "${TEST_LUKS_PASSPHRASE}" --no-shutdown &&
+	    time ssh -F ${WORK_DIR}/virtual/.ssh/config alpha installer --symmetric-passphrase "${VIRTUAL_SYMMETRIC_PASSPHRASE}" --luks-passphrase "${VIRTUAL_LUKS_PASSPHRASE}" --no-shutdown &&
 	    sudo VBoxManage controlvm nixos poweroff soft &&
 	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    sudo VBoxManage startvm --type headless nixos &&
 	    sleep 1m &&
 	    echo KEYING IN LUKS PASSWORD &&
-	    echo "${TEST_LUKS_PASSPHRASE}" | keyboardputscancode &&
+	    echo "${VIRTUAL_LUKS_PASSPHRASE}" | keyboardputscancode &&
 	    echo KEYED IN LUKS PASSWORD &&
 	    knownhosts gamma ${GAMMA_PORT} &&
 	    testit() {
@@ -332,7 +333,7 @@ EOF
 		    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
 		    echo EXPECTED_EXIT_CODE=${EXPECTED_EXIT_CODE} &&
 		    BEFORE=$(date +%s) &&
-		    OBSERVED_OUTPUT="$(ssh -F ${WORK_DIR}/test/.ssh/config gamma ${COMMAND})"
+		    OBSERVED_OUTPUT="$(ssh -F ${WORK_DIR}/virtual/.ssh/config gamma ${COMMAND})"
 		OBSERVED_EXIT_CODE=${?} &&
 		    AFTER=$(date +%s) &&
 		    echo DURATION=$((${AFTER}-${BEFORE})) &&
@@ -356,27 +357,28 @@ EOF
     ) &&
     for_later(){
 	(
-	    mkdir ${WORK_DIR}/final &&
-		cp iso.nix ${WORK_DIR}/final/iso.nix &&
+	    mkdir ${WORK_DIR}/confirmed &&
+		cp iso.nix ${WORK_DIR}/confirmed/iso.nix &&
 		sed \
-		    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/final/.ssh/id_rsa)#" \
-		    -e "w${WORK_DIR}/final/iso-ssh.nix" \
-		    iso.final.nix.template &&
-		mkdir ${WORK_DIR}/final/installer &&
-		cp installer.nix ${WORK_DIR}/final/installer/default.nix &&
-		mkdir ${WORK_DIR}/final/installer/src &&
-		cp installer.sh.template ${WORK_DIR}/final/installer/src/installer.sh.template &&
+		    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/confirmed/.ssh/id_rsa)#" \
+		    -e "w${WORK_DIR}/confirmed/iso.isolated.nix" \
+		    iso.confirmed.nix.template &&
+		mkdir ${WORK_DIR}/confirmed/installer &&
+		cp installer.nix ${WORK_DIR}/confirmed/installer/default.nix &&
+		mkdir ${WORK_DIR}/confirmed/installer/src &&
+		cp installer.sh.template ${WORK_DIR}/confirmed/installer/src/installer.sh.template &&
+		cp configuration.nix ${WORK_DIR}/confirmed/installer/src/configuration.nix &&
 		sed \
-		    -e "s#HASHED_PASSWORD#$(echo ${FINAL_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
-		    -e "w${WORK_DIR}/final/installer/src/configuration.nix" \
-		    configuration.final.nix.template &&
-		cp -r custom ${WORK_DIR}/final/installer/src/custom &&
-		mkdir ${WORK_DIR}/final/installer/src/secrets &&
-		echo ${FINAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/final/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
+		    -e "s#HASHED_PASSWORD#$(echo ${CONFIRMED_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
+		    -e "w${WORK_DIR}/confirmed/installer/src/configuration.isolated.nix" \
+		    configuration.confirmed.nix.template &&
+		cp -r custom ${WORK_DIR}/confirmed/installer/src/custom &&
+		mkdir ${WORK_DIR}/confirmed/installer/src/secrets &&
+		echo ${CONFIRMED_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/confirmed/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
 	) &&
 	    (
-		cd ${WORK_DIR}/final
-		time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
+		cd ${WORK_DIR}/confirmed &&
+		    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
 	    )
     } &&
     STATUS=PASS &&    
