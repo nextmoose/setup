@@ -84,8 +84,8 @@ EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
-    echo "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
-    echo "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 keys &&
+    echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
+    echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 keys &&
     mkfs.ext4 -L KEYS /dev/mapper/keys &&
     mkfs.ext4 -L ROOT /dev/sda4 &&
     mount /dev/sda4 /mnt &&

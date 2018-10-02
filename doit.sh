@@ -7,7 +7,6 @@ WORK_DIR=$(mktemp -d) &&
     GAMMA_PORT=29156 &&
     SYMMETRIC_PASSPHRASE=passphrase &&
     LUKS_PASSPHRASE=passphrase &&
-    LUKS_CODE="19 1E 1F 1F 11 18 13 20 1C" &&
     cleanup() {
 	echo ${STATUS} &&
 	    echo ${WORK_DIR}
