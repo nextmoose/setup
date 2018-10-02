@@ -25,13 +25,22 @@ SHUTDOWN="true" &&
 		;;
 	esac
     done &&
-    if [ -z "${SYMMETRIC_PASSPHRASE}" ]
+    read -s -p "SYMMETRIC_PASSPHRASE" SYMMETRIC_PASSPHRASE &&
+    read -s -p "CONFIRM SYMMETRIC_PASSPHRASE" CONFIRM_SYMMETRIC_PASSPHRASE &&
+    if [ "${SYMMETRIC_PASSPHRASE}" == "${CONFIRM_SYMMETRIC_PASSPHRASE}" ]
     then
-	echo Unspecified SYMMETRIC_PASSPHRASE &&
+	echo Verified SYMMETRIC_PASSPHRASE
+    else
+	echo Failed to verify SYMMETRIC_PASSPHRASE &&
 	    exit 65
-    elif [ -z "${LUKS_PASSPHRASE}" ]
+    fi &&
+    read -s -p "LUKS_PASSPHRASE" LUKS_PASSPHRASE &&
+    read -s -p "CONFIRM LUKS_PASSPHRASE" CONFIRM_LUKS_PASSPHRASE &&
+    if [ "${LUKS_PASSPHRASE}" == "${CONFIRM_LUKS_PASSPHRASE}" ]
     then
-	echo Unspecified LUKS_PASSPHRASE &&
+	echo Verified LUKS_PASSPHRASE
+    else
+	echo Failed to verify LUKS_PASSPHRASE &&
 	    exit 66
     fi &&
     export PATH=${PATH}:PKGS.GNUPG &&
@@ -86,13 +95,14 @@ EOF
     mkswap -L SWAP /dev/sda2 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 keys &&
-    mkfs.ext4 -L KEYS /dev/mapper/keys &&
+    mkfs.ext4 -L KEYS /dev/mapper/secrets &&
     mkfs.ext4 -L ROOT /dev/sda4 &&
     mount /dev/sda4 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
-    mkdir /mnt/keys &&
-    mount /dev/mapper/keys /mnt/keys &&
+    mkdir /mnt/run &&
+    mkdir /mnt/run/secrets &&
+    mount /dev/mapper/secrets /mnt/run/keys &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&

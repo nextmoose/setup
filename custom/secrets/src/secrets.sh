@@ -1,8 +1,13 @@
 #!/bin/sh
 
-if [ -f "OUT/etc/secrets/${@}" ]
+if [ ${1} == "show" ]
 then
-    cat "OUT/etc/secrets/${@}"
+    if [ -f "/var/run/secrets/${2}" ]
+    then
+	cat "/var/run/secrets/${2}"
+    else
+	exit 65
+    fi
 else
-    exit 65
+    exit 66
 fi
