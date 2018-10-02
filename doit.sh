@@ -215,6 +215,9 @@ EOF
 			"_")
 			    PRESS=39
 			    ;;
+			"")
+			    PRESS=1C
+			    ;;
 			*)
 			    echo Unknown Symbol &&
 				echo ${SYMBOL} &&
@@ -228,8 +231,7 @@ EOF
 			fi &&
 			RELEASE=$(printf "%X" $((0x${PRESS}+0x80))) &&
 			sudo VBoxManage controlvm nixos keyboardputscancode ${PRESS} ${RELEASE}
-		done &&
-		sudo VBoxManage controlvm nixos keyboardputscancode 1C 9C
+		done
 	} &&
 	    sudo lvcreate -y --name nixos --size 100GB volumes &&
 	    sudo lvcreate -y --name test --size 1GB volumes &&
