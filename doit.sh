@@ -92,7 +92,8 @@ EOF
 		configuration.virtual.nix.template &&
 	    cp -r custom ${WORK_DIR}/virtual/installer/src/custom &&
 	    mkdir ${WORK_DIR}/virtual/installer/src/secrets &&
-	    echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
+	    echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/secret0.txt.gpg --symmetric secret0.txt
+	    echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/secret1.txt.gpg --symmetric secret1.txt
     ) &&
     (
 	cd ${WORK_DIR}/virtual &&
@@ -352,7 +353,8 @@ EOF
 		    fi &&
 		    date
 	    } &&
-	    testit --title "We have a secrets program." --expected-output $(cat secret.txt) --expected-exit-code 0 --command "secrets secret.txt" &&
+	    testit --title "We have a secrets program." --expected-output "$(cat secret0.txt)" --expected-exit-code 0 --command "secrets secret0.txt" &&
+	    testit --title "We have a secrets program." --expected-output "$(cat secret1.txt)" --expected-exit-code 0 --command "secrets secret1.txt" &&
 	    testit --title "We have a secrets program.  It fails on undefined secrets." --expected-exit-code 65 --command "secrets nosecret"
     ) &&
     for_later(){
