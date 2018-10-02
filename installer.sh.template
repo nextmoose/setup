@@ -104,14 +104,13 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     mkdir /mnt/run &&
     mkdir /mnt/run/secrets &&
-    mount /dev/mapper/secrets /mnt/run/keys &&
+    mount /dev/mapper/secrets /mnt/run/secrets &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
     cat OUT/etc/nixos/configuration.isolated.nix > /mnt/etc/nixos/configuration.isolated.nix &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
-    mkdir /mnt/etc/nixos/custom/secrets/src/secrets &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output /mnt/etc/nixos/custom/secrets/src/secrets/secret.txt --decrypt OUT/etc/secrets/secret.txt.gpg &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output /mnt/run/secrets/secret.txt --decrypt OUT/etc/secrets/secret.txt.gpg &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}

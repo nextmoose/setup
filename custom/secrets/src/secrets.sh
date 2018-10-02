@@ -1,13 +1,8 @@
 #!/bin/sh
 
-if [ ${1} == "show" ]
+if [ -f "/var/run/secrets/${2}" ]
 then
-    if [ -f "/var/run/secrets/${2}" ]
-    then
-	cat "/var/run/secrets/${2}"
-    else
-	exit 65
-    fi
+    cat "/var/run/secrets/${2}"
 else
-    exit 66
+    exit 65
 fi
