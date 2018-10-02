@@ -1,8 +1,8 @@
 #!/bin/sh
 
-if [ -f "/var/run/secrets/${2}" ]
+if [ -f "/secrets/${2}" ]
 then
-    cat "/var/run/secrets/${2}"
+    cat "/secrets/${2}"
 else
     exit 65
 fi

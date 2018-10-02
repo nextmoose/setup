@@ -102,9 +102,8 @@ EOF
     mount /dev/sda4 /mnt &&
     mkdir /mnt/boot &&
     mount /dev/sda1 /mnt/boot/ &&
-    mkdir /mnt/run &&
-    mkdir /mnt/run/secrets &&
-    mount /dev/mapper/secrets /mnt/run/secrets &&
+    mkdir /mnt/secrets &&
+    mount /dev/mapper/secrets /mnt/secrets &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
