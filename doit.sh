@@ -91,7 +91,6 @@ EOF
 		-e "w${WORK_DIR}/virtual/installer/src/configuration.isolated.nix" \
 		configuration.virtual.nix.template &&
 	    cp -r custom ${WORK_DIR}/virtual/installer/src/custom &&
-	    echo AAAAAAAAAAAAAA &&
 	    mkdir ${WORK_DIR}/secrets &&
 	    secrets gpg.secret.key > ${WORK_DIR}/secrets/gpg.secret.key &&
 	    secrets gpg.owner.trust > ${WORK_DIR}/secrets/gpg.owner.trust &&
@@ -316,9 +315,10 @@ EOF
 	    knownhosts gamma ${GAMMA_PORT} &&
 	    testit() {
 		TITLE= &&
-		    EXPECTED_EXIT_CODE= &&
-		    EXPECTED_OUTPUT= &&
-		    COMMAND= &&
+		    EXPECTED_EXIT_CODE="" &&
+		    EXPECTED_OUTPUT="" &&
+		    COMMAND="" &&
+		    SENSITIVE="false" &&
 		    while [ ${#} -gt 0 ]
 		    do
 			case ${1} in
@@ -338,6 +338,10 @@ EOF
 				COMMAND="${2}" &&
 				    shift 2
 				;;
+			    --sensitive)
+				SENSITIVE="true" &&
+				    shift
+				;;
 			    *)
 				echo Unexpected Argument &&
 				    echo ${@} &&
@@ -349,14 +353,24 @@ EOF
 		    date &&
 		    echo TITLE=${TITLE} &&
 		    echo COMMAND=${COMMAND} &&
-		    echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT} &&
+		    if [ "${SENSITIVE}" == "true" ]
+		    then
+			echo MD5SUM EXPECTED_OUTPUT=$(echo ${EXPECTED_OUTPUT} | md5sum -)
+		    else
+			echo EXPECTED_OUTPUT=${EXPECTED_OUTPUT}
+		    fi &&
 		    echo EXPECTED_EXIT_CODE=${EXPECTED_EXIT_CODE} &&
 		    BEFORE=$(date +%s) &&
 		    OBSERVED_OUTPUT="$(ssh -F ${WORK_DIR}/virtual/.ssh/config gamma ${COMMAND})"
 		OBSERVED_EXIT_CODE=${?} &&
 		    AFTER=$(date +%s) &&
 		    echo DURATION=$((${AFTER}-${BEFORE})) &&
-		    echo OBSERVED_OUTPUT=${OBSERVED_OUTPUT} &&
+		    if [ "${SENSITIVE}" == "true" ]
+		    then
+			echo MD5SUM OBSERVED_OUTPUT=$(echo ${OBSERVED_OUTPUT} | md5sum -)
+		    else
+			echo OBSERVED_OUTPUT=${OBSERVED_OUTPUT}
+		    fi &&
 		    echo OBSERVED_EXIT_CODE=${OBSERVED_EXIT_CODE} &&
 		    if [ "${OBSERVED_EXIT_CODE}" != "${EXPECTED_EXIT_CODE}" ]
 		    then
