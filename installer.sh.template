@@ -26,22 +26,32 @@ SHUTDOWN="true" &&
 	esac
     done &&
     read -s -p "SYMMETRIC_PASSPHRASE" SYMMETRIC_PASSPHRASE &&
+    if [ -z "${SYMMETRIC_PASSPHRASE}" ]
+    then
+	echo Blank SYMMETRIC_PASSPHRASE &&
+	    exit 65
+    fi &&
     read -s -p "CONFIRM SYMMETRIC_PASSPHRASE" CONFIRM_SYMMETRIC_PASSPHRASE &&
     if [ "${SYMMETRIC_PASSPHRASE}" == "${CONFIRM_SYMMETRIC_PASSPHRASE}" ]
     then
 	echo Verified SYMMETRIC_PASSPHRASE
     else
 	echo Failed to verify SYMMETRIC_PASSPHRASE &&
-	    exit 65
+	    exit 66
     fi &&
     read -s -p "LUKS_PASSPHRASE" LUKS_PASSPHRASE &&
+    if [ -z "${LUKS_PASSPHRASE}" ]
+    then
+	echo Blank LUKS_PASSPHRASE &&
+	    exit 67
+    fi &&
     read -s -p "CONFIRM LUKS_PASSPHRASE" CONFIRM_LUKS_PASSPHRASE &&
     if [ "${LUKS_PASSPHRASE}" == "${CONFIRM_LUKS_PASSPHRASE}" ]
     then
 	echo Verified LUKS_PASSPHRASE
     else
 	echo Failed to verify LUKS_PASSPHRASE &&
-	    exit 66
+	    exit 68
     fi &&
     export PATH=${PATH}:PKGS.GNUPG &&
     (swapoff -L SWAP || true ) &&
