@@ -209,11 +209,11 @@ EOF
 			"9")
 			    PRESS=0A
 			    ;;
-			" ")
-			    PRESS=39
-			    ;;
 			"-")
 			    PRESS=0C
+			    ;;
+			"_")
+			    PRESS=39
 			    ;;
 			*)
 			    echo Unknown Symbol &&
@@ -257,7 +257,7 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    echo "installer --symmetric-passphrase ${SYMMETRIC_PASSPHRASE} --luks-passphrase ${LUKS_PASSPHRASE}" | keyboardputscancode &&
+	    echo "installer --symmetric-passphrase ${SYMMETRIC_PASSPHRASE} --luks-passphrase ${LUKS_PASSPHRASE}" | sed -e "s# #_#g" | keyboardputscancode &&
 	    while [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
 	    do
 		echo waiting for install to complete &&
