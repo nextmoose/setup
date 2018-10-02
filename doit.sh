@@ -390,11 +390,11 @@ EOF
 	    testit --title "GPG2 SECRET KEY" --expected-output "$(secrets gpg2.secret.key)" --expected-exit-code 0 --command "secrets gpg2.secret.key" --sensitive &&
 	    testit --title "GPG2 OWNER TRUST" --expected-output "$(secrets gpg2.owner.trust)" --expected-exit-code 0 --command "secrets gpg2.owner.trust" --sensitive &&
 	    testit --title "UPSTREAM ID RSA" --expected-output "$(secrets upstream.id_rsa)" --expected-exit-code 0 --command "secrets upstream.id_rsa" --sensitive &&
-	    testit --title "UPSTREAM OWNER TRUST" --expected-output "$(secrets upstream.owner.trust)" --expected-exit-code 0 --command "secrets upstream.owner.trust" --sensitive &&
+	    testit --title "UPSTREAM KNOWN HOSTS" --expected-output "$(secrets upstream.known_hosts)" --expected-exit-code 0 --command "secrets upstream.known_hosts" --sensitive &&
 	    testit --title "ORIGIN ID RSA" --expected-output "$(secrets origin.id_rsa)" --expected-exit-code 0 --command "secrets origin.id_rsa" --sensitive &&
-	    testit --title "ORIGIN OWNER TRUST" --expected-output "$(secrets origin.owner.trust)" --expected-exit-code 0 --command "secrets origin.owner.trust" --sensitive &&
+	    testit --title "ORIGIN KNOWN HOSTS" --expected-output "$(secrets origin.known_hosts)" --expected-exit-code 0 --command "secrets origin.known_hosts" --sensitive &&
 	    testit --title "REPORT ID RSA" --expected-output "$(secrets report.id_rsa)" --expected-exit-code 0 --command "secrets report.id_rsa" --sensitive &&
-	    testit --title "REPORT OWNER TRUST" --expected-output "$(secrets report.owner.trust)" --expected-exit-code 0 --command "secrets report.owner.trust" --sensitive &&
+	    testit --title "REPORT KNOWN HOSTS" --expected-output "$(secrets report.known_hosts)" --expected-exit-code 0 --command "secrets report.known_hosts" --sensitive &&
 	    true
     ) &&
     for_later(){
