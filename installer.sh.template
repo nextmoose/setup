@@ -112,7 +112,9 @@ EOF
     for FILE in $(ls -1 OUT/etc/secrets)
     do
 	echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output /mnt/secrets/${FILE%.*} --decrypt OUT/etc/secrets/${FILE} &&
-    ROOT_PASSWORD=$(uuidgen) &&
+	    true
+    done
+ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
