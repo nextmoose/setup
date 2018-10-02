@@ -109,7 +109,7 @@ EOF
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
     cat OUT/etc/nixos/configuration.isolated.nix > /mnt/etc/nixos/configuration.isolated.nix &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output /secrets/secret.txt --decrypt OUT/etc/secrets/secret.txt.gpg &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output /mnt/secrets/secret.txt --decrypt OUT/etc/secrets/secret.txt.gpg &&
     ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
