@@ -84,9 +84,6 @@ EOF
 	    cp installer.nix ${WORK_DIR}/virtual/installer/default.nix &&
 	    mkdir ${WORK_DIR}/virtual/installer/src &&
 	    cp installer.sh.template ${WORK_DIR}/virtual/installer/src/installer.sh.template &&
-	    cp ${WORK_DIR}/virtual/.ssh/beta.id_rsa ${WORK_DIR}/virtual/installer/src/beta.id_rsa &&
-	    cp ${WORK_DIR}/virtual/.ssh/beta.id_dss ${WORK_DIR}/virtual/installer/src/beta.id_dss &&
-	    cp ${WORK_DIR}/virtual/.ssh/beta.id_ecdsa ${WORK_DIR}/virtual/installer/src/beta.id_ecdsa &&
 	    cp configuration.nix ${WORK_DIR}/virtual/installer/src/configuration.nix &&
 	    sed \
 		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/virtual/.ssh/id_rsa)#" \
