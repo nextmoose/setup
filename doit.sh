@@ -91,9 +91,23 @@ EOF
 		-e "w${WORK_DIR}/virtual/installer/src/configuration.isolated.nix" \
 		configuration.virtual.nix.template &&
 	    cp -r custom ${WORK_DIR}/virtual/installer/src/custom &&
+	    mkdir ${WORK_DIR}/secrets &&
+	    secrets gpg.secrets.key > ${WORK_DIR}/secrets/gpg.secret.key &&
+	    secrets gpg.owner.trust > ${WORK_DIR}/secrets/gpg.owner.trust &&
+	    secrets gpg2.secrets.key > ${WORK_DIR}/secrets/gpg2.secret.key &&
+	    secrets gpg2.owner.trust > ${WORK_DIR}/secrets/gpg2.owner.trust &&
+	    secrets upstream.id_rsa > ${WORK_DIR}/secrets/upstream.id_rsa &&
+	    secrets upstream.known_hosts > ${WORK_DIR}/secrets/upstream.known_hosts &&
+	    secrets origin.id_rsa > ${WORK_DIR}/secrets/origin.id_rsa &&
+	    secrets origin.known_hosts > ${WORK_DIR}/secrets/origin.known_hosts &&
+	    secrets report.id_rsa > ${WORK_DIR}/secrets/report.id_rsa &&
+	    secrets report.known_hosts > ${WORK_DIR}/secrets/report.known_hosts &&
 	    mkdir ${WORK_DIR}/virtual/installer/src/secrets &&
-	    echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/secret0.txt.gpg --symmetric secret0.txt
-	    echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/secret1.txt.gpg --symmetric secret1.txt
+	    ls -1 ${WORK_DIR}/secrets | while read FILE
+	    do
+		echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/${FILE}
+	    done &&
+	    rm -rf ${WORK_DIR}/secrets
     ) &&
     (
 	cd ${WORK_DIR}/virtual &&
@@ -353,9 +367,17 @@ EOF
 		    fi &&
 		    date
 	    } &&
-	    testit --title "We have a secrets program." --expected-output "$(cat secret0.txt)" --expected-exit-code 0 --command "secrets secret0.txt" &&
-	    testit --title "We have a secrets program." --expected-output "$(cat secret1.txt)" --expected-exit-code 0 --command "secrets secret1.txt" &&
-	    testit --title "We have a secrets program.  It fails on undefined secrets." --expected-exit-code 65 --command "secrets nosecret"
+	    testit --title "GPG SECRET KEY" --expected-output "$(secrets gpg.secret.key)" --expected-exit-code 0 --command "secrets gpg.secret.key" --sensitive &&
+	    testit --title "GPG OWNER TRUST" --expected-output "$(secrets gpg.owner.trust)" --expected-exit-code 0 --command "secrets gpg.owner.trust" --sensitive &&
+	    testit --title "GPG2 SECRET KEY" --expected-output "$(secrets gpg2.secret.key)" --expected-exit-code 0 --command "secrets gpg2.secret.key" --sensitive &&
+	    testit --title "GPG2 OWNER TRUST" --expected-output "$(secrets gpg2.owner.trust)" --expected-exit-code 0 --command "secrets gpg2.owner.trust" --sensitive &&
+	    testit --title "UPSTREAM ID RSA" --expected-output "$(secrets upstream.id_rsa)" --expected-exit-code 0 --command "secrets upstream.id_rsa" --sensitive &&
+	    testit --title "UPSTREAM OWNER TRUST" --expected-output "$(secrets upstream.owner.trust)" --expected-exit-code 0 --command "secrets upstream.owner.trust" --sensitive &&
+	    testit --title "ORIGIN ID RSA" --expected-output "$(secrets origin.id_rsa)" --expected-exit-code 0 --command "secrets origin.id_rsa" --sensitive &&
+	    testit --title "ORIGIN OWNER TRUST" --expected-output "$(secrets origin.owner.trust)" --expected-exit-code 0 --command "secrets origin.owner.trust" --sensitive &&
+	    testit --title "REPORT ID RSA" --expected-output "$(secrets report.id_rsa)" --expected-exit-code 0 --command "secrets report.id_rsa" --sensitive &&
+	    testit --title "REPORT OWNER TRUST" --expected-output "$(secrets report.owner.trust)" --expected-exit-code 0 --command "secrets report.owner.trust" --sensitive &&
+	    true
     ) &&
     for_later(){
 	(
