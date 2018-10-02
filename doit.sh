@@ -44,7 +44,7 @@ later_passwords() {
     } &&
     trap cleanup EXIT &&
     (
-	mkdir ${WORK_DIR}/virtual &&
+	mkdir ${WORK_DIR}/test &&
 	    mkdir ${WORK_DIR}/test/.ssh &&
 	    chmod 0700 ${WORK_DIR}/test/.ssh &&
 	    ssh-keygen -f ${WORK_DIR}/test/.ssh/id_rsa -P "" -C "" &&
