@@ -1,6 +1,6 @@
 #!/bin/sh
 
-SHUTDOWN=true &&
+SHUTDOWN="true" &&
     while [ ${#} -gt 0 ]
     do
 	case ${1} in
@@ -13,7 +13,7 @@ SHUTDOWN=true &&
 		    shift 2
 		;;
 	    --no-shutdown)
-		SHUTDOWN=false &&
+		SHUTDOWN="false" &&
 		    shift
 		;;
 	    *)
@@ -108,7 +108,7 @@ ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
 EOF
     ) | nixos-install &&
-    if [ ${SHUTDOWN} ]
+    if [ "${SHUTDOWN}" == "true" ]
     then
 	shutdown -h now
     fi &&
