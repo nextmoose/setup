@@ -29,7 +29,7 @@ later_passwords() {
 		exit 66
 	fi &&
 	true
-    } &&
+} &&
     WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
     ALPHA_PORT=20560 &&
@@ -357,22 +357,27 @@ EOF
     for_later(){
 	(
 	    mkdir ${WORK_DIR}/final &&
+		cp iso.nix ${WORK_DIR}/final/iso.nix &&
+		sed \
+		    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/final/.ssh/id_rsa)#" \
+		    -e "w${WORK_DIR}/final/iso-ssh.nix" \
+		    iso.final.nix.template &&
 		mkdir ${WORK_DIR}/final/installer &&
 		cp installer.nix ${WORK_DIR}/final/installer/default.nix &&
 		mkdir ${WORK_DIR}/final/installer/src &&
 		cp installer.sh.template ${WORK_DIR}/final/installer/src/installer.sh.template &&
 		sed \
-		    -e "s#HASHED_PASSWORD#$(echo ${REAL_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
+		    -e "s#HASHED_PASSWORD#$(echo ${FINAL_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
 		    -e "w${WORK_DIR}/final/installer/src/configuration.nix" \
-		    configuration.nix.template &&
+		    configuration.final.nix.template &&
 		cp -r custom ${WORK_DIR}/final/installer/src/custom &&
 		mkdir ${WORK_DIR}/final/installer/src/secrets &&
-		echo ${TEST_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/final/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
+		echo ${FINAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/final/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
 	) &&
 	    (
 		cd ${WORK_DIR}/final
 		time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
-	    )
+	    ) &&
     } &&
     STATUS=PASS &&    
     true
