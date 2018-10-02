@@ -82,7 +82,7 @@ EOF
 	    sed \
 		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/test/.ssh/id_rsa)#" \
 		-e "w${WORK_DIR}/test/iso-ssh.nix" \
-		iso-ssh.nix.template &&
+		iso.test.nix.template &&
 	    mkdir ${WORK_DIR}/test/installer &&
 	    cp installer.nix ${WORK_DIR}/test/installer/default.nix &&
 	    mkdir ${WORK_DIR}/test/installer/src &&
@@ -94,7 +94,7 @@ EOF
 		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/test/.ssh/id_rsa)#" \
 		-e "s#HASHED_PASSWORD#$(echo ${TEST_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
 		-e "w${WORK_DIR}/test/installer/src/configuration.nix" \
-		configuration-ssh.nix.template &&
+		configuration.test.nix.template &&
 	    cp -r custom ${WORK_DIR}/test/installer/src/custom &&
 	    mkdir ${WORK_DIR}/test/installer/src/secrets &&
 	    echo ${TEST_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/test/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
