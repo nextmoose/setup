@@ -48,9 +48,6 @@ later_passwords() {
 	    mkdir ${WORK_DIR}/virtual/.ssh &&
 	    chmod 0700 ${WORK_DIR}/virtual/.ssh &&
 	    ssh-keygen -f ${WORK_DIR}/virtual/.ssh/id_rsa -P "" -C "" &&
-	    dropbearkey -t rsa -f ${WORK_DIR}/virtual/.ssh/beta.id_rsa &&
-	    dropbearkey -t dss -f ${WORK_DIR}/virtual/.ssh/beta.id_dss &&
-	    dropbearkey -t ecdsa -f ${WORK_DIR}/virtual/.ssh/beta.id_ecdsa &&
 	    (cat > ${WORK_DIR}/virtual/.ssh/config <<EOF
 Host alpha  
 HostName 127.0.0.1
