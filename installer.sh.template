@@ -95,7 +95,7 @@ EOF
     mount /dev/mapper/keys /mnt/keys &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
-    ROOT_PASSWORD=$(uuidgen) &&case 
+    ROOT_PASSWORD=$(uuidgen) && 
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
     cat OUT/etc/nixos/beta.id_rsa > /mnt/etc/nixos/beta.id_rsa &&
     cat OUT/etc/nixos/beta.id_dss > /mnt/etc/nixos/beta.id_dss &&
