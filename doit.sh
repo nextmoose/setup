@@ -281,10 +281,10 @@ EOF
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
 	    (cat <<EOF
-${SYMMETRIC_PASSPHRASE}
-${SYMMETRIC_PASSPHRASE}
-${LUKS_PASSPHRASE}
-${LUKS_PASSPHRASE}
+${VIRTUAL_SYMMETRIC_PASSPHRASE}
+${VIRTUAL_SYMMETRIC_PASSPHRASE}
+${VIRTUAL_LUKS_PASSPHRASE}
+${VIRTUAL_LUKS_PASSPHRASE}
 EOF
 	    ) | time ssh -F ${WORK_DIR}/virtual/.ssh/config alpha installer --no-shutdown &&
 	    sudo VBoxManage controlvm nixos poweroff soft &&

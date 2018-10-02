@@ -4,14 +4,6 @@ SHUTDOWN="true" &&
     while [ ${#} -gt 0 ]
     do
 	case ${1} in
-	    --symmetric-passphrase)
-		SYMMETRIC_PASSPHRASE="${2}" &&
-		    shift 2
-		;;
-	    --luks-passphrase)
-		LUKS_PASSPHRASE="${2}" &&
-		    shift 2
-		;;
 	    --no-shutdown)
 		SHUTDOWN="false" &&
 		    shift
@@ -103,9 +95,7 @@ EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
-    echo -n "${LUKS_PASSPHRASE}" TO cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
-    echo -n "${LUKS_PASSPHRASE}" TO cryptsetup --key-file - luksOpen /dev/sda3 keys &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 keys &&
     mkfs.ext4 -L KEYS /dev/mapper/secrets &&
     mkfs.ext4 -L ROOT /dev/sda4 &&
