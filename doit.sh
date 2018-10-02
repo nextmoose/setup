@@ -91,10 +91,11 @@ EOF
 		-e "w${WORK_DIR}/virtual/installer/src/configuration.isolated.nix" \
 		configuration.virtual.nix.template &&
 	    cp -r custom ${WORK_DIR}/virtual/installer/src/custom &&
+	    echo AAAAAAAAAAAAAA &&
 	    mkdir ${WORK_DIR}/secrets &&
-	    secrets gpg.secrets.key > ${WORK_DIR}/secrets/gpg.secret.key &&
+	    secrets gpg.secret.key > ${WORK_DIR}/secrets/gpg.secret.key &&
 	    secrets gpg.owner.trust > ${WORK_DIR}/secrets/gpg.owner.trust &&
-	    secrets gpg2.secrets.key > ${WORK_DIR}/secrets/gpg2.secret.key &&
+	    secrets gpg2.secret.key > ${WORK_DIR}/secrets/gpg2.secret.key &&
 	    secrets gpg2.owner.trust > ${WORK_DIR}/secrets/gpg2.owner.trust &&
 	    secrets upstream.id_rsa > ${WORK_DIR}/secrets/upstream.id_rsa &&
 	    secrets upstream.known_hosts > ${WORK_DIR}/secrets/upstream.known_hosts &&
@@ -105,7 +106,9 @@ EOF
 	    mkdir ${WORK_DIR}/virtual/installer/src/secrets &&
 	    ls -1 ${WORK_DIR}/secrets | while read FILE
 	    do
-		echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/${FILE}
+		echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/${FILE} &&
+		    rm -f ${WORK_DIR}/secrets/${FILE} &&
+		    true
 	    done &&
 	    rm -rf ${WORK_DIR}/secrets
     ) &&
@@ -260,6 +263,7 @@ EOF
 			    echo Unknown Symbol &&
 				echo ${SYMBOL} &&
 				exit 64
+			    ;;
 		    esac &&
 			if [ "${PRESS}" == "--" ]
 			then
