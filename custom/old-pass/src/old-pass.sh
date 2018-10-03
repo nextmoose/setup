@@ -1,6 +1,7 @@
 #!/bin/sh
 
-TEMP=$(mktemp -d) &&
+export PATH=${PATH}:GPG:PASS &&
+    TEMP=$(mktemp -d) &&
     secrets gpg.secret.key > ${TEMP}/gpg.secret.key &&
     secrets gpg.owner.trust > ${TEMP}/gpg.owner.trust &&
     secrets gpg2.secret.key > ${TEMP}/gpg2.secret.key &&

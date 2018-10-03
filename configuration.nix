@@ -18,6 +18,7 @@
   users.extraUsers.user.extraGroups = [ "wheel" "networkmanager" ];
   users.extraUsers.user.packages = [
     pkgs.chromium
+    pkgs.emacs
     (import ./custom/secrets/default.nix { inherit pkgs; })
     (import ./custom/wifi/default.nix { inherit pkgs; })
     (import ./custom/development-setup/default.nix { inherit pkgs; })

@@ -1,9 +1,6 @@
 #!/bin/sh
 
-which ssh &&
-    which git &&
-    which gpg &&
-    which emacs &&
+export PATH=${PATH}:GIT:OPENSSH:GNUPG &&
     mkdir ${HOME}/.ssh &&
     chmod 0700 ${HOME}/.ssh &&
     (cat > ${HOME}/.ssh/config <<EOF

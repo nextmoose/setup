@@ -7,7 +7,13 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir $out &&
       mkdir $out/bin &&
-      sed -e "s#OUT#$out#" -e "w$out/bin/development-setup" development-setup.sh &&
+      sed \
+        -e "s#OUT#$out#" \
+	-e "s#OPENSSH#${pkgs.openssh}/bin#" \
+	-e "s#GIT#${pkgs.git}/bin#" \
+	-e "s#GNUPG#${pkgs.gnupg}/bin#" \
+	-e "w$out/bin/development-setup" \
+	development-setup.sh &&
       chmod 0555 $out/bin/development-setup &&
       cp pre-push.sh $out/bin/pre-push &&
       chmod 0555 $out/bin/pre-push &&
