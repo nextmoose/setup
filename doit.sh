@@ -394,6 +394,7 @@ EOF
 		    fi &&
 		    date
 	    } &&
+	    testit --title "HAS SECRETS PROGRAM" --expected-exit-code 0 --command "which secrets" --volatile &&
 	    testit --title "GPG SECRET KEY" --expected-output "$(secrets gpg.secret.key)" --expected-exit-code 0 --command "secrets gpg.secret.key" --sensitive &&
 	    testit --title "GPG OWNER TRUST" --expected-output "$(secrets gpg.owner.trust)" --expected-exit-code 0 --command "secrets gpg.owner.trust" --sensitive &&
 	    testit --title "GPG2 SECRET KEY" --expected-output "$(secrets gpg2.secret.key)" --expected-exit-code 0 --command "secrets gpg2.secret.key" --sensitive &&
@@ -408,6 +409,7 @@ EOF
 	    testit --title "RICHMOND SQUARE WIFI SSID" --expected-output "guestwifi" --expected-exit-code 0 --command "secrets richmondsquare.password" &&
 	    testit --title "PERSONAL WIFI SSID" --expected-output "56LYL" --expected-exit-code 0 --command "secrets personal.ssid" &&
 	    testit --title "PERSONAL WIFI SSID" --expected-output "K3Z3ZNNKD9D6B4MC" --expected-exit-code 0 --command "secrets personal.password" &&
+	    testit --title "HAS WIFI PROGRAM" --expected-exit-code 0 --command "which wifi" --volatile &&
 	    true
     ) &&
     for_later(){
