@@ -7,7 +7,12 @@ stdenv.mkDerivation {
   installPhase = ''
     mkdir $out &&
       mkdir $out/bin &&
-      cp development-setup.sh $out/bin/development-setup &&
-      chmod 0555 $out/bin/development-setup
+      sed -e "s#OUT#$out#" -e "w$out/bin/development-setup" development-setup.sh &&
+      chmod 0555 $out/bin/development-setup &&
+      cp pre-push.sh $out/bin/pre-push &&
+      chmod 0555 $out/bin/pre-push &&
+      cp post-commit.sh $out/bin/post-commit &&
+      chmod 0555 $out/bin/post-commit &&
+      true
   '';
 }

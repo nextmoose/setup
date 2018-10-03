@@ -20,9 +20,7 @@
     (import ./custom/secrets/default.nix { inherit pkgs; })
     (import ./custom/wifi/default.nix { inherit pkgs; })
     (import ./custom/development-setup/default.nix { inherit pkgs; })
+    (import ./custom/old-pass/default.nix { inherit pkgs; })
   ];
-  programs.bash.shellInit = ''
-    wifi
-  '';
   system.stateVersion = "18.03";
 }
