@@ -38,8 +38,8 @@ EOF
     chmod 0600 ${HOME}/.ssh/report.known_hosts &&
     mkdir ${HOME}/project &&
     git -C ${HOME}/project init &&
-    ln -sf OUT/bin/pre-push ${HOME}/.git/hooks &&
-    ln -sf OUT/bin/post-commit ${HOME}/.git/hooks &&
+    ln -sf OUT/bin/pre-push ${HOME}/project/.git/hooks &&
+    ln -sf OUT/bin/post-commit ${HOME}/project/.git/hooks &&
     git -C ${HOME}/project config user.name "Emory Merryman" &&
     git -C ${HOME}/project config user.email "emory.merryman@gmail.com" &&
     git -C ${HOME}/project remote add upstream upstream:rebelplutonium/setup.git &&
