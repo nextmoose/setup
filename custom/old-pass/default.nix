@@ -14,7 +14,12 @@ stdenv.mkDerivation {
 	-e "w$out/bin/old-pass" \
 	old-pass.sh &&
       chmod 0555 $out/bin/old-pass &&
-      cp post-commit.sh $out/bin/post-commit &&
+      sed \
+        -e "s#OUT#$out#" \
+	-e "s#GNUPG#${pkgs.gnupg}/bin#" \
+	-e "s#PASS#${pkgs.pass}/bin#" \
+	-e "w$out/bin/post-commit" \
+	post-commit.sh &&
       chmod 0555 $out/bin/post-commit &&
       true
   '';

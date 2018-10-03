@@ -15,9 +15,21 @@ stdenv.mkDerivation {
 	-e "w$out/bin/development-setup" \
 	development-setup.sh &&
       chmod 0555 $out/bin/development-setup &&
-      cp pre-push.sh $out/bin/pre-push &&
+      sed \
+        -e "s#OUT#$out#" \
+	-e "s#OPENSSH#${pkgs.openssh}/bin#" \
+	-e "s#GIT#${pkgs.git}/bin#" \
+	-e "s#GNUPG#${pkgs.gnupg}/bin#" \
+	-e "w$out/bin/pre-push" \
+	pre-push.sh &&
       chmod 0555 $out/bin/pre-push &&
-      cp post-commit.sh $out/bin/post-commit &&
+      sed \
+        -e "s#OUT#$out#" \
+	-e "s#OPENSSH#${pkgs.openssh}/bin#" \
+	-e "s#GIT#${pkgs.git}/bin#" \
+	-e "s#GNUPG#${pkgs.gnupg}/bin#" \
+	-e "w$out/bin/post-commit" \
+	post-commit.sh &&
       chmod 0555 $out/bin/post-commit &&
       true
   '';
