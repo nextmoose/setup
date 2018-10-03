@@ -404,10 +404,10 @@ EOF
 	    testit --title "ORIGIN KNOWN HOSTS" --expected-output "$(secrets origin.known_hosts)" --expected-exit-code 0 --command "secrets origin.known_hosts" --sensitive &&
 	    testit --title "REPORT ID RSA" --expected-output "$(secrets report.id_rsa)" --expected-exit-code 0 --command "secrets report.id_rsa" --sensitive &&
 	    testit --title "REPORT KNOWN HOSTS" --expected-output "$(secrets report.known_hosts)" --expected-exit-code 0 --command "secrets report.known_hosts" --sensitive &&
-	    test-it --title "RICHMOND SQUARE WIFI SSID" --expected-output "Richmond Sq Guest" --expected-exit-code 0 --command "secrets richmondsquare.ssid" &&
-	    test-it --title "RICHMOND SQUARE WIFI SSID" --expected-output "guestwifi" --expected-exit-code 0 --command "secrets richmondsquare.password" &&
-	    test-it --title "PERSONAL WIFI SSID" --expected-output "56LYL" --expected-exit-code 0 --command "secrets personal.ssid" &&
-	    test-it --title "PERSONAL WIFI SSID" --expected-output "K3Z3ZNNKD9D6B4MC" --expected-exit-code 0 --command "secrets personal.password" &&
+	    testit --title "RICHMOND SQUARE WIFI SSID" --expected-output "Richmond Sq Guest" --expected-exit-code 0 --command "secrets richmondsquare.ssid" &&
+	    testit --title "RICHMOND SQUARE WIFI SSID" --expected-output "guestwifi" --expected-exit-code 0 --command "secrets richmondsquare.password" &&
+	    testit --title "PERSONAL WIFI SSID" --expected-output "56LYL" --expected-exit-code 0 --command "secrets personal.ssid" &&
+	    testit --title "PERSONAL WIFI SSID" --expected-output "K3Z3ZNNKD9D6B4MC" --expected-exit-code 0 --command "secrets personal.password" &&
 	    true
     ) &&
     for_later(){
