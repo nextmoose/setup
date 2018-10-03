@@ -1,10 +1,13 @@
+{ pkgs ? import <nixpkgs> {} }:
 with import <nixpkgs> {};
-let
-  myScript =   pkgs.writeShellScriptBin "wifi" ''
-    ${pkgs.networkmanager}/bin/nmcli device wifi connect "Richmond Sq Guest" password "guestwifi"
+stdenv.mkDerivation {
+  name = "secrets";
+  src = ./src;
+  buildInputs = [ pkgs.networkmanager ];
+  installPhase = ''
+    mkdir $out &&
+      mkdir $out/bin &&
+      sed -e "s#NETWORKMANAGER#${pkgs.networkmanager}/bin# -e "w$out/bin/wifi" wifi.sh &&
+      chmod 0555 $out/bin/wifi
   '';
-in
-stdenv.mkDerivation rec {
-  name = "wifi";
-  buildInputs = [ myScript pkgs.networkmanager ];
 }
