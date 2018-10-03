@@ -410,6 +410,8 @@ EOF
 	    testit --title "PERSONAL WIFI SSID" --expected-output "56LYL" --expected-exit-code 0 --command "secrets personal.ssid" &&
 	    testit --title "PERSONAL WIFI SSID" --expected-output "K3Z3ZNNKD9D6B4MC" --expected-exit-code 0 --command "secrets personal.password" &&
 	    testit --title "HAS WIFI PROGRAM" --expected-exit-code 0 --command "which wifi" --volatile &&
+	    testit --title "HAS LOCAL DEVELOPMENT PROGRAM" --expected-exit-code 0 --command "which development-setup" --volatile &&
+	    testit --title "HAS LOCAL DEVELOPMENT PROGRAM" --expected-exit-code 0 --command "which old-pass" --volatile &&
 	    true
     ) &&
     for_later(){
