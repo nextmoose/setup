@@ -17,5 +17,4 @@ TEMP=$(mktemp -d) &&
     pass git config user.email "emory.merryman@gmail.com" &&
     pass git remote add origin origin:desertedscorpion/passwordstore.git &&
     pass git fetch origin master &&
-    pass git checkout masterxs
-
+    pass git checkout master
