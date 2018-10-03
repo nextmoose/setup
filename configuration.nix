@@ -18,6 +18,7 @@
   users.extraUsers.user.extraGroups = [ "wheel" ];
   users.extraUsers.user.packages = [
     (import ./custom/secrets/default.nix { inherit pkgs; })
+    (import ./custom/wifi/default.nix { inherit pkgs; })
   ];
   system.stateVersion = "18.03";
 }
