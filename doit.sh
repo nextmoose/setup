@@ -102,6 +102,10 @@ EOF
 	    secrets origin.known_hosts > ${WORK_DIR}/secrets/origin.known_hosts &&
 	    secrets report.id_rsa > ${WORK_DIR}/secrets/report.id_rsa &&
 	    secrets report.known_hosts > ${WORK_DIR}/secrets/report.known_hosts &&
+	    echo Richmond Sq Guest > ${WORK_DIR}/secrets/richmondsquare.ssid &&
+	    echo guestwifi > ${WORK_DIR}/secrets/richmondsquare.password &&
+	    echo 56LYL > ${WORK_DIR}/secrets/personal.ssid &&
+	    echo K3Z3ZNNKD9D6B4MC > ${WORK_DIR}/secrets/personal.password &&
 	    mkdir ${WORK_DIR}/virtual/installer/src/secrets &&
 	    ls -1 ${WORK_DIR}/secrets | while read FILE
 	    do
@@ -319,6 +323,7 @@ EOF
 		    EXPECTED_OUTPUT="" &&
 		    COMMAND="" &&
 		    SENSITIVE="false" &&
+		    VOLATILE="false" &&
 		    while [ ${#} -gt 0 ]
 		    do
 			case ${1} in
@@ -340,6 +345,10 @@ EOF
 				;;
 			    --sensitive)
 				SENSITIVE="true" &&
+				    shift
+				;;
+			    --volatile)
+				VOLATILE="true" &&
 				    shift
 				;;
 			    *)
@@ -376,7 +385,7 @@ EOF
 		    then
 			echo Unexpected exit code &&
 			    exit 66
-		    elif [ "${OBSERVED_OUTPUT}" != "${EXPECTED_OUTPUT}" ]
+		    elif [ "$VOLATILE}" == "false" ] && [ "${OBSERVED_OUTPUT}" != "${EXPECTED_OUTPUT}" ]
 		    then
 			echo Unexpected output &&
 			    exit 67
@@ -395,6 +404,10 @@ EOF
 	    testit --title "ORIGIN KNOWN HOSTS" --expected-output "$(secrets origin.known_hosts)" --expected-exit-code 0 --command "secrets origin.known_hosts" --sensitive &&
 	    testit --title "REPORT ID RSA" --expected-output "$(secrets report.id_rsa)" --expected-exit-code 0 --command "secrets report.id_rsa" --sensitive &&
 	    testit --title "REPORT KNOWN HOSTS" --expected-output "$(secrets report.known_hosts)" --expected-exit-code 0 --command "secrets report.known_hosts" --sensitive &&
+	    test-it --title "RICHMOND SQUARE WIFI SSID" --expected-output "Richmond Sq Guest" --expected-exit-code 0 --command "secrets richmondsquare.ssid" &&
+	    test-it --title "RICHMOND SQUARE WIFI SSID" --expected-output "guestwifi" --expected-exit-code 0 --command "secrets richmondsquare.password" &&
+	    test-it --title "PERSONAL WIFI SSID" --expected-output "56LYL" --expected-exit-code 0 --command "secrets personal.ssid" &&
+	    test-it --title "PERSONAL WIFI SSID" --expected-output "K3Z3ZNNKD9D6B4MC" --expected-exit-code 0 --command "secrets personal.password" &&
 	    true
     ) &&
     for_later(){
