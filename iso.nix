@@ -10,11 +10,6 @@
       enable = true;
       unmanaged = [ "interface-name:ve-*" ];
     };
-    nat = {
-      enable = true;
-      internalInterfaces = [ "ve-+" ];
-      externalInterface = "wl01";
-    };
   };
   environment.systemPackages = [
     pkgs.networkmanager
