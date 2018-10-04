@@ -6,6 +6,8 @@
     ./iso.isolated.nix
   ];
   environment.systemPackages = [
+    pkgs.networkmanager
+    (import ./custom/wifi/default.nix { inherit pkgs; })
     (import ./installer/default.nix  { inherit pkgs; })
   ];
   systemd.services.sshd.wantedBy = pkgs.lib.mkForce [ "multi-user.target" ];
