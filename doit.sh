@@ -59,10 +59,12 @@ read -s -p "SYMMETRIC PASSPHRASE? " CONFIRMED_SYMMETRIC_PASSPHRASE &&
     echo guestwifi > ${WORK_DIR}/secrets/plain/richmondsquare.password &&
     echo 56LYL > ${WORK_DIR}/secrets/plain/personal.ssid &&
     echo K3Z3ZNNKD9D6B4MC > ${WORK_DIR}/secrets/plain/personal.password &&
-    mkdir ${WORK_DIR}/secrets/encrypted &&
+    mkdir ${WORK_DIR}/secrets/virtual &&
+    mkdir ${WORK_DIR}/secrets/confirmed &&
     ls -1 ${WORK_DIR}/secrets/plain | while read FILE
     do
-	echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/secrets/encrypted/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
+	echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/secrets/virtual/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
+	    echo ${CONFIRMED_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/secrets/confirmed/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
 	    rm -f ${WORK_DIR}/secrets/plain/${FILE} &&
 	    true
     done &&
@@ -115,7 +117,7 @@ EOF
 		-e "w${WORK_DIR}/virtual/installer/src/configuration.isolated.nix" \
 		configuration.virtual.nix.template &&
 	    cp -r custom ${WORK_DIR}/virtual/installer/src/custom &&
-	    cp -r ${WORK_DIR}/secrets/encrypted ${WORK_DIR}/virtual/installer/src/secrets &&
+	    cp -r ${WORK_DIR}/secrets/virtual ${WORK_DIR}/virtual/installer/src/secrets &&
 	    true
     ) &&
     (
@@ -434,7 +436,7 @@ EOF
 		-e "w${WORK_DIR}/confirmed/installer/src/configuration.isolated.nix" \
 		configuration.confirmed.nix.template &&
 	    cp -r custom ${WORK_DIR}/confirmed/installer/src/custom &&
-	    cp -r ${WORK_DIR}/secrets/encrypted ${WORK_DIR}/confirmed/installer/src/secrets
+	    cp -r ${WORK_DIR}/secrets/confirmed ${WORK_DIR}/confirmed/installer/src/secrets
     ) &&
     (
 	cd ${WORK_DIR}/confirmed &&
