@@ -439,7 +439,6 @@ EOF
     (
 	cd ${WORK_DIR}/confirmed &&
 	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
-    )
-} &&
-STATUS=PASS &&    
-true
+    ) &&
+    STATUS=PASS &&    
+    true
