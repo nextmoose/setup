@@ -1,35 +1,32 @@
 #!/bin/sh
 
-later_passwords() {
-    read -s -p "SYMMETRIC PASSPHRASE? " CONFIRMED_SYMMETRIC_PASSPHRASE &&
-	read -s -p "VERIFY SYMMETRIC_PASSPHRASE? " VERIFY_CONFIRMED_SYMMETRIC_PASSPHRASE &&
-	if [ "${CONFIRMED_SYMMETRIC_PASSPHRASE}" == "${VERIFY_CONFIRMED_SYMMETRIC_PASSPHRASE}" ]
-	then
-	    echo VERIFIED SYMMETRIC PASSPHRASE
-	else
-	    echo FAILED TO VERIFY SYMMETRIC PASSPHRASE &&
-		exit 65
-	fi &&
-	read -s -p "LUKS PASSPHRASE? " CONFIRMED_LUKS_PASSPHRASE &&
-	read -s -p "VERIFY LUKS_PASSPHRASE? " VERIFY_CONFIRMED_LUKS_PASSPHRASE &&
-	if [ "${CONFIRMED_LUKS_PASSPHRASE}" != "${VERIFY_CONFIRMED_LUKS_PASSPHRASE}" ]
-	then
-	    echo VERIFIED LUKS PASSPHRASE
-	else
-	    echo FAILED TO VERIFY LUKS PASSPHRASE &&
-		exit 65
-	fi &&
-	read -s -p "PASSWORD? " CONFIRMED_PASSWORD &&
-	read -s -p "VERIFY LUKS_PASSWORD? " VERIFY_CONFIRMED_PASSWORD &&
-	if [ "${CONFIRMED_PASSWORD}" != "${VERIFY_CONFIRMED_PASSWORD}" ]
-	then
-	    echo VERIFIED PASSWORD
-	else
-	    echo FAILED TO VERIFY PASSWORD &&
-		exit 66
-	fi &&
-	true
-} &&
+read -s -p "SYMMETRIC PASSPHRASE? " CONFIRMED_SYMMETRIC_PASSPHRASE &&
+    read -s -p "VERIFY SYMMETRIC_PASSPHRASE? " VERIFY_CONFIRMED_SYMMETRIC_PASSPHRASE &&
+    if [ "${CONFIRMED_SYMMETRIC_PASSPHRASE}" == "${VERIFY_CONFIRMED_SYMMETRIC_PASSPHRASE}" ]
+    then
+	echo VERIFIED SYMMETRIC PASSPHRASE
+    else
+	echo FAILED TO VERIFY SYMMETRIC PASSPHRASE &&
+	    exit 65
+    fi &&
+    read -s -p "LUKS PASSPHRASE? " CONFIRMED_LUKS_PASSPHRASE &&
+    read -s -p "VERIFY LUKS_PASSPHRASE? " VERIFY_CONFIRMED_LUKS_PASSPHRASE &&
+    if [ "${CONFIRMED_LUKS_PASSPHRASE}" != "${VERIFY_CONFIRMED_LUKS_PASSPHRASE}" ]
+    then
+	echo VERIFIED LUKS PASSPHRASE
+    else
+	echo FAILED TO VERIFY LUKS PASSPHRASE &&
+	    exit 65
+    fi &&
+    read -s -p "PASSWORD? " CONFIRMED_PASSWORD &&
+    read -s -p "VERIFY LUKS_PASSWORD? " VERIFY_CONFIRMED_PASSWORD &&
+    if [ "${CONFIRMED_PASSWORD}" != "${VERIFY_CONFIRMED_PASSWORD}" ]
+    then
+	echo VERIFIED PASSWORD
+    else
+	echo FAILED TO VERIFY PASSWORD &&
+	    exit 66
+    fi &&
     WORK_DIR=$(mktemp -d) &&
     STATUS=FAIL &&
     ALPHA_PORT=20560 &&
@@ -46,6 +43,30 @@ later_passwords() {
 	    echo ${WORK_DIR}
     } &&
     trap cleanup EXIT &&
+    mkdir ${WORK_DIR}/secrets &&
+    mkdir ${WORK_DIR}/secrets/plain &&
+    secrets gpg.secret.key > ${WORK_DIR}/secrets/plain/gpg.secret.key &&
+    secrets gpg.owner.trust > ${WORK_DIR}/secrets/plain/gpg.owner.trust &&
+    secrets gpg2.secret.key > ${WORK_DIR}/secrets/plain/gpg2.secret.key &&
+    secrets gpg2.owner.trust > ${WORK_DIR}/secrets/plain/gpg2.owner.trust &&
+    secrets upstream.id_rsa > ${WORK_DIR}/secrets/plain/upstream.id_rsa &&
+    secrets upstream.known_hosts > ${WORK_DIR}/secrets/plain/upstream.known_hosts &&
+    secrets origin.id_rsa > ${WORK_DIR}/secrets/plain/origin.id_rsa &&
+    secrets origin.known_hosts > ${WORK_DIR}/secrets/plain/origin.known_hosts &&
+    secrets report.id_rsa > ${WORK_DIR}/secrets/plain/report.id_rsa &&
+    secrets report.known_hosts > ${WORK_DIR}/secrets/plain/report.known_hosts &&
+    echo Richmond Sq Guest > ${WORK_DIR}/secrets/plain/richmondsquare.ssid &&
+    echo guestwifi > ${WORK_DIR}/secrets/plain/richmondsquare.password &&
+    echo 56LYL > ${WORK_DIR}/secrets/plain/personal.ssid &&
+    echo K3Z3ZNNKD9D6B4MC > ${WORK_DIR}/secrets/plain/personal.password &&
+    mkdir ${WORK_DIR}/secrets/encrypted &&
+    ls -1 ${WORK_DIR}/secrets/plain | while read FILE
+    do
+	echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/encrypted/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
+	    rm -f ${WORK_DIR}/secrets/plain/${FILE} &&
+	    true
+    done &&
+    rm -rf ${WORK_DIR}/secrets/plain &&
     (
 	mkdir ${WORK_DIR}/virtual &&
 	    mkdir ${WORK_DIR}/virtual/.ssh &&
@@ -94,29 +115,8 @@ EOF
 		-e "w${WORK_DIR}/virtual/installer/src/configuration.isolated.nix" \
 		configuration.virtual.nix.template &&
 	    cp -r custom ${WORK_DIR}/virtual/installer/src/custom &&
-	    mkdir ${WORK_DIR}/secrets &&
-	    secrets gpg.secret.key > ${WORK_DIR}/secrets/gpg.secret.key &&
-	    secrets gpg.owner.trust > ${WORK_DIR}/secrets/gpg.owner.trust &&
-	    secrets gpg2.secret.key > ${WORK_DIR}/secrets/gpg2.secret.key &&
-	    secrets gpg2.owner.trust > ${WORK_DIR}/secrets/gpg2.owner.trust &&
-	    secrets upstream.id_rsa > ${WORK_DIR}/secrets/upstream.id_rsa &&
-	    secrets upstream.known_hosts > ${WORK_DIR}/secrets/upstream.known_hosts &&
-	    secrets origin.id_rsa > ${WORK_DIR}/secrets/origin.id_rsa &&
-	    secrets origin.known_hosts > ${WORK_DIR}/secrets/origin.known_hosts &&
-	    secrets report.id_rsa > ${WORK_DIR}/secrets/report.id_rsa &&
-	    secrets report.known_hosts > ${WORK_DIR}/secrets/report.known_hosts &&
-	    echo Richmond Sq Guest > ${WORK_DIR}/secrets/richmondsquare.ssid &&
-	    echo guestwifi > ${WORK_DIR}/secrets/richmondsquare.password &&
-	    echo 56LYL > ${WORK_DIR}/secrets/personal.ssid &&
-	    echo K3Z3ZNNKD9D6B4MC > ${WORK_DIR}/secrets/personal.password &&
-	    mkdir ${WORK_DIR}/virtual/installer/src/secrets &&
-	    ls -1 ${WORK_DIR}/secrets | while read FILE
-	    do
-		echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/${FILE} &&
-		    rm -f ${WORK_DIR}/secrets/${FILE} &&
-		    true
-	    done &&
-	    rm -rf ${WORK_DIR}/secrets
+	    cp -r ${WORK_DIR}/secrets/encrypted ${WORK_DIR}/virtual/installer/src/secrets &&
+	    true
     ) &&
     (
 	cd ${WORK_DIR}/virtual &&
@@ -417,31 +417,29 @@ EOF
 	    testit --title "HAS LOCAL DEVELOPMENT PROGRAM" --expected-exit-code 0 --command "which old-pass" --volatile &&
 	    true
     ) &&
-    for_later(){
-	(
-	    mkdir ${WORK_DIR}/confirmed &&
-		cp iso.nix ${WORK_DIR}/confirmed/iso.nix &&
-		sed \
-		    -e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/confirmed/.ssh/id_rsa)#" \
-		    -e "w${WORK_DIR}/confirmed/iso.isolated.nix" \
-		    iso.confirmed.nix.template &&
-		mkdir ${WORK_DIR}/confirmed/installer &&
-		cp installer.nix ${WORK_DIR}/confirmed/installer/default.nix &&
-		mkdir ${WORK_DIR}/confirmed/installer/src &&
-		cp installer.sh.template ${WORK_DIR}/confirmed/installer/src/installer.sh.template &&
-		cp configuration.nix ${WORK_DIR}/confirmed/installer/src/configuration.nix &&
-		sed \
-		    -e "s#HASHED_PASSWORD#$(echo ${CONFIRMED_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
-		    -e "w${WORK_DIR}/confirmed/installer/src/configuration.isolated.nix" \
-		    configuration.confirmed.nix.template &&
-		cp -r custom ${WORK_DIR}/confirmed/installer/src/custom &&
-		mkdir ${WORK_DIR}/confirmed/installer/src/secrets &&
-		echo ${CONFIRMED_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/confirmed/installer/src/secrets/secret.txt.gpg --symmetric secret.txt
-	) &&
-	    (
-		cd ${WORK_DIR}/confirmed &&
-		    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
-	    )
-    } &&
-    STATUS=PASS &&    
-    true
+    (
+	mkdir ${WORK_DIR}/confirmed &&
+	    cp iso.nix ${WORK_DIR}/confirmed/iso.nix &&
+	    sed \
+		-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${WORK_DIR}/confirmed/.ssh/id_rsa)#" \
+		-e "w${WORK_DIR}/confirmed/iso.isolated.nix" \
+		iso.confirmed.nix.template &&
+	    mkdir ${WORK_DIR}/confirmed/installer &&
+	    cp installer.nix ${WORK_DIR}/confirmed/installer/default.nix &&
+	    mkdir ${WORK_DIR}/confirmed/installer/src &&
+	    cp installer.sh.template ${WORK_DIR}/confirmed/installer/src/installer.sh.template &&
+	    cp configuration.nix ${WORK_DIR}/confirmed/installer/src/configuration.nix &&
+	    sed \
+		-e "s#HASHED_PASSWORD#$(echo ${CONFIRMED_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
+		-e "w${WORK_DIR}/confirmed/installer/src/configuration.isolated.nix" \
+		configuration.confirmed.nix.template &&
+	    cp -r custom ${WORK_DIR}/confirmed/installer/src/custom &&
+	    cp -r ${WORK_DIR}/secrets/encrypted ${WORK_DIR}/confirmed/installer/src/secrets &&
+    ) &&
+    (
+	cd ${WORK_DIR}/confirmed &&
+	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
+    )
+} &&
+STATUS=PASS &&    
+true
