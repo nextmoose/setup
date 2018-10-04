@@ -11,7 +11,7 @@ read -s -p "SYMMETRIC PASSPHRASE? " CONFIRMED_SYMMETRIC_PASSPHRASE &&
     fi &&
     read -s -p "LUKS PASSPHRASE? " CONFIRMED_LUKS_PASSPHRASE &&
     read -s -p "VERIFY LUKS_PASSPHRASE? " VERIFY_CONFIRMED_LUKS_PASSPHRASE &&
-    if [ "${CONFIRMED_LUKS_PASSPHRASE}" != "${VERIFY_CONFIRMED_LUKS_PASSPHRASE}" ]
+    if [ "${CONFIRMED_LUKS_PASSPHRASE}" == "${VERIFY_CONFIRMED_LUKS_PASSPHRASE}" ]
     then
 	echo VERIFIED LUKS PASSPHRASE
     else
@@ -434,7 +434,7 @@ EOF
 		-e "w${WORK_DIR}/confirmed/installer/src/configuration.isolated.nix" \
 		configuration.confirmed.nix.template &&
 	    cp -r custom ${WORK_DIR}/confirmed/installer/src/custom &&
-	    cp -r ${WORK_DIR}/secrets/encrypted ${WORK_DIR}/confirmed/installer/src/secrets &&
+	    cp -r ${WORK_DIR}/secrets/encrypted ${WORK_DIR}/confirmed/installer/src/secrets
     ) &&
     (
 	cd ${WORK_DIR}/confirmed &&
