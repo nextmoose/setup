@@ -6,9 +6,7 @@
     ./iso.isolated.nix
   ];
   networking = {
-    networkmanager = {
-      enable = true;
-    };
+    useDHCP = true;
   };
   environment.systemPackages = [
     pkgs.networkmanager
