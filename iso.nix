@@ -5,6 +5,17 @@
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
     ./iso.isolated.nix
   ];
+  networking = {
+    networkmanager = {
+      enable = true;
+      unmanaged = [ "interface-name:ve-*" ];
+    };
+    nat = {
+      enable = true;
+      internalInterfaces = [ "ve-+" ];
+      externalInterface = "wl01";
+    };
+  };
   environment.systemPackages = [
     pkgs.networkmanager
     (import ./installer/src/custom/wifi/default.nix { inherit pkgs; })
