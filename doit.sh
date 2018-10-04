@@ -39,7 +39,10 @@ later_passwords() {
     VIRTUAL_LUKS_PASSPHRASE=$(uuidgen) &&
     VIRTUAL_PASSWORD=$(uuidgen) &&
     cleanup() {
-	echo ${STATUS} &&
+	echo &&
+	    echo &&
+	    echo &&
+	    echo ${STATUS} &&
 	    echo ${WORK_DIR}
     } &&
     trap cleanup EXIT &&

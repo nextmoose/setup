@@ -19,6 +19,7 @@
   users.extraUsers.user.packages = [
     pkgs.chromium
     pkgs.emacs
+    pkgs.gnupg
     (import ./custom/secrets/default.nix { inherit pkgs; })
     (import ./custom/wifi/default.nix { inherit pkgs; })
     (import ./custom/development-setup/default.nix { inherit pkgs; })
