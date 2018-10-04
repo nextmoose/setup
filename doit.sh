@@ -62,7 +62,7 @@ read -s -p "SYMMETRIC PASSPHRASE? " CONFIRMED_SYMMETRIC_PASSPHRASE &&
     mkdir ${WORK_DIR}/secrets/encrypted &&
     ls -1 ${WORK_DIR}/secrets/plain | while read FILE
     do
-	echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/virtual/installer/src/secrets/encrypted/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
+	echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/secrets/encrypted/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
 	    rm -f ${WORK_DIR}/secrets/plain/${FILE} &&
 	    true
     done &&
