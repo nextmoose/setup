@@ -35,6 +35,7 @@ read -s -p "SYMMETRIC PASSPHRASE? " CONFIRMED_SYMMETRIC_PASSPHRASE &&
     VIRTUAL_SYMMETRIC_PASSPHRASE=$(uuidgen) &&
     VIRTUAL_LUKS_PASSPHRASE=$(uuidgen) &&
     VIRTUAL_PASSWORD=$(uuidgen) &&
+    TOKEN=18.03.133245.d16a7abceb7-x86_64-linux &&
     cleanup() {
 	echo &&
 	    echo &&
@@ -63,8 +64,8 @@ read -s -p "SYMMETRIC PASSPHRASE? " CONFIRMED_SYMMETRIC_PASSPHRASE &&
     mkdir ${WORK_DIR}/secrets/confirmed &&
     ls -1 ${WORK_DIR}/secrets/plain | while read FILE
     do
-	echo ${VIRTUAL_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/secrets/virtual/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
-	    echo ${CONFIRMED_SYMMETRIC_PASSPHRASE} | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/secrets/confirmed/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
+	echo "${VIRTUAL_SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/secrets/virtual/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
+	    echo "${CONFIRMED_SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${WORK_DIR}/secrets/confirmed/${FILE}.gpg --symmetric ${WORK_DIR}/secrets/plain/${FILE} &&
 	    rm -f ${WORK_DIR}/secrets/plain/${FILE} &&
 	    true
     done &&
@@ -287,7 +288,7 @@ EOF
 	    sudo VBoxManage internalcommands createrawvmdk -filename ${WORK_DIR}/virtual/nixos.vmdk -rawdisk /dev/volumes/nixos &&
 	    sudo VBoxManage createvm --name nixos --groups /nixos --register &&
 	    sudo VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
-	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/virtual/result/iso/nixos-18.03.133098.cd0cd946f37-x86_64-linux.iso &&
+	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium ${WORK_DIR}/virtual/result/iso/nixos-${TOKEN}.iso &&
 	    sudo VBoxManage storagectl nixos --name "IDE" --add IDE &&
 	    sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium ${WORK_DIR}/virtual/nixos.vmdk &&
 	    sudo VBoxManage modifyvm nixos --natpf1 "alpha,tcp,127.0.0.1,${ALPHA_PORT},,22" &&
