@@ -118,6 +118,7 @@ EOF
 		-e "w${WORK_DIR}/virtual/installer/src/configuration.isolated.nix" \
 		configuration.virtual.nix.template &&
 	    cp -r custom ${WORK_DIR}/virtual/installer/src/custom &&
+	    cp -r containers ${WORK_DIR}/virtual/installer/src/containers &&
 	    cp -r ${WORK_DIR}/secrets/virtual ${WORK_DIR}/virtual/installer/src/secrets &&
 	    true
     ) &&
@@ -437,6 +438,7 @@ EOF
 		-e "w${WORK_DIR}/confirmed/installer/src/configuration.isolated.nix" \
 		configuration.confirmed.nix.template &&
 	    cp -r custom ${WORK_DIR}/confirmed/installer/src/custom &&
+	    cp -r containers ${WORK_DIR}/confirmed/installer/src/containers &&
 	    cp -r ${WORK_DIR}/secrets/confirmed ${WORK_DIR}/confirmed/installer/src/secrets
     ) &&
     (
