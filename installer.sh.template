@@ -104,8 +104,11 @@ EOF
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 secrets &&
     mkfs.ext4 -L KEYS /dev/mapper/secrets &&
     mkfs.ext4 -L ROOT /dev/sda4 &&
+    pvs &&
+    vgs &&
+    lvs &&
     echo AAAAA 00100 &&
-    pvcreate /dev/sda5 &&
+    echo y | pvcreate /dev/sda5 &&
     echo AAAAA 00200 &&
     vgcreate volumes /dev/sda5 &&
     echo AAAAA 00300 &&
