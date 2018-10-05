@@ -4,7 +4,7 @@ let
   entrypoint = writeScript "entrypoint.sh" ''
     #!${stdenv.shell}
 
-    echo hello ${@}
+    echo hello
   '';
 in
 dockerTools.buildImage {
