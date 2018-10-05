@@ -308,7 +308,7 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    ssh alpha &&
+	    ssh -F ${WORK_DIR}/virtual/.ssh/config alpha &&
 	    (cat <<EOF
 ${VIRTUAL_SYMMETRIC_PASSPHRASE}
 ${VIRTUAL_SYMMETRIC_PASSPHRASE}
