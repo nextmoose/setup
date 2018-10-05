@@ -6,6 +6,7 @@
     ./iso.isolated.nix
   ];
   networking = {
+    wireless.enable = true;
     useDHCP = true;
   };
   environment.systemPackages = [
