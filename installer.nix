@@ -10,6 +10,7 @@ stdenv.mkDerivation {
       cp configuration.nix $out/etc/nixos/configuration.nix &&
       cp configuration.isolated.nix $out/etc/nixos/configuration.isolated.nix &&
       cp -r custom $out/etc/nixos &&
+      cp -r containers $out/etc/nixos &&
       cp -r secrets $out/etc/secrets &&
       chmod 0400 $out/etc/nixos/configuration.nix &&
       mkdir $out/bin &&
