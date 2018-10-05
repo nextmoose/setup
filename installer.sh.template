@@ -143,7 +143,7 @@ Y
 EOF
 	) | gdisk /dev/sda &&
 	    echo y | pvcreate /dev/sda5 &&
-	    vgcreate volumes /dev/sda5 &&
+	    vgcreate volumes /dev/sda5
     fi &&
     if [ "${SHUTDOWN}" == "true" ]
     then
