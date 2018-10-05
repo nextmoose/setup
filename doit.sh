@@ -308,6 +308,7 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
+	    ssh alpha &&
 	    (cat <<EOF
 ${VIRTUAL_SYMMETRIC_PASSPHRASE}
 ${VIRTUAL_SYMMETRIC_PASSPHRASE}
