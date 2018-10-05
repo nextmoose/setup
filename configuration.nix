@@ -3,6 +3,7 @@
   imports = [
     ./hardware-configuration.nix
     ./configuration.isolated.nix
+    ./containers/boot-it.nix
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
@@ -33,15 +34,18 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
   security.sudo.wheelNeedsPassword = false;
+  programs.bash.shellInit = ''
+    wifi
+  '';
   users.mutableUsers = false;
   users.extraUsers.user.isNormalUser = true;
-  users.extraUsers.user.uid = 1000;
-  users.extraUsers.user.extraGroups = [ "wheel" "networkmanager" "vboxusers" ];
+  users.extraUsers.user.extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
   users.extraUsers.user.packages = [
     pkgs.chromium
     pkgs.emacs
     pkgs.gnupg
     pkgs.pass
+    pkgs.git
     (import ./custom/secrets/default.nix { inherit pkgs; })
     (import ./custom/wifi/default.nix { inherit pkgs; })
     (import ./custom/development-setup/default.nix { inherit pkgs; })

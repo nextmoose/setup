@@ -11,7 +11,6 @@
   };
   environment.systemPackages = [
     pkgs.networkmanager
-    (import ./installer/src/custom/wifi/default.nix { inherit pkgs; })
     (import ./installer/src/custom/wifi2/default.nix { inherit pkgs; })
     (import ./installer/default.nix  { inherit pkgs; })
   ];
