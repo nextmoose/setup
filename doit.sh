@@ -308,14 +308,13 @@ EOF
 		done
 	    } &&
 	    knownhosts alpha ${ALPHA_PORT} &&
-	    ssh -F ${WORK_DIR}/virtual/.ssh/config alpha &&
 	    (cat <<EOF
 ${VIRTUAL_SYMMETRIC_PASSPHRASE}
 ${VIRTUAL_SYMMETRIC_PASSPHRASE}
 ${VIRTUAL_LUKS_PASSPHRASE}
 ${VIRTUAL_LUKS_PASSPHRASE}
 EOF
-	    ) | time ssh -F ${WORK_DIR}/virtual/.ssh/config alpha installer --no-shutdown &&
+	    ) | time ssh -F ${WORK_DIR}/virtual/.ssh/config alpha installer --no-shutdown --no-volumes &&
 	    sudo VBoxManage controlvm nixos poweroff soft &&
 	    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
 	    sudo VBoxManage startvm --type headless nixos &&
