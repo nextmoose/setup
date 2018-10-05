@@ -9,4 +9,7 @@ let
 in
 dockerTools.buildImage {
   name = "boot-it";
+  config = {
+    Entrypoint = entrypoint;
+  };
 }
