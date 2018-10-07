@@ -1,6 +1,5 @@
 #!/bin/sh
 
-
 TEMP_DIR=$(mktemp -d) &&
     cleanup() {
 	rm --recursive --force ${TEMP_DIR}
@@ -55,7 +54,7 @@ TEMP_DIR=$(mktemp -d) &&
 	-e "s#HASHED_PASSWORD#$(echo ${CONFIRMED_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
 	-e "wbuild/real/installer/src/configuration.isolated.nix" \
 	src/real/configuration.isolated.nix.template &&
-    cp -r src/common/custom build/real/installer/src/custom &&
+    cp --recursive src/common/custom build/real/installer/src/custom &&
     mkdir ${TEMP_DIR}/secrets &&
     ls -1 /secrets | while read FILE
     do
@@ -63,8 +62,9 @@ TEMP_DIR=$(mktemp -d) &&
 	    cp /secrets/${FILE} ${TEMP_DIR}/secrets/${FILE}
     done &&
     tar --create --file ${TEMP_DIR}/secrets.tar --directory ${TEMP_DIR}/secrets . &&
-    rm -rf ${TEMP_DIR}/secrets &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/real/installer/src/secrets.gpg --symmetric ${TEMP_DIR}/secrets.tar &&
+    rm --recursive --force ${TEMP_DIR}/secrets &&
+    rm --force build/real/installer/src/secrets.tar.gpg &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/real/installer/src/secrets.tar.gpg --symmetric ${TEMP_DIR}/secrets.tar &&
     rm -rf ${TEMP_DIR}/secrets.tar &&
     (
 	cd build/real &&
