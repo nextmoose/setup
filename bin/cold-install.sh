@@ -17,10 +17,10 @@ EOF
     sh $(dirname ${0})/create-boot.sh &&
     sudo VBoxManage startvm --type headless nixos &&
     rm --force ~/.ssh/virtual-install.known_hosts &&
-    while [ -z "$(cat build/dot-ssh/install.known_hosts)" ]
+    while [ -z "$(cat build/dot-ssh/installer.known_hosts)" ]
     do
 	sleep 1s &&
-	    ssh-keyscan -p 20560 127.0.0.1 > build/dot-ssh/install.known_hosts
+	    ssh-keyscan -p 20560 127.0.0.1 > build/dot-ssh/installer.known_hosts
     done &&
     LUKS_PASSPHRASE="$(cat /secrets/build/luks.txt)" &&
     (cat <<EOF

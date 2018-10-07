@@ -127,9 +127,7 @@ EOF
     echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/secrets.tar --decrypt OUT/etc/secrets.tar.gpg &&
     mkdir /mnt/etc/nixos/secrets &&
     tar --extract --file ${TEMP_DIR}/secrets.tar --directory /mnt/etc/nixos/secrets &&
-    true
-    done
-ROOT_PASSWORD=$(uuidgen) &&
+    ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF
 ${ROOT_PASSWORD}
 ${ROOT_PASSWORD}
