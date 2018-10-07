@@ -34,9 +34,15 @@ done &&
     fi &&
     cp src/common/iso.nix build/real &&
     cp src/real/iso.isolated.nix build/real &&
-    mkdir build/real/installer &&
+    if [ ! -d build/real/installer ]
+    then
+	mkdir build/real/installer
+    fi &&
     cp src/common/installer.nix build/real/installer/default.nix &&
-    mkdir build/real/installer/src &&
+    if [ ! -d build/real/installer/src ]
+    then
+	mkdir build/real/installer/src
+    fi &&
     cp build/common/installer.sh.template build/real/installer/src &&
     cp build/common/configuration.nix build/real/installer/src &&
     sed \
