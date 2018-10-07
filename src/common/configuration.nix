@@ -45,6 +45,7 @@
     pkgs.gnupg
     pkgs.pass
     pkgs.git
+    pkgs.mkpasswd
     (import ./custom/secrets/default.nix { inherit pkgs; })
     (import ./custom/wifi/default.nix { inherit pkgs; })
     (import ./custom/development-setup/default.nix { inherit pkgs; })
