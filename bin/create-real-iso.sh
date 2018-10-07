@@ -1,19 +1,7 @@
 #!/bin/sh
 
 
-if [ ! -d build ]
-then
-    mkdir build
-fi &&
-    if [ ! -d build/real ]
-    then
-	mkdir build/real
-    fi &&
-    if [ ! -d build/real/temp ]
-    then
-	mkdir build/real/temp
-    fi &&
-    TEMP_DIR=$(mktemp build/real/temp/XXXXXXXX) &&
+TEMP_DIR=$(mktemp -d) &&
     cleanup() {
 	rm --recursive --force ${TEMP_DIR}
     } &&
@@ -42,6 +30,14 @@ fi &&
 		    exit 66
 	    fi
     done &&
+    if [ ! -d build ]
+    then
+	mkdir build
+    fi &&
+    if [ ! -d build/real ]
+    then
+	mkdir build/real
+    fi &&
     cp src/common/iso.nix build/real &&
     cp src/real/iso.isolated.nix build/real &&
     if [ ! -d build/real/installer ]
@@ -60,7 +56,13 @@ fi &&
 	-e "wbuild/real/installer/src/configuration.isolated.nix" \
 	src/real/configuration.isolated.nix.template &&
     cp -r src/common/custom build/real/installer/src/custom &&
-    tar --create --file ${TEMP_DIR}/secrets.tar --directory /secrets . &&
+    mkdir ${TEMP_DIR}/secrets &&
+    ls -1 /secrets | while read FILE
+    do
+	[ 700 != $(stat --printf %a /secrets/${FILE}) ] &&
+	    cp /secrets/${FILE} ${TEMP_DIR}/secrets/${FILE}
+    done &&
+    tar --create --file ${TEMP_DIR}/secrets.tar --directory ${TEMP_DIR}/secrets &&
     echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/real/installer/src/secrets.gpg ${TEMP_DIR}/secrets.tar &&
     (
 	cd build/real &&
