@@ -62,7 +62,7 @@ TEMP_DIR=$(mktemp -d) &&
 	[ 700 != $(stat --printf %a /secrets/${FILE}) ] &&
 	    cp /secrets/${FILE} ${TEMP_DIR}/secrets/${FILE}
     done &&
-    tar --create --file ${TEMP_DIR}/secrets.tar --directory ${TEMP_DIR}/secrets &&
+    tar --create --file ${TEMP_DIR}/secrets.tar --directory ${TEMP_DIR}/secrets . &&
     echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/real/installer/src/secrets.gpg ${TEMP_DIR}/secrets.tar &&
     (
 	cd build/real &&
