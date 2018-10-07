@@ -51,7 +51,7 @@ TEMP_DIR=$(mktemp -d) &&
     cp src/common/installer.sh.template build/real/installer/src &&
     cp src/common/configuration.nix build/real/installer/src &&
     sed \
-	-e "s#HASHED_PASSWORD#$(echo ${CONFIRMED_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
+	-e "s#HASHED_PASSWORD#$(echo ${USER_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
 	-e "wbuild/real/installer/src/configuration.isolated.nix" \
 	src/real/configuration.isolated.nix.template &&
     cp --recursive src/common/custom build/real/installer/src/custom &&
