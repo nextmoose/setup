@@ -124,7 +124,7 @@ EOF
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
     cat OUT/etc/nixos/configuration.isolated.nix > /mnt/etc/nixos/configuration.isolated.nix &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/secrets.tar --decrypt OUT/etc/secrets.gpg &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/secrets.tar --decrypt OUT/etc/secrets.tar.gpg &&
     mkdir /mnt/etc/nixos/secrets &&
     tar --extract --file ${TEMP_DIR}/secrets.tar --directory /mnt/etc/nixos/secrets &&
     true
