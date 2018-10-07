@@ -4,6 +4,7 @@ sh $(dirname ${0})/destroy-box.sh &&
     sh $(dirname ${0})/destroy-dot-ssh.sh &&
     SYMMETRIC_PASSPHRASE=$(uuidgen) &&
     USER_PASSWORD=$(uuidgen) &&
+    exit 64 &&
     sh $(dirname ${0})/create-dot-ssh.sh &&
     (cat <<EOF
 ${SYMMETRIC_PASSPHRASE}

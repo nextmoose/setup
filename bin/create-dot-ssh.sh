@@ -26,15 +26,16 @@ IdentityFile $(pwd)/build/dot-ssh/use.id_rsa
 UserKnownHostsFile $(pwd)/build/dot-ssh/use.known_hosts
 EOF
 	) &&
-	    chmod 0600 build/dot-ssh/config &&
-	    if [ ! -f build/dot-ssh/installer.id_rsa ]
-	    then
-		ssh-keygen -f build/dot-ssh/installer.id_rsa -P "" -C "" &&
-		    rm --force build/dot-ssh/installer.id_rsa.pub
-	    fi &&
-	    if [ ! -f build/dot-ssh/use.id_rsa ]
-	    then
-		ssh-keygen -f build/dot-ssh/use.id_rsa -P "" -C "" &&
-		    rm --force build/dot-ssh/use.id_rsa.pub
-	    fi &&
-	    true
+	    chmod 0600 build/dot-ssh/config
+    fi &&
+    if [ ! -f build/dot-ssh/installer.id_rsa ]
+    then
+	ssh-keygen -f build/dot-ssh/installer.id_rsa -P "" -C "" &&
+	    rm --force build/dot-ssh/installer.id_rsa.pub
+    fi &&
+    if [ ! -f build/dot-ssh/use.id_rsa ]
+    then
+	ssh-keygen -f build/dot-ssh/use.id_rsa -P "" -C "" &&
+	    rm --force build/dot-ssh/use.id_rsa.pub
+    fi &&
+    true
