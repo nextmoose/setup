@@ -1,8 +1,6 @@
 #!/bin/sh
 
-sh $(dirname ${0})/destroy-box.sh &&
-    sh $(dirname ${0})/destroy-dot-ssh.sh &&
-    SYMMETRIC_PASSPHRASE=$(uuidgen) &&
+SYMMETRIC_PASSPHRASE=$(uuidgen) &&
     USER_PASSWORD=$(uuidgen) &&
     sh $(dirname ${0})/create-dot-ssh.sh &&
     (cat <<EOF
@@ -12,6 +10,7 @@ ${USER_PASSWORD}
 ${USER_PASSWORD}
 EOF
     ) | sh $(dirname ${0})/create-virtual-iso.sh &&
+    sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium build/box/nixos.vmdk &&
     rm --force ~/.ssh/virtual-install.known_hosts &&
     while [ -z "$(cat build/dot-ssh/install.known_hosts)" ]
     do
