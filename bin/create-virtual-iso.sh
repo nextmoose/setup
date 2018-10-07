@@ -27,7 +27,7 @@ TEMP_DIR=$(mktemp -d) &&
     fi &&
     cp src/common/iso.nix build/virtual &&
     sed \
-	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ${HOME}/.ssh/origin.id_rsa)#" \
+	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f build/dot-ssh/installer.id_rsa)#" \
 	-e "wbuild/virtual/iso.isolated.nix" \
 	src/virtual/iso.isolated.nix.template &&
     if [ ! -d build/virtual/installer ]
@@ -43,7 +43,7 @@ TEMP_DIR=$(mktemp -d) &&
     cp src/common/configuration.nix build/virtual/installer/src &&
     sed \
 	-e "s#HASHED_PASSWORD#$(uuidgen | mkpasswd -m sha-512 --stdin)#" \
-	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ~/.ssh/origin.id_rsa)#" \
+	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f build/dot-ssh/use.id_rsa)#" \
 	-e "wbuild/virtual/installer/src/configuration.isolated.nix" \
 	src/virtual/configuration.isolated.nix.template &&
     cp --recursive src/common/custom build/virtual/installer/src/custom &&
