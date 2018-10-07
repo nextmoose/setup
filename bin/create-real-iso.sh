@@ -50,7 +50,7 @@ done &&
 	-e "wbuild/real/installer/src/configuration.isolated.nix" \
 	src/real/configuration.isolated.nix.template &&
     cp -r src/common/custom build/real/installer/src/custom &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/real/installer/src/secrets.gpg /secrets &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --multifile --output build/real/installer/src/secrets.gpg /secrets &&
     (
 	cd build/real &&
 	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
