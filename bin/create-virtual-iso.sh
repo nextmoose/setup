@@ -38,7 +38,7 @@ done &&
     cp src/common/configuration.nix build/virtual/installer/src &&
     sed \
 	-e "s#HASHED_PASSWORD#$(uuidgen | mkpasswd -m sha-512 --stdin)#" \
-	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ~/.ssh/origin.id_rsa#" \
+	-e "s#AUTHORIZED_KEY_PUBLIC#$(ssh-keygen -y -f ~/.ssh/origin.id_rsa)#" \
 	-e "wbuild/virtual/installer/src/configuration.isolated.nix" \
 	src/virtual/configuration.isolated.nix.template &&
     cp --recursive src/common/custom build/virtual/installer/src/custom &&
