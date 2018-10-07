@@ -3,7 +3,6 @@
   imports = [
     ./hardware-configuration.nix
     ./configuration.isolated.nix
-    ./containers/boot-it.nix
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
