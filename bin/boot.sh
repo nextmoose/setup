@@ -143,3 +143,5 @@ LUKS_PASSPHRASE="$(cat /secrets/build/luks.txt)" &&
 	    done
     } &&
     echo "${LUKS_PASSPHRASE}" | keyboardputscancode &&
+    sleep 1m &&
+    true
