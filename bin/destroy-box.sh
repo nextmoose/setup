@@ -30,4 +30,5 @@ fi &&
     then
 	sudo lvremove --force /dev/volumes/nixos
     fi &&
+    rm --recursive --force build/box &&
     true
