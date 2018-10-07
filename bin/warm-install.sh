@@ -1,6 +1,7 @@
 #!/bin/sh
 
-SYMMETRIC_PASSPHRASE=$(uuidgen) &&
+sh $(dirname ${0})/destroy-dot-ssh.sh &&
+    SYMMETRIC_PASSPHRASE=$(uuidgen) &&
     USER_PASSWORD=$(uuidgen) &&
     sh $(dirname ${0})/create-dot-ssh.sh &&
     (cat <<EOF
@@ -10,7 +11,9 @@ ${USER_PASSWORD}
 ${USER_PASSWORD}
 EOF
     ) | sh $(dirname ${0})/create-virtual-iso.sh &&
+    sudo VBoxManage controlvm nixos poweroff soft &&
     sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium build/box/nixos.vmdk &&
+    sudo VBoxManage startvm --type headless nixos &&
     rm --force ~/.ssh/virtual-install.known_hosts &&
     while [ -z "$(cat build/dot-ssh/install.known_hosts)" ]
     do

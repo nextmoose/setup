@@ -16,7 +16,7 @@ EOF
     while [ -z "$(cat build/dot-ssh/install.known_hosts)" ]
     do
 	sleep 1s &&
-	    ssh-keyscan -p 20560 127.0.0.1 > ~/.ssh/virtual-install.known_hosts
+	    ssh-keyscan -p 20560 127.0.0.1 > build/dot-ssh/install.known_hosts
     done &&
     LUKS_PASSPHRASE=$(uuidgen) &&
     (cat <<EOF
