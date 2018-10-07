@@ -15,7 +15,7 @@ ${VIRTUAL_SYMMETRIC_PASSPHRASE}
 ${VIRTUAL_LUKS_PASSPHRASE}
 ${VIRTUAL_LUKS_PASSPHRASE}
 EOF
-) | time ssh -F ${WORK_DIR}/virtual/.ssh/config alpha installer --no-shutdown --no-volumes &&
+) | time ssh -F build/dot-ssh/config install installer --no-shutdown --no-volumes &&
     sudo VBoxManage controlvm nixos poweroff soft &&
     sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
     true
