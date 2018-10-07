@@ -12,13 +12,13 @@ ${USER_PASSWORD}
 EOF
     ) | sh $(dirname ${0})/create-virtual-iso.sh &&
     sudo VBoxManage controlvm nixos poweroff soft &&
-    sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium build/box/nixos.vmdk &&
+    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium build/virtual/result/iso/$(ls -1 build/virtual/result/iso) &&
     sudo VBoxManage startvm --type headless nixos &&
     rm --force ~/.ssh/virtual-install.known_hosts &&
-    while [ -z "$(cat build/dot-ssh/install.known_hosts)" ]
+    while [ -z "$(cat build/dot-ssh/installer.known_hosts)" ]
     do
 	sleep 1s &&
-	    ssh-keyscan -p 20560 127.0.0.1 > ~/.ssh/virtual-install.known_hosts
+	    ssh-keyscan -p 20560 127.0.0.1 > build/dot-ssh/installer.known_hosts
     done &&
     LUKS_PASSPHRASE=$(uuidgen) &&
     (cat <<EOF

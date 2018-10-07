@@ -1,6 +1,11 @@
 #!/bin/sh
 
 LUKS_PASSPHRASE="$(cat /secrets/build/luks.txt)" &&
+    if [ "0" != "$(sudo VBoxManage showvminfo nixos | grep -c running)" ]
+    then
+	sudo VBoxManage controlvm nixos poweroff soft &&
+	    sleep 10s
+    fi &&
     sudo VBoxManage startvm --type headless nixos &&
     sleep 1m &&
     keyboardputscancode() {

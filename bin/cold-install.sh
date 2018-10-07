@@ -32,6 +32,6 @@ EOF
     ) | time ssh -F build/dot-ssh/config installer installer --no-shutdown --no-volumes &&
     rm --force ~/.ssh/virtual-install.known_hosts &&
     sudo VBoxManage controlvm nixos poweroff soft &&
-    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
+    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium emptydrive &&
     sh $(dirname ${0})/boot.sh &&
     true
