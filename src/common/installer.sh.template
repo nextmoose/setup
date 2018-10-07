@@ -1,6 +1,11 @@
 #!/bin/sh
 
-SHUTDOWN="true" &&
+TEMP_DIR=$(mktemp -d) &&
+    cleanup() {
+	rm --recursive --force ${TEMP_DIR}
+    } &&
+    trap cleanup EXIT &&
+    SHUTDOWN="true" &&
     VOLUMES="true" &&
     while [ ${#} -gt 0 ]
     do
@@ -119,8 +124,10 @@ EOF
     cat OUT/etc/nixos/configuration.nix > /mnt/etc/nixos/configuration.nix &&
     cat OUT/etc/nixos/configuration.isolated.nix > /mnt/etc/nixos/configuration.isolated.nix &&
     cp -r OUT/etc/nixos/custom /mnt/etc/nixos &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --multifile --output /mnt/secrets --decrypt OUT/etc/secrets.gpg &&
-	    true
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/secrets.tar --decrypt OUT/etc/secrets.gpg &&
+    mkdir /mnt/etc/nixos/secrets &&
+    tar --extract --file ${TEMP_DIR}/secrets.tar --directory /mnt/etc/nixos/secrets &&
+    true
     done
 ROOT_PASSWORD=$(uuidgen) &&
     (cat <<EOF

@@ -1,17 +1,35 @@
 #!/bin/sh
 
-while [ -z "${SYMMETRIC_PASSPHRASE}" ]
-do
-    read -s -p "Symmetric Passphrase? " SYMMETRIC_PASSPHRASE &&
-	read -s -p "Verify Symmetric Passphrase? " VERIFY_SYMMETRIC_PASSPHRASE &&
-	if [ "${SYMMETRIC_PASSPHRASE}" == "${VERIFY_SYMMETRIC_PASSPHRASE}" ]
-	then
-	    echo Verified Symmetric Passphrase
-	else
-	    echo Failed to Verify Symmetric Passphrase &&
-		exit 65
-	fi
-done &&
+
+if [ ! -d build ]
+then
+    mkdir build
+fi &&
+    if [ ! -d build/real ]
+    then
+	mkdir build/real
+    fi &&
+    if [ ! -d build/real/temp ]
+    then
+	mkdir build/real/temp
+    fi &&
+    TEMP_DIR=$(mktemp build/real/temp/XXXXXXXX) &&
+    cleanup() {
+	rm --recursive --force ${TEMP_DIR}
+    } &&
+    trap cleanup EXIT &&
+    while [ -z "${SYMMETRIC_PASSPHRASE}" ]
+    do
+	read -s -p "Symmetric Passphrase? " SYMMETRIC_PASSPHRASE &&
+	    read -s -p "Verify Symmetric Passphrase? " VERIFY_SYMMETRIC_PASSPHRASE &&
+	    if [ "${SYMMETRIC_PASSPHRASE}" == "${VERIFY_SYMMETRIC_PASSPHRASE}" ]
+	    then
+		echo Verified Symmetric Passphrase
+	    else
+		echo Failed to Verify Symmetric Passphrase &&
+		    exit 65
+	    fi
+    done &&
     while [ -z "${USER_PASSWORD}" ]
     do
 	read -s -p "User Passphrase? " USER_PASSWORD &&
@@ -24,14 +42,6 @@ done &&
 		    exit 66
 	    fi
     done &&
-    if [ ! -d build ]
-    then
-	mkdir build
-    fi &&
-    if [ ! -d build/real ]
-    then
-	mkdir build/real
-    fi &&
     cp src/common/iso.nix build/real &&
     cp src/real/iso.isolated.nix build/real &&
     if [ ! -d build/real/installer ]
@@ -50,7 +60,8 @@ done &&
 	-e "wbuild/real/installer/src/configuration.isolated.nix" \
 	src/real/configuration.isolated.nix.template &&
     cp -r src/common/custom build/real/installer/src/custom &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --multifile --output build/real/installer/src/secrets.gpg /secrets &&
+    tar --create --file ${TEMP_DIR}/secrets.tar --directory /secrets . &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/real/installer/src/secrets.gpg ${TEMP_DIR}/secrets.tar &&
     (
 	cd build/real &&
 	    time nix-build '<nixpkgs/nixos>' -A config.system.build.isoImage -I nixos-config=iso.nix
