@@ -43,8 +43,8 @@ done &&
     then
 	mkdir build/real/installer/src
     fi &&
-    cp build/common/installer.sh.template build/real/installer/src &&
-    cp build/common/configuration.nix build/real/installer/src &&
+    cp src/common/installer.sh.template build/real/installer/src &&
+    cp src/common/configuration.nix build/real/installer/src &&
     sed \
 	-e "s#HASHED_PASSWORD#$(echo ${CONFIRMED_PASSWORD} | mkpasswd -m sha-512 --stdin)#" \
 	-e "w${WORK_DIR}/confirmed/installer/src/configuration.isolated.nix" \
