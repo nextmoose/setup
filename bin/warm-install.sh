@@ -27,7 +27,7 @@ ${SYMMETRIC_PASSPHRASE}
 ${LUKS_PASSPHRASE}
 ${LUKS_PASSPHRASE}
 EOF
-    ) | time ssh -F build/dot-ssh/config install installer --no-shutdown --no-volumes &&
+    ) | time ssh -F build/dot-ssh/config installer installer --no-shutdown --no-volumes &&
     sudo VBoxManage controlvm nixos poweroff soft &&
     sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium none &&
     sh $(dirname ${0})/boot.sh &&
