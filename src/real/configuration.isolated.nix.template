@@ -1,0 +1,4 @@
+{ config, pkgs, ... }:
+{
+  users.extraUsers.user.hashedPassword = "HASHED_PASSWORD";
+}
