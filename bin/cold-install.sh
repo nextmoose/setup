@@ -3,7 +3,7 @@
 sh $(dirname ${0})/destroy-box.sh &&
     sh $(dirname ${0})/destroy-dot-ssh.sh &&
     sh $(dirname ${0})/create-virtual-iso.sh &&
-    sh $(dirname ${0}/create-dot-ssh.sh &&
+    sh $(dirname ${0})/create-dot-ssh.sh &&
     rm --force ~/.ssh/virtual-install.known_hosts &&
     while [ -z "$(cat build/dot-ssh/install.known_hosts)" ]
     do
