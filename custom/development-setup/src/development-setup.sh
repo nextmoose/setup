@@ -36,15 +36,27 @@ EOF
     chmod 0600 ${HOME}/.ssh/report.id_rsa &&
     secrets report.known_hosts > ${HOME}/.ssh/report.known_hosts &&
     chmod 0600 ${HOME}/.ssh/report.known_hosts &&
-    mkdir ${HOME}/project &&
-    git -C ${HOME}/project init &&
-    ln -sf OUT/bin/pre-push ${HOME}/project/.git/hooks &&
-    ln -sf OUT/bin/post-commit ${HOME}/project/.git/hooks &&
-    git -C ${HOME}/project config user.name "Emory Merryman" &&
-    git -C ${HOME}/project config user.email "emory.merryman@gmail.com" &&
-    git -C ${HOME}/project remote add upstream upstream:rebelplutonium/setup.git &&
-    git -C ${HOME}/project remote set-url --push upstream no_push &&
-    git -C ${HOME}/project remote add origin origin:nextmoose/setup.git &&
-    git -C ${HOME}/project remote add nextmoose report:rebelplutonium/setup.git &&
-    git -C ${HOME}/project fetch upstream master &&
+    mkdir ${HOME}/projects &&
+    mkdir ${HOME}/projects/setup &&
+    git -C ${HOME}/projects/setup init &&
+    ln -sf OUT/bin/pre-push ${HOME}/projects/setup/.git/hooks &&
+    ln -sf OUT/bin/post-commit ${HOME}/projects/setup/.git/hooks &&
+    git -C ${HOME}/projects/setup config user.name "Emory Merryman" &&
+    git -C ${HOME}/projects/setup config user.email "emory.merryman@gmail.com" &&
+    git -C ${HOME}/projects/setup remote add upstream upstream:rebelplutonium/setup.git &&
+    git -C ${HOME}/projects/setup remote set-url --push upstream no_push &&
+    git -C ${HOME}/projects/setup remote add origin origin:nextmoose/setup.git &&
+    git -C ${HOME}/projects/setup remote add nextmoose report:rebelplutonium/setup.git &&
+    git -C ${HOME}/projects/setup fetch upstream master &&
+    mkdir ${HOME}/projects/nixpkgs &&
+    git -C ${HOME}/projects/nixpkgs init &&
+    ln -sf OUT/bin/pre-push ${HOME}/projects/nixpkgs/.git/hooks &&
+    ln -sf OUT/bin/post-commit ${HOME}/projects/nixpkgs/.git/hooks &&
+    git -C ${HOME}/projects/nixpkgs config user.name "Emory Merryman" &&
+    git -C ${HOME}/projects/nixpkgs config user.email "emory.merryman@gmail.com" &&
+    git -C ${HOME}/projects/nixpkgs remote add upstream upstream:NixOS/nixpkgs.git &&
+    git -C ${HOME}/projects/nixpkgs remote set-url --push upstream no_push &&
+    git -C ${HOME}/projects/nixpkgs remote add origin origin:nextmoose/setup.git &&
+    git -C ${HOME}/projects/nixpkgs remote add nextmoose report:NixOS/setup.git &&
+    git -C ${HOME}/projects/nixpkgs fetch upstream master &&
     true
