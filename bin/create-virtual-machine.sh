@@ -4,8 +4,8 @@ if [ ! -d build ]
 then
     mkdir build
 fi &&
-    sh $(basedir ${0})/bin/destroy-virtual-machine.sh &&
-    sh $(basedir ${0})/bin/create-install-iso.sh &&
+    sh $(dirname ${0})/bin/destroy-virtual-machine.sh &&
+    sh $(dirname ${0})/bin/create-install-iso.sh &&
     sudo lvcreate -y --name nixos --size 100GB volumes &&
     sudo VBoxManage internalcommands createrawvmdk -filename build/nixos.vmdk -rawdisk /dev/volumes/nixos    sudo VBoxManage createvm --name nixos --groups /nixos --register &&
     sudo VBoxManage storagectl nixos --name "SATA Controller" --add SATA &&
