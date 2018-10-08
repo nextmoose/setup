@@ -20,7 +20,7 @@ UserKnownHostsFile $(pwd)/build/dot-ssh/installer.known_hosts
 
 Host use
 HostName 127.0.0.1
-User root
+User user
 Port 29156
 IdentityFile $(pwd)/build/dot-ssh/use.id_rsa
 UserKnownHostsFile $(pwd)/build/dot-ssh/use.known_hosts

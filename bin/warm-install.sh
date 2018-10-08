@@ -20,7 +20,7 @@ EOF
 	sleep 1s &&
 	    ssh-keyscan -p 20560 127.0.0.1 > build/dot-ssh/installer.known_hosts
     done &&
-    LUKS_PASSPHRASE=$(uuidgen) &&
+    LUKS_PASSPHRASE=$(cat /secrets/build/luks.txt) &&
     (cat <<EOF
 ${SYMMETRIC_PASSPHRASE}
 ${SYMMETRIC_PASSPHRASE}

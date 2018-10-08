@@ -1,6 +1,12 @@
 #!/bin/sh
 
-sh $(dirname ${0})/create-virtual.sh &&
+SYMMETRIC_PASSWORD=$(uuidgen) &&
+    (cat <<EOF
+${SYMMETRIC_PASSWORD}
+${SYMMETRIC_PASSWORD}	
+EOF
+    ) | sh $(dirname ${0})/create-virtual.sh &&
+    sh $(dirname ${0})/boot.sh &&
     scp -F build/dot-ssh/config build/virtual/installer/src/configuration.isolated.nix use:/etc/nixos/configuration.isolated.nix &&
     scp -F build/dot-ssh/config build/virtual/installer/src/configuration.nix use:/etc/nixos/configuration.nix &&
     scp --recursive -F build/dot-ssh/config build/virtual/installer/src/custom use:/etc/nixos/custom &&

@@ -147,6 +147,15 @@ LUKS_PASSPHRASE="$(cat /secrets/build/luks.txt)" &&
 		    sudo VBoxManage controlvm nixos keyboardputscancode ${PRESS} ${RELEASE}
 	    done
     } &&
+    sleep 30s &&
+    echo BEFORE ENTERING LUKS PASSPHRASE &&
     echo "${LUKS_PASSPHRASE}" | keyboardputscancode &&
-    sleep 1m &&
+    echo AFTER ENTERING LUKS PASSPHRASE &&
+    rm --force build/dot-ssh/use.known_hosts &&
+    while [ -z "$(cat build/dot-ssh/use.known_hosts)" ]
+    do
+	echo waiting for virtual machine &&
+	    ssh-keyscan -p 29156 127.0.0.1 > build/dot-ssh/use.known_hosts &&
+	    sleep 10s
+    done &&
     true
