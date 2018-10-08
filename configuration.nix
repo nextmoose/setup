@@ -42,6 +42,9 @@
     pkgs.emacs
     pkgs.gnupg
     pkgs.pass
+    pkgs.git
+    pkgs.mkpasswd
+    pkgs.gnome-terminal
     (import ./custom/secrets/default.nix { inherit pkgs; })
     (import ./custom/wifi/default.nix { inherit pkgs; })
     (import ./custom/development-setup/default.nix { inherit pkgs; })
