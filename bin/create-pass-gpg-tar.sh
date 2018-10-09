@@ -41,6 +41,6 @@ TEMP_DIR=$(mktemp -d) &&
     echo "${LUKS_PASSPHRASE}" > ${TEMP_DIR}/pass/luks.txt &&
     tar --create --file ${TEMP_DIR}/pass.tar --directory ${TEMP_DIR}/pass . &&
     rm --recursive --force ${TEMP_DIR}/pass &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/pass.tar.gz --symmetric ${TEMP_DIR}/pass.tar &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/pass.tar.gpg --symmetric ${TEMP_DIR}/pass.tar &&
     rm --force ${TEMP_DIR}/pass.tar &&
     true
