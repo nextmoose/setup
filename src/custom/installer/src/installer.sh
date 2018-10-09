@@ -1,7 +1,6 @@
 #!/bin/sh
 
-(wpa_supplicant -B -i wlo1 -c<(wpa_passphrase 'Richmond Sq Guest' 'guestwifi') || true ) &&
-    TEMP_DIR=$(mktemp -d) &&
+TEMP_DIR=$(mktemp -d) &&
     cleanup() {
 	rm --recursive --force ${TEMP_DIR}
     } &&
@@ -79,7 +78,7 @@ n
 n
 
 
-+1G
++20G
 
 n
 
@@ -95,17 +94,18 @@ w
 Y
 EOF
     ) | gdisk /dev/sda &&
-    mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
+    mkfs.vfa t-F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
-    echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 secrets &&
-    mkfs.ext4 -L KEYS /dev/mapper/secrets &&
+    echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 nix &&
+    mkfs.ext4 -L KEYS /dev/mapper/nix &&
     mkfs.ext4 -L ROOT /dev/sda4 &&
     mount /dev/sda4 /mnt &&
     mkdir /mnt/boot &&
+    mkdir /mnt/nix &&
     mount /dev/sda1 /mnt/boot/ &&
-    mkdir /mnt/secrets &&
-    mount /dev/mapper/secrets /mnt/secrets &&
+    mount /dev/mapper/secrets /mnt/nix &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
+    cp OUT/etc/configuration.nix /mnt/etc/nixos &&
     true
