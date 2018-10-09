@@ -94,7 +94,7 @@ w
 Y
 EOF
     ) | gdisk /dev/sda &&
-    mkfs.vfa t-F 32 -n BOOT /dev/sda1 &&
+    mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 nix &&
