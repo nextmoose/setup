@@ -117,6 +117,6 @@ EOF
     cp -r ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
     if [ "${SHUTDOWN}" == true ]
     then
-	
+	shutdown -h now
     fi &&
     true
