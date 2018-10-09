@@ -96,6 +96,10 @@ EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/pass.tar OUT/etc/pass.tar.gpg &&
+    mkdir ${TEMP_DIR}/pass &&
+    tar --extract --file ${TEMP_DIR}/pass.tar --directory ${TEMP_DIR}/pass &&
+    LUKS_PASSPHRASE="$(cat ${TEMP_DIR}/luks.txt)" &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 nix &&
     mkfs.ext4 -L KEYS /dev/mapper/nix &&

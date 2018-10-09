@@ -33,6 +33,10 @@ TEMP_DIR=$(mktemp -d) &&
 	echo FAILED TO VERIFY LUKS PASSPHRASE &&
 	    exit 68
     fi &&
+    if [ ! -d build ]
+    then
+	mkdir build
+    fi &&
     mkdir ${TEMP_DIR}/pass &&
     echo "${LUKS_PASSPHRASE}" > ${TEMP_DIR}/pass/luks.txt &&
     tar --create --file ${TEMP_DIR}/pass.tar --directory ${TEMP_DIR}/pass . &&
