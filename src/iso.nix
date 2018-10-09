@@ -5,6 +5,7 @@
     <nixpkgs/nixos/modules/installer/cd-dvd/channel.nix>
   ];
   environment.systemPackages = [
+    pkgs.mkpasswd
     (import ./custom/installer/default.nix { inherit pkgs; })
   ];
 }

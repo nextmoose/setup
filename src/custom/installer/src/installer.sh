@@ -102,6 +102,13 @@ EOF
     cp OUT/etc/configuration.nix /mnt/etc/nixos &&
     cp --recursive OUT/etc/custom /mnt/etc/nixos &&
     cp --recursive ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
+    (cat > /mnt/etc/nixos/password.nix <<EOF
+{ config, pkgs, ... }:
+{
+  users.extraUsers.user.hashedPassword = "$(echo ${USER_PASSWORD} | mkpasswd --std-in -m sha-512)"
+}
+EOF
+    ) &&
     nixos-install &&
     if [ "${SHUTDOWN}" == true ]
     then
