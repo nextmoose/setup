@@ -52,7 +52,7 @@ TEMP_DIR=$(mktemp -d) &&
 	mkdir build
     fi &&
     mkdir ${TEMP_DIR}/pass &&
-    (cat > ${TEMP_DIR}/installer.env <<EOF
+    (cat > ${TEMP_DIR}/pass/installer.env <<EOF
 LUKS_PASSPHRASE=${LUKS_PASSPHRASE}
 USER_PASSWORD=${USER_PASSWORD}
 EOF
