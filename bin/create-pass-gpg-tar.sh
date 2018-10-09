@@ -11,6 +11,7 @@ TEMP_DIR=$(mktemp -d) &&
 	echo BLANK SYMMETRIC PASSPHRASE &&
 	    exit 66
     fi &&
+    echo &&
     read -s -p "VERIFY SYMMETRIC PASSPHRASE? " VERIFY_SYMMETRIC_PASSPHRASE &&
     if [ "${SYMMETRIC_PASSPHRASE}" == "${VERIFY_SYMMETRIC_PASSPHRASE}" ]
     then
@@ -19,12 +20,15 @@ TEMP_DIR=$(mktemp -d) &&
 	echo FAILED TO VERIFY SYMMETRIC PASSPHRASE &&
 	    exit 67
     fi &&
+    echo &&
+    echo &&
     read -s -p "LUKS PASSPHRASE? " LUKS_PASSPHRASE &&
     if [ -z "${LUKS_PASSPHRASE}" ]
     then
 	echo BLANK LUKS PASSPHRASE &&
 	    exit 67
     fi &&
+    echo &&
     read -s -p "VERIFY LUKS PASSPHRASE? " VERIFY_LUKS_PASSPHRASE &&
     if [ "${LUKS_PASSPHRASE}" == "${VERIFY_LUKS_PASSPHRASE}" ]
     then
@@ -33,12 +37,15 @@ TEMP_DIR=$(mktemp -d) &&
 	echo FAILED TO VERIFY LUKS PASSPHRASE &&
 	    exit 68
     fi &&
+    echo &&
+    echo &&
     read -s -p "USER PASSWORD? " USER_PASSWORD &&
     if [ -z "${USER_PASSWORD}" ]
     then
 	echo BLANK USER PASSWORD &&
 	    exit 67
     fi &&
+    echo &&
     read -s -p "VERIFY USER PASSWORD? " VERIFY_USER_PASSWORD &&
     if [ "${USER_PASSWORD}" == "${VERIFY_USER_PASSWORD}" ]
     then
@@ -47,6 +54,9 @@ TEMP_DIR=$(mktemp -d) &&
 	echo FAILED TO VERIFY USER PASSWORD &&
 	    exit 68
     fi &&
+    echo &&
+    echo &&
+    echo VERIFIED &&
     if [ ! -d build ]
     then
 	mkdir build

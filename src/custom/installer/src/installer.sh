@@ -34,6 +34,7 @@ export PATH=${PATH}:GNUPG &&
 	echo Blank SYMMETRIC_PASSPHRASE &&
 	    exit 65
     fi &&
+    echo &&
     read -s -p "CONFIRM SYMMETRIC_PASSPHRASE" CONFIRM_SYMMETRIC_PASSPHRASE &&
     if [ "${SYMMETRIC_PASSPHRASE}" == "${CONFIRM_SYMMETRIC_PASSPHRASE}" ]
     then
@@ -42,6 +43,9 @@ export PATH=${PATH}:GNUPG &&
 	echo Failed to verify SYMMETRIC_PASSPHRASE &&
 	    exit 66
     fi &&
+    echo &&
+    echo &&
+    echo VERIFIED &&
     export PATH=${PATH}:PKGS.GNUPG &&
     (swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
@@ -103,8 +107,8 @@ EOF
     source ${TEMP_DIR}/pass/installer.env &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 nix &&
-    mkfs.ext4 -L KEYS /dev/mapper/nix &&
-    mkfs.ext4 -L ROOT /dev/sda4 &&
+    echo y | mkfs.ext4 -L NIX /dev/mapper/nix &&
+    echo y | mkfs.ext4 -L ROOT /dev/sda4 &&
     mount /dev/sda4 /mnt &&
     mkdir /mnt/boot &&
     mkdir /mnt/nix &&
@@ -113,8 +117,8 @@ EOF
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cp OUT/etc/configuration.nix /mnt/etc/nixos &&
-    cp OUT/etc/custom /mnt/etc/nixos &&
-    cp -r ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
+    cp --recursive OUT/etc/custom /mnt/etc/nixos &&
+    cp --recursive ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
     if [ "${SHUTDOWN}" == true ]
     then
 	shutdown -h now
