@@ -14,6 +14,7 @@ stdenv.mkDerivation {
       chmod 0500 $out/bin/installer &&
       mkdir $out/etc &&
       cp configuration.nix $out/etc &&
+      cp -r custom $out/etc &&
       chmod 0500 $out/etc/configuration.nix &&
       cp pass.tar.gpg $out/etc &&
       chmod 0500 $out/etc/pass.tar.gpg &&

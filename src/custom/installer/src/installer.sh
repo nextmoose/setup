@@ -113,5 +113,10 @@ EOF
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cp OUT/etc/configuration.nix /mnt/etc/nixos &&
+    cp OUT/etc/custom /mnt/etc/nixos &&
     cp -r ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
+    if [ "${SHUTDOWN}" == true ]
+    then
+	
+    fi &&
     true
