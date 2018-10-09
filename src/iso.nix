@@ -8,4 +8,12 @@
     pkgs.mkpasswd
     (import ./custom/installer/default.nix { inherit pkgs; })
   ];
+  system.extraDependencies = [
+    pkgs.chromium
+    pkgs.emacs
+    pkgs.gnupg
+    pkgs.pass
+    pkgs.git
+    pkgs.mkpasswd
+  ];
 }

@@ -105,7 +105,7 @@ EOF
     (cat > /mnt/etc/nixos/password.nix <<EOF
 { config, pkgs, ... }:
 {
-  users.extraUsers.user.hashedPassword = "$(echo ${USER_PASSWORD} | mkpasswd --stdin -m sha-512)"
+  users.extraUsers.user.hashedPassword = "$(echo ${USER_PASSWORD} | mkpasswd --stdin -m sha-512)";
 }
 EOF
     ) &&
