@@ -100,7 +100,7 @@ EOF
     echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/pass.tar OUT/etc/pass.tar.gpg &&
     mkdir ${TEMP_DIR}/pass &&
     tar --extract --file ${TEMP_DIR}/pass.tar --directory ${TEMP_DIR}/pass &&
-    LUKS_PASSPHRASE="$(cat ${TEMP_DIR}/pass/luks.txt)" &&
+    source ${TEMP_DIR}/pass/installer.env &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 nix &&
     mkfs.ext4 -L KEYS /dev/mapper/nix &&
@@ -109,8 +109,9 @@ EOF
     mkdir /mnt/boot &&
     mkdir /mnt/nix &&
     mount /dev/sda1 /mnt/boot/ &&
-    mount /dev/mapper/secrets /mnt/nix &&
+    mount /dev/mapper/nix /mnt/nix &&
     swapon -L SWAP &&
     nixos-generate-config --root /mnt &&
     cp OUT/etc/configuration.nix /mnt/etc/nixos &&
+    cp -r ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
     true
