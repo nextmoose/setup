@@ -7,6 +7,12 @@
   environment.systemPackages = [
     pkgs.mkpasswd
     (import ./custom/installer/default.nix { inherit pkgs; })
+    pkgs.chromium
+    pkgs.emacs
+    pkgs.gnupg
+    pkgs.pass
+    pkgs.git
+    pkgs.mkpasswd
   ];
   system.extraDependencies = [
     pkgs.chromium
