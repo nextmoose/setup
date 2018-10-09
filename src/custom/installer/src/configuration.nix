@@ -33,9 +33,6 @@
   sound.enable = true;
   hardware.pulseaudio.enable = true;
   security.sudo.wheelNeedsPassword = false;
-  programs.bash.shellInit = ''
-    wifi
-  '';
   users.mutableUsers = false;
   users.extraUsers.user.isNormalUser = true;
   users.extraUsers.user.extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
@@ -46,10 +43,6 @@
     pkgs.pass
     pkgs.git
     pkgs.mkpasswd
-    (import ./custom/secrets/default.nix { inherit pkgs; })
-    (import ./custom/wifi/default.nix { inherit pkgs; })
-    (import ./custom/development-setup/default.nix { inherit pkgs; })
-    (import ./custom/old-pass/default.nix { inherit pkgs; })
   ];
   system.stateVersion = "18.03";
 }
