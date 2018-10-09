@@ -28,7 +28,7 @@ export PATH=${PATH}:GNUPG &&
 		;;
 	esac
     done &&
-    read -s -p "SYMMETRIC_PASSPHRASE" SYMMETRIC_PASSPHRASE &&
+    read -s -p "SYMMETRIC_PASSPHRASE? " SYMMETRIC_PASSPHRASE &&
     export PATH=${PATH}:PKGS.GNUPG &&
     (swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
@@ -105,7 +105,7 @@ EOF
     (cat > /mnt/etc/nixos/password.nix <<EOF
 { config, pkgs, ... }:
 {
-  users.extraUsers.user.hashedPassword = "$(echo ${USER_PASSWORD} | mkpasswd --std-in -m sha-512)"
+  users.extraUsers.user.hashedPassword = "$(echo ${USER_PASSWORD} | mkpasswd --stdin -m sha-512)"
 }
 EOF
     ) &&
