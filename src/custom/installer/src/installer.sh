@@ -1,6 +1,7 @@
 #!/bin/sh
 
-TEMP_DIR=$(mktemp -d) &&
+export PATH=${PATH}:GNUPG &&
+    TEMP_DIR=$(mktemp -d) &&
     cleanup() {
 	rm --recursive --force ${TEMP_DIR}
     } &&

@@ -8,6 +8,7 @@ stdenv.mkDerivation {
       mkdir $out/bin &&
       sed \
         -e "s#OUT#$out#" \
+        -e "s#GNUPG#${gnupg}/bin#" \
 	-e "w$out/bin/installer" \
 	installer.sh &&
       chmod 0500 $out/bin/installer &&
