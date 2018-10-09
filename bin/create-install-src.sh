@@ -9,4 +9,5 @@ fi &&
 	mkdir build/src
     fi &&
     cp src/iso.nix build/src &&
+    cp --recursive src/custom build/src &&
     true
