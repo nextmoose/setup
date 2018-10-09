@@ -1,0 +1,9 @@
+{ pkgs ? import <nixpkgs> {} }:
+with import <nixpkgs> {};
+stdenv.mkDerivation {
+  name = "installer";
+  src = ./src;
+  installPhase = ''
+    mkdir $out &&
+  '';
+}
