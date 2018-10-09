@@ -17,5 +17,7 @@ fi &&
     then
 	sudo lvremove --force /dev/volumes/nixos
     fi &&
-    rm --recursive --force build/nixos.vmdk &&
+    rm --force build/nixos.vmdk &&
+    rm --recursive --force build/src &&
+    rm --recursive --force build &&
     true
