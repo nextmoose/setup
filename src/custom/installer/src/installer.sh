@@ -29,23 +29,6 @@ export PATH=${PATH}:GNUPG &&
 	esac
     done &&
     read -s -p "SYMMETRIC_PASSPHRASE" SYMMETRIC_PASSPHRASE &&
-    if [ -z "${SYMMETRIC_PASSPHRASE}" ]
-    then
-	echo Blank SYMMETRIC_PASSPHRASE &&
-	    exit 65
-    fi &&
-    echo &&
-    read -s -p "CONFIRM SYMMETRIC_PASSPHRASE" CONFIRM_SYMMETRIC_PASSPHRASE &&
-    if [ "${SYMMETRIC_PASSPHRASE}" == "${CONFIRM_SYMMETRIC_PASSPHRASE}" ]
-    then
-	echo Verified SYMMETRIC_PASSPHRASE
-    else
-	echo Failed to verify SYMMETRIC_PASSPHRASE &&
-	    exit 66
-    fi &&
-    echo &&
-    echo &&
-    echo VERIFIED &&
     export PATH=${PATH}:PKGS.GNUPG &&
     (swapoff -L SWAP || true ) &&
     (umount /mnt/secrets || true) &&
@@ -119,6 +102,7 @@ EOF
     cp OUT/etc/configuration.nix /mnt/etc/nixos &&
     cp --recursive OUT/etc/custom /mnt/etc/nixos &&
     cp --recursive ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
+    nixos-install &&
     if [ "${SHUTDOWN}" == true ]
     then
 	shutdown -h now
