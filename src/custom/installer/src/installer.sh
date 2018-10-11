@@ -98,7 +98,8 @@ EOF
     mount /dev/sda1 /mnt/boot/ &&
     mount /dev/mapper/nix /mnt/nix &&
     swapon -L SWAP &&
-    nixos-generate-config --root /mnt &&
+    mkdir /mnt/etc &&
+    mkdir /mnt/etc/nixos &&
     cp OUT/etc/configuration.nix /mnt/etc/nixos &&
     cp --recursive OUT/etc/custom /mnt/etc/nixos &&
     cp --recursive ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
@@ -109,7 +110,8 @@ EOF
 }
 EOF
     ) &&
-    nixos-install &&
+    nixos-generate-config --root /mnt &&
+    nixos-install --no-root-password &&
     if [ "${SHUTDOWN}" == true ]
     then
 	shutdown -h now
