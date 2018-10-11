@@ -24,6 +24,7 @@ if [ ! -d build ]
     done &&
     sudo VBoxManage storagectl nixos --name "IDE" --add IDE &&
     sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium build/nixos.vmdk &&
+    sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 1 --type hdd --medium build/config.vmdk &&
     sudo VBoxManage modifyvm nixos --memory 2000 &&
     sudo VBoxManage modifyvm nixos --firmware efi &&
     true
