@@ -111,7 +111,7 @@ EOF
 EOF
     ) &&
     nixos-generate-config --root /mnt &&
-    nixos-install --no-root-password &&
+    nixos-install --root /mnt --no-root-password &&
     if [ "${SHUTDOWN}" == true ]
     then
 	shutdown -h now
