@@ -36,6 +36,7 @@
   users.mutableUsers = false;
   users.extraUsers.user.isNormalUser = true;
 #  users.extraUsers.user.extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
+  users.extraUsers.user.extraGroups = [ "wheel" ];
   users.extraUsers.user.packages = [
 #    pkgs.chromium
 #    pkgs.emacs
