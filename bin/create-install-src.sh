@@ -10,13 +10,13 @@ fi &&
     fi &&
     cp src/iso.nix build/src &&
     cp --recursive src/custom build/src &&
-    (cat > build/src/installer/src/hardware.nix <<EOF
+    (cat > build/src/custom/installer/src/hardware-configuration.nix <<EOF
 { config, lib, pkgs, ... }:
 {
 }
 EOF
     ) &&
-    (cat > build/src/installer/src/password.nix <<EOF
+    (cat > build/src/custom/installer/src/password.nix <<EOF
 { config, pkgs, ... }:
 {
   users.extraUsers.user.hashedPassword = "$(echo password | mkpasswd --stdin -m sha-512)";
