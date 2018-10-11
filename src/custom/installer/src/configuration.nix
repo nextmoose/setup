@@ -35,14 +35,14 @@
   security.sudo.wheelNeedsPassword = false;
   users.mutableUsers = false;
   users.extraUsers.user.isNormalUser = true;
-  users.extraUsers.user.extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
+#  users.extraUsers.user.extraGroups = [ "wheel" "networkmanager" "vboxusers" "docker" ];
   users.extraUsers.user.packages = [
-    pkgs.chromium
-    pkgs.emacs
-    pkgs.gnupg
-    pkgs.pass
-    pkgs.git
-    pkgs.mkpasswd
+#    pkgs.chromium
+#    pkgs.emacs
+#    pkgs.gnupg
+#    pkgs.pass
+#    pkgs.git
+#    pkgs.mkpasswd
   ];
   system.stateVersion = "18.03";
 }
