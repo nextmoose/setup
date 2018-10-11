@@ -7,7 +7,7 @@
   isoImage.includeSystemBuildDependencies = true;
   isoImage.storeContents = [
     (import ./custom/installer/default.nix { inherit pkgs; })
-    (import ./custom/installer/src/configuration.nix { inherit pkgs; })
+    (import ./custom/installer/src/configuration.nix { inherit config; inherit pkgs; })
   ];
   environment.systemPackages = [
     pkgs.sudo
