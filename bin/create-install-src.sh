@@ -16,7 +16,7 @@ fi &&
 }
 EOF
     ) &&
-    (cat > build/src/installer/src/password.nix <<EOF &&
+    (cat > build/src/installer/src/password.nix <<EOF
 { config, pkgs, ... }:
 {
   users.extraUsers.user.hashedPassword = "$(echo password | mkpasswd --stdin -m sha-512)";
