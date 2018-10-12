@@ -31,7 +31,7 @@ export PATH=${PATH}:GNUPG &&
     read -s -p "SYMMETRIC_PASSPHRASE? " SYMMETRIC_PASSPHRASE &&
     export PATH=${PATH}:PKGS.GNUPG &&
     (swapoff -L SWAP || true ) &&
-    (umount /mnt/secrets || true) &&
+    (umount /mnt/nix || true) &&
     (umount /mnt/boot || true) &&
     (umount /mnt || true) &&
     lvs --options NAME volumes | tail -n -1 | while read NAME
