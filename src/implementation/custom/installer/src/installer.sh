@@ -84,10 +84,11 @@ EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/pass.tar OUT/etc/pass.tar.gpg &&
-    mkdir ${TEMP_DIR}/pass &&
-    tar --extract --file ${TEMP_DIR}/pass.tar --directory ${TEMP_DIR}/pass &&
-    source ${TEMP_DIR}/pass/installer.env &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/root.tar OUT/etc/root.tar.gpg &&
+    mkdir ${TEMP_DIR}/root &&
+    tar --extract --file ${TEMP_DIR}/root.tar --directory ${TEMP_DIR}/root &&
+    rm --force ${TEMP_DIR}/root.tar &&
+    source ${TEMP_DIR}/root/installer.env &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 nix &&
     echo y | mkfs.ext4 -L NIX /dev/mapper/nix &&
@@ -102,7 +103,7 @@ EOF
     mkdir /mnt/etc/nixos &&
     cp OUT/etc/configuration.nix /mnt/etc/nixos &&
     cp --recursive OUT/etc/custom /mnt/etc/nixos &&
-    cp --recursive ${TEMP_DIR}/pass/secrets /mnt/etc/nixos/custom/pass/src &&
+    cp --recursive ${TEMP_DIR}/root/secrets /mnt/etc/nixos/custom/pass/src &&
     (cat > /mnt/etc/nixos/password.nix <<EOF
 { config, pkgs, ... }:
 {

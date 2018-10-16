@@ -17,8 +17,8 @@ stdenv.mkDerivation {
       cp configuration.nix $out/etc &&
       cp -r custom $out/etc &&
       chmod 0500 $out/etc/configuration.nix &&
-      cp pass.tar.gpg $out/etc &&
-      chmod 0500 $out/etc/pass.tar.gpg &&
+      cp root.tar.gpg $out/etc &&
+      chmod 0500 $out/etc/root.tar.gpg &&
       true
   '';
 }
