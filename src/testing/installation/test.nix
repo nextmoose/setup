@@ -5,5 +5,8 @@ import <nixpkgs/nixos/tests/make-test.nix> {
     };
   testScript =
     ''
+      $machine->start() &&
+        $machine->waitForUnit("default.target");
+        $machine->shutdown()
     '';
 }
