@@ -103,7 +103,7 @@ EOF
     mkdir /mnt/etc/nixos &&
     cp OUT/etc/configuration.nix /mnt/etc/nixos &&
     cp --recursive OUT/etc/custom /mnt/etc/nixos &&
-    cp --recursive ${TEMP_DIR}/root/secrets /mnt/etc/nixos/custom/pass/src &&
+    cp --recursive ${TEMP_DIR}/root/secrets /mnt/etc/nixos/custom/secrets/src &&
     (cat > /mnt/etc/nixos/password.nix <<EOF
 { config, pkgs, ... }:
 {

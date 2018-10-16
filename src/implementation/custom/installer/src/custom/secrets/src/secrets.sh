@@ -2,5 +2,5 @@
 
 if [ "${1}" == "show" ]
 then
-    cat OUT/etc/${2}
+    cat OUT/etc/secrets/${2}
 fi
