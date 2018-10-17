@@ -2,8 +2,8 @@
 
 sh $(dirname ${0})/create-configuration.sh &&
     mkdir build/transfer &&
-    cp build/configuration/custom/installer/src/configuration.nix build/transfer/configuration &&
     cp --recursive build/configuration/custom/installer/src/custom build/transfer/configuration &&
+    cp build/configuration/custom/installer/src/configuration.nix build/transfer/configuration &&
     cp --recursive src/testing/bin build/transfer/bin &&
     mkisofs -lJR -o build/transfer.iso build/transfer &&
     sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --type dvddrive --medium build/transfer.iso &&
