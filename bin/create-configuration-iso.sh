@@ -1,6 +1,7 @@
 #!/bin/sh
 
-sh $(dirname ${0})/create-configuration.sh &&
+rm --recursive --force build/transfer &&
+    sh $(dirname ${0})/create-configuration.sh &&
     mkdir build/transfer &&
     cp --recursive build/configuration/custom/installer/src/ build/transfer/configuration &&
     cp build/configuration/custom/installer/src/configuration.nix build/transfer/configuration &&
