@@ -84,82 +84,82 @@ do
 	    sh $(dirname ${0})/type-keyboard-key.sh --key "z"
 	    ;;
 	"A")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "a" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "a" --case "upper"
 	    ;;
 	"B")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "b" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "b" --case "upper"
 	    ;;
 	"C")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "c" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "c" --case "upper"
 	    ;;
 	"D")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "d" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "d" --case "upper"
 	    ;;
 	"E")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "e" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "e" --case "upper"
 	    ;;
 	"F")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "f" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "f" --case "upper"
 	    ;;
 	"G")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "g" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "g" --case "upper"
 	    ;;
 	"H")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "h" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "h" --case "upper"
 	    ;;
 	"I")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "i" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "i" --case "upper"
 	    ;;
 	"J")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "j" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "j" --case "upper"
 	    ;;
 	"K")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "k" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "k" --case "upper"
 	    ;;
 	"L")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "l" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "l" --case "upper"
 	    ;;
 	"M")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "m" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "m" --case "upper"
 	    ;;
 	"N")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "n" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "n" --case "upper"
 	    ;;
 	"O")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "o" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "o" --case "upper"
 	    ;;
 	"P")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "p" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "p" --case "upper"
 	    ;;
 	"Q")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "q" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "q" --case "upper"
 	    ;;
 	"R")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "r" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "r" --case "upper"
 	    ;;
 	"S")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "s" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "s" --case "upper"
 	    ;;
 	"T")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "t" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "t" --case "upper"
 	    ;;
 	"U")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "u" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "u" --case "upper"
 	    ;;
 	"V")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "v" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "v" --case "upper"
 	    ;;
 	"W")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "w" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "w" --case "upper"
 	    ;;
 	"X")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "x" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "x" --case "upper"
 	    ;;
 	"Y")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "y" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "y" --case "upper"
 	    ;;
 	"Z")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "z" --case upper
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "z" --case "upper"
 	    ;;
 	"0")
 	    sh $(dirname ${0})/type-keyboard-key.sh --key "0"
@@ -192,10 +192,10 @@ do
 	    sh $(dirname ${0})/type-keyboard-key.sh --key "9"
 	    ;;
 	"-")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "-"
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "HYPHEN"
 	    ;;
  	"|")
-	    sh $(dirname ${0})/type-keyboard-key.sh --key "\\"
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "BACK_SLASH" --case "upper"
 	    ;;
 	"")
 	    ;;

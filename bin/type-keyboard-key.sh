@@ -215,16 +215,16 @@ SHIFT_PRESS=2A &&
 	"9")
 	    PRESS=0A
 	    ;;
-	"-")
+	"HYPHEN")
 	    PRESS=0C
 	    ;;
- 	"|")
+ 	"BACK_SLASH")
 	    PRESS=2B
 	    ;;
 	"SPACE")
 	    PRESS=39
 	    ;;
-	"RETURN")
+	"ENTER")
 	    PRESS=1C
 	    ;;
 	*)
