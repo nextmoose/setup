@@ -6,6 +6,7 @@
   ];
   boot.loader.systemd-boot.enable = true;
   boot.loader.efi.canTouchEfiVariables = true;
+  security.sudo.wheelNeedsPassword = false;
   users.mutableUsers = false;
   users.extraUsers.user.isNormalUser = true;
   users.extraUsers.user.extraGroups = [ "wheel" ];
