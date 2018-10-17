@@ -227,6 +227,8 @@ SHIFT_PRESS=2A &&
 	"ENTER")
 	    PRESS=1C
 	    ;;
+	"QUESTION")
+	    PRESS=35
 	*)
 	    echo "Unknown Key \"${KEY}\"" &&
 		exit 64
