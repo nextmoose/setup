@@ -109,6 +109,12 @@ EOF
     secrets gpg.owner.trust > ${TEMP_DIR}/root/secrets/gpg.owner.trust &&
     secrets gpg2.secret.key > ${TEMP_DIR}/root/secrets/gpg2ls.secret.key &&
     secrets gpg2.owner.trust > ${TEMP_DIR}/root/secrets/gpg2.owner.trust &&
+    secrets upstream.id_rsa > ${TEMP_DIR}/root/secrets/upstream.id_rsa &&
+    secrets upstream.known_hosts > ${TEMP_DIR}/root/secrets/upstream.known_hosts &&
+    secrets origin.id_rsa > ${TEMP_DIR}/root/secrets/origin.id_rsa &&
+    secrets origin.known_hosts > ${TEMP_DIR}/root/secrets/origin.known_hosts &&
+    secrets report.id_rsa > ${TEMP_DIR}/root/secrets/report.id_rsa &&
+    secrets report.known_hosts > ${TEMP_DIR}/root/secrets/report.known_hosts &&
     tar --create --file ${TEMP_DIR}/root.tar --directory ${TEMP_DIR}/root . &&
     rm --recursive --force ${TEMP_DIR}/root &&
     echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output build/root.tar.gpg --symmetric ${TEMP_DIR}/root.tar &&
