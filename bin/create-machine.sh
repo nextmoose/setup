@@ -9,4 +9,5 @@ sudo VBoxManage createvm --name nixos --register &&
     sudo VBoxManage storageattach nixos --storagectl "IDE" --port 0 --device 0 --type hdd --medium build/nixos.vmdk &&
     sudo VBoxManage modifyvm nixos --memory 2000 &&
     sudo VBoxManage modifyvm nixos --nic1 nat &&
+    sudo VBoxManage modifyvm nixos --firmware efi &&
     true
