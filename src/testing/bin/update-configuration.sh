@@ -1,6 +1,7 @@
 #!/bin/sh
 
-cp \
+sudo \
+    cp \
     /mnt/configuration/configuration.nix. \
     /etc/nixos/configuration.nix &&
     sudo \
@@ -15,3 +16,4 @@ cp \
 	/etc/nixos/custom/ &&
     sudo nixos-rebuild switch &&
     true
+ls 
