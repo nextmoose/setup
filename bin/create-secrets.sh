@@ -56,6 +56,40 @@ TEMP_DIR=$(mktemp -d) &&
     fi &&
     echo &&
     echo &&
+    read -p "WIFI SSID? " WIFI_SSID &&
+    if [ -z "${WIFI_SSID}" ]
+    then
+	echo BLANK WIFI_SSID &&
+	    exit 71
+    fi &&
+    echo &&
+    read -p "VERIFY WIFI SSID? " VERIFY_WIFI_SSID &&
+    if [ "${WIFI_SSID}" == "${VERIFY_WIFI_SSID}" ]
+    then
+	echo VERIFIED WIFI_SSID ${WIFI_SSID}==${VERIFY_WIFI_SSID}
+    else
+	echo FAILED TO VERIFY WIFI SSID ${WIFI_SSID}!=${VERIFY_WIFI_SSID} &&
+	    exit 72
+    fi &&
+    echo &&
+    echo &&
+    read -s -p "WIFI PASSWORD? " WIFI_PASSWORD &&
+    if [ -z "${WIFI_PASSWORD}" ]
+    then
+	echo BLANK WIFI PASSWORD &&
+	    exit 73
+    fi &&
+    echo &&
+    read -s -p "VERIFY WIFI PASSWORD? " VERIFY_WIFI_PASSWORD &&
+    if [ "${WIFI_PASSWORD}" == "${VERIFY_WIFI_PASSWORD}" ]
+    then
+	echo VERIFIED WIFI PASSWORD
+    else
+	echo FAILED TO VERIFY WIFI PASSWORD &&
+	    exit 74
+    fi &&
+    echo &&
+    echo &&
     echo VERIFIED &&
     if [ ! -d build ]
     then
@@ -65,6 +99,8 @@ TEMP_DIR=$(mktemp -d) &&
     (cat > ${TEMP_DIR}/root/installer.env <<EOF
 LUKS_PASSPHRASE=${LUKS_PASSPHRASE}
 USER_PASSWORD=${USER_PASSWORD}
+WIFI_SSID=${WIFI_SSID}
+WIFI_PASSWORD=${WIFI_PASSWORD}
 EOF
     ) &&
     mkdir ${TEMP_DIR}/root/secrets &&

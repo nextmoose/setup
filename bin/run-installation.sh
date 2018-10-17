@@ -16,8 +16,10 @@ read -s -p "SYMMETRIC PASSWORD? " SYMMETRIC_PASSWORD &&
     echo "--no-shutdown" | sh $(dirname ${0})/transcribe-keyboard-alpha.sh &&
     sh $(dirname ${0})/type-keyboard-space.sh &&
     echo "--no-volumes" | sh $(dirname ${0})/transcribe-keyboard-alpha.sh &&
+    sh $(dirname ${0})/type-keyboard-space.sh &&
+    echo "--no-wifi" | sh $(dirname ${0})/transcribe-keyboard-alpha.sh &&
     sh $(dirname ${0})/type-keyboard-enter.sh &&
     sleep 30s &&
-    sudo VBoxManage controlvm nixos poweroff soft &&
-    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium emptydrive &&
+#    sudo VBoxManage controlvm nixos poweroff soft &&
+#    sudo VBoxManage storageattach nixos --storagectl "SATA Controller" --port 0 --device 0 --medium emptydrive &&
     true

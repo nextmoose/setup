@@ -8,6 +8,7 @@ export PATH=${PATH}:GNUPG:MKPASSWD &&
     trap cleanup EXIT &&
     SHUTDOWN="true" &&
     VOLUMES="true" &&
+    WIFI="true" &&
     while [ ${#} -gt 0 ]
     do
 	case ${1} in
@@ -19,17 +20,30 @@ export PATH=${PATH}:GNUPG:MKPASSWD &&
 		VOLUMES="false" &&
 		    shift
 		;;
+	    --no-wifi)
+		WIFI="false" &&
+		    shift
+		;;
 	    *)
 		echo Unsupported Option &&
 		    echo ${1} &&
-		    echo ${@} &&
+		    echo ${@} &
 		    echo ${0} &&
 		    exit 64
 		;;
 	esac
     done &&
     read -s -p "SYMMETRIC_PASSPHRASE? " SYMMETRIC_PASSPHRASE &&
-    export PATH=${PATH}:PKGS.GNUPG &&
+    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/root.tar OUT/etc/root.tar.gpg &&
+    mkdir ${TEMP_DIR}/root &&
+    tar --extract --file ${TEMP_DIR}/root.tar --directory ${TEMP_DIR}/root &&
+    rm --force ${TEMP_DIR}/root.tar &&
+    source ${TEMP_DIR}/root/installer.env &&
+    rm --force ${TEMP_DIR}/root/installer.env &&
+    if [ "${WIFI}" == "true" ]
+    then
+	wpa_passphrase "${WIFI_SSID}" "${WIFI_PASSWORD}" | wpa_supplicant -B -i wlo1 -c
+    fi &&
     (swapoff -L SWAP || true ) &&
     (umount /mnt/nix || true) &&
     (umount /mnt/boot || true) &&
@@ -84,11 +98,6 @@ EOF
     ) | gdisk /dev/sda &&
     mkfs.vfat -F 32 -n BOOT /dev/sda1 &&
     mkswap -L SWAP /dev/sda2 &&
-    echo "${SYMMETRIC_PASSPHRASE}" | gpg --batch --passphrase-fd 0 --output ${TEMP_DIR}/root.tar OUT/etc/root.tar.gpg &&
-    mkdir ${TEMP_DIR}/root &&
-    tar --extract --file ${TEMP_DIR}/root.tar --directory ${TEMP_DIR}/root &&
-    rm --force ${TEMP_DIR}/root.tar &&
-    source ${TEMP_DIR}/root/installer.env &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksFormat /dev/sda3 &&
     echo -n "${LUKS_PASSPHRASE}" | cryptsetup --key-file - luksOpen /dev/sda3 nix &&
     echo y | mkfs.ext4 -L NIX /dev/mapper/nix &&
