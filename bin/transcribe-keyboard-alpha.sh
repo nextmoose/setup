@@ -200,7 +200,7 @@ do
  	"\\")
 	    sh $(dirname ${0})/type-keyboard-key.sh --key "BACK_SLASH"
 	    ;;
-	"?")
+	"/")
 	    sh $(dirname ${0})/type-keyboard-key.sh --key "QUESTION" --case "upper"
 	    ;;
 	"(")
