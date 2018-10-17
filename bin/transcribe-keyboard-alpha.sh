@@ -203,6 +203,12 @@ do
 	"?")
 	    sh $(dirname ${0})/type-keyboard-key.sh --key "QUESTION" --case "upper"
 	    ;;
+	"(")
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "9" --case "upper"
+	    ;;
+	")")
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "0" --case "upper"
+	    ;;
 	"")
 	    ;;
 	*)

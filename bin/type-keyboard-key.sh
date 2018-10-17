@@ -229,6 +229,13 @@ SHIFT_PRESS=2A &&
 	    ;;
 	"QUESTION")
 	    PRESS=35
+	    ;;
+	"OPEN_PARENTHESIS")
+	    PRESS=0A
+	    ;;
+	"CLOSE_PARENTHESIS")
+	    PRESS=0B
+	    ;;
 	*)
 	    echo "Unknown Key \"${KEY}\"" &&
 		exit 64
