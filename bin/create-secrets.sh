@@ -107,7 +107,7 @@ EOF
     echo cd095fcf-1321-4da4-82e0-e8d22412f3d4 > ${TEMP_DIR}/root/secrets/verification.txt &&
     secrets gpg.secret.key > ${TEMP_DIR}/root/secrets/gpg.secret.key &&
     secrets gpg.owner.trust > ${TEMP_DIR}/root/secrets/gpg.owner.trust &&
-    secrets gpg2.secret.key > ${TEMP_DIR}/root/secrets/gpg2.secret.key &&
+    secrets gpg2.secret.key > ${TEMP_DIR}/root/secrets/gpg2ls.secret.key &&
     secrets gpg2.owner.trust > ${TEMP_DIR}/root/secrets/gpg2.owner.trust &&
     tar --create --file ${TEMP_DIR}/root.tar --directory ${TEMP_DIR}/root . &&
     rm --recursive --force ${TEMP_DIR}/root &&
