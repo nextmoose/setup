@@ -1,6 +1,7 @@
 #!/bin/sh
 
-rsync \
+sudo \
+    rsync \
     --verbose \
     --recursive \
     --whole-file \
@@ -8,4 +9,6 @@ rsync \
     --progress \
     --itemize-changes \
     /mnt/configuration/. \
-    /etc/nixos/
+    /etc/nixos/ &&
+    sudo nixos-rebuild switch &&
+    true
