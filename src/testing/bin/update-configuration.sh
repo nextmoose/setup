@@ -1,12 +1,6 @@
 #!/bin/sh
 
-sudo \
-    rsync \
-    --verbose \
-    --whole-file \
-    --delete \
-    --progress \
-    --itemize-changes \
+cp \
     /mnt/configuration/configuration.nix. \
     /etc/nixos/configuration.nix &&
     sudo \
