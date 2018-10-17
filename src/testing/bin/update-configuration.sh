@@ -2,7 +2,7 @@
 
 sudo \
     cp \
-    /mnt/configuration/configuration.nix. \
+    /mnt/configuration/configuration.nix \
     /etc/nixos/configuration.nix &&
     sudo \
 	rsync \
