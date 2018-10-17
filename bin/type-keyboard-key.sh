@@ -236,6 +236,9 @@ SHIFT_PRESS=2A &&
 	"CLOSE_PARENTHESIS")
 	    PRESS=0B
 	    ;;
+	"PERIOD")
+	    PRESS=34
+	    ;;
 	*)
 	    echo "Unknown Key \"${KEY}\"" &&
 		exit 64

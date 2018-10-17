@@ -209,6 +209,12 @@ do
 	")")
 	    sh $(dirname ${0})/type-keyboard-key.sh --key "0" --case "upper"
 	    ;;
+	"&")
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "7" --case "upper"
+	    ;;
+	".")
+	    sh $(dirname ${0})/type-keyboard-key.sh --key "PERIOD"
+	    ;;
 	"")
 	    ;;
 	*)
