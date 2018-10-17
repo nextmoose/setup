@@ -197,19 +197,11 @@ do
  	"|")
 	    sh $(dirname ${0})/type-keyboard-key.sh --key "\\"
 	    ;;
+	"")
+	    ;;
 	*)
 	    echo "Unknown Symbol \"${SYMBOL}\"" &&
 		exit 64
 	    ;;
-    esac &&
-	RELEASE=$(printf "%X" $((0x${PRESS}+0x80))) &&
-	if [ "${CASE}" == "upper" ]
-	then
-	    sudo VBoxManage controlvm nixos keyboardputscancode ${SHIFT_PRESS}
-	fi &&
-	sudo VBoxManage controlvm nixos keyboardputscancode ${PRESS} ${RELEASE} &&
-	if [ "${CASE}" == "upper" ]
-	then
-	    sudo VBoxManage controlvm nixos keyboardputscancode ${SHIFT_RELEASE}
-	fi		
+    esac
 done
