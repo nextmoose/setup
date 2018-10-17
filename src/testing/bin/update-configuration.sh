@@ -12,8 +12,7 @@ sudo \
 	--delete \
 	--progress \
 	--itemize-changes \
-	/mnt/configuration/custom/. \
+	/mnt/configuration/custom \
 	/etc/nixos/custom/ &&
     sudo nixos-rebuild switch &&
     true
-ls 

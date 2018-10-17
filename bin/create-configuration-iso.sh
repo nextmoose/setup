@@ -2,7 +2,7 @@
 
 sh $(dirname ${0})/create-configuration.sh &&
     mkdir build/transfer &&
-    cp --recursive build/configuration/custom/installer/src/custom build/transfer/configuration &&
+    cp --recursive build/configuration/custom/installer/src/ build/transfer/configuration &&
     cp build/configuration/custom/installer/src/configuration.nix build/transfer/configuration &&
     cp --recursive src/testing/bin build/transfer/bin &&
     mkisofs -lJR -o build/transfer.iso build/transfer &&
