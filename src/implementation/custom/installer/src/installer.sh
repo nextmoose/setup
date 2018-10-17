@@ -126,4 +126,9 @@ EOF
     then
 	shutdown -h now
     fi &&
+    if [ "${VOLUMES}" == true ]
+    then
+	pvcreate --yes /dev/volumes/sda5 &&
+	    vgcreate volumes /dev/volumes/sda5
+    fi &&
     true
